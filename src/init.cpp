@@ -27,6 +27,7 @@
 #include "rpcserver.h"
 #include "script/standard.h"
 #include "spork.h"
+#include "sporkdb.h"
 #include "txdb.h"
 #include "ui_interface.h"
 #include "util.h"
@@ -1230,6 +1231,7 @@ bool AppInit2(boost::thread_group& threadGroup)
                 delete pcoinscatcher;
                 delete pblocktree;
 
+                sporkDB = new CSporkDB(0, false, false);
                 pblocktree = new CBlockTreeDB(nBlockTreeDBCache, false, fReindex);
                 pcoinsdbview = new CCoinsViewDB(nCoinDBCache, false, fReindex);
                 pcoinscatcher = new CCoinsViewErrorCatcher(pcoinsdbview);

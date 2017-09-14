@@ -263,17 +263,12 @@ void CBudgetManager::SubmitFinalBudget()
 
     int nBlockStart = nCurrentHeight - nCurrentHeight % GetBudgetPaymentCycleBlocks() + GetBudgetPaymentCycleBlocks();
     if (nSubmittedHeight >= nBlockStart){
-        LogPrint("masternode","CBudgetManager::SubmitFinalBudget - nSubmittedHeight(=%ld) < nBlockStart(=%ld) condition not fulfilled.\n", nSubmittedHeight, nBlockStart);
+        LogPrintf("CBudgetManager::SubmitFinalBudget - nSubmittedHeight(=%ld) < nBlockStart(=%ld) condition not fulfilled.\n", nSubmittedHeight, nBlockStart);
         return;
     }
-    // Submit final budget during the last 2 days before payment for Mainnet, about 9 minutes for Testnet
-    int nFinalizationStart = nBlockStart - ((GetBudgetPaymentCycleBlocks() / 30) * 2);
-    int nOffsetToStart = nFinalizationStart - nCurrentHeight;
-
+    // Submit final budget at least 2 days before payment for Mainnet, about 9 minutes for Testnet
     if (nBlockStart - nCurrentHeight > ((GetBudgetPaymentCycleBlocks() / 30) * 2)){
-        LogPrint("masternode","CBudgetManager::SubmitFinalBudget - Too early for finalization. Current block is %ld, next Superblock is %ld.\n", nCurrentHeight, nBlockStart);
-        LogPrint("masternode","CBudgetManager::SubmitFinalBudget - First possible block for finalization: %ld. Last possible block for finalization: %ld. You have to wait for %ld block(s) until Budget finalization will be possible\n", nFinalizationStart, nBlockStart, nOffsetToStart);
-
+        LogPrintf("CBudgetManager::SubmitFinalBudget - Too late for finalization. Latest block for finalization before next Superblock: %ld (Superblock=%ld). You are %ld blocks before the next Superblock\n", ((GetBudgetPaymentCycleBlocks() / 30) * 2), nBlockStart, (nBlockStart - nCurrentHeight));
         return;
     }
 

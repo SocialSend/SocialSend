@@ -734,11 +734,29 @@ bool CBudgetManager::IsBudgetPaymentBlock(int nBlockHeight)
         ++it;
     }
 
-    LogPrint("masternode","CBudgetManager::IsBudgetPaymentBlock() - nHighestCount: %lli, 5%% of Masternodes: %lli. Number of budgets: %lli\n", 
-              nHighestCount, nFivePercent, mapFinalizedBudgets.size());
+    LogPrintf("CBudgetManager::IsBudgetPaymentBlock() - nHighestCount: %lli, 5% of Masternodes: %lli\n", nHighestCount, nFivePercent);
 
-    // If budget doesn't have 5% of the network votes, then we should pay a masternode instead
+    /*
+        If budget doesn't have 5% of the network votes, then we should pay a masternode instead
+    */
     if (nHighestCount > nFivePercent) return true;
+
+    return false;
+}
+
+bool CBudgetManager::HasNextFinalizedBudget()
+{
+    CBlockIndex* pindexPrev = chainActive.Tip();
+    if (!pindexPrev) return false;
+
+    if (masternodeSync.IsBudgetFinEmpty()) return true;
+
+    int nBlockStart = pindexPrev->nHeight - pindexPrev->nHeight % GetBudgetPaymentCycleBlocks() + GetBudgetPaymentCycleBlocks();
+    if (nBlockStart - pindexPrev->nHeight > 1440 * 2) return true; //we wouldn't have the budget yet
+
+    if (budget.IsBudgetPaymentBlock(nBlockStart)) return true;
+
+    LogPrintf("CBudgetManager::HasNextFinalizedBudget() - Client is missing budget - %lli\n", nBlockStart);
 
     return false;
 }
@@ -765,8 +783,7 @@ bool CBudgetManager::IsTransactionValid(const CTransaction& txNew, int nBlockHei
         ++it;
     }
 
-    LogPrint("masternode","CBudgetManager::IsTransactionValid() - nHighestCount: %lli, 5%% of Masternodes: %lli mapFinalizedBudgets.size(): %ld\n", 
-              nHighestCount, nFivePercent, mapFinalizedBudgets.size());
+    LogPrintf("CBudgetManager::IsTransactionValid() - nHighestCount: %lli, 5% of Masternodes: %lli\n", nHighestCount, nFivePercent);
     /*
         If budget doesn't have 5% of the network votes, then we should pay a masternode instead
     */
@@ -1212,8 +1229,8 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             vote.Relay();
             masternodeSync.AddedBudgetItem(vote.GetHash());
         }
-        hasChanges = true;
-        LogPrint("masternode","mvote - new budget vote for budget %s - %s\n", vote.nProposalHash.ToString(),  vote.GetHash().ToString());
+
+        LogPrintf("mvote - new budget vote for budget %s - %s\n", vote.nProposalHash.ToString(),  vote.GetHash().ToString());
     }
 
     if (strCommand == "fbs") { //Finalized Budget Suggestion
@@ -2128,12 +2145,10 @@ bool CFinalizedBudget::IsValid(std::string& strError, bool fCheckCollateral)
     CBlockIndex* pindexPrev = chainActive.Tip();
     if (pindexPrev == NULL) return true;
 
-// TODO: verify if we can safely remove this
-//
-//    if (nBlockStart < pindexPrev->nHeight - 100) {
-//        strError = "Budget " + strBudgetName + " Older than current blockHeight" ;
-//        return false;
-//    }
+    if (nBlockStart < pindexPrev->nHeight - 100) {
+        strError = "Budget " + strBudgetName + " Older than current blockHeight" ;
+        return false;
+    }
 
     return true;
 }

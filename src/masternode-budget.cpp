@@ -90,7 +90,7 @@ bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, s
         return true;
     } else {
         strError = strprintf("Collateral requires at least %d confirmations - %d confirmations", Params().Budget_Fee_Confirmations(), conf);
-        LogPrint("masternode","CBudgetProposalBroadcast::IsBudgetCollateralValid - %s - %d confirmations\n", strError, conf);
+        LogPrintf("CBudgetProposalBroadcast::IsBudgetCollateralValid - %s - %d confirmations\n", strError, conf);
         return false;
     }
 }
@@ -266,9 +266,14 @@ void CBudgetManager::SubmitFinalBudget()
         LogPrintf("CBudgetManager::SubmitFinalBudget - nSubmittedHeight(=%ld) < nBlockStart(=%ld) condition not fulfilled.\n", nSubmittedHeight, nBlockStart);
         return;
     }
-    // Submit final budget at least 2 days before payment for Mainnet, about 9 minutes for Testnet
+    // Submit final budget during the last 2 days before payment for Mainnet, about 9 minutes for Testnet
+    int nFinalizationStart = nBlockStart - ((GetBudgetPaymentCycleBlocks() / 30) * 2);
+    int nOffsetToStart = nFinalizationStart - nCurrentHeight;
+    
     if (nBlockStart - nCurrentHeight > ((GetBudgetPaymentCycleBlocks() / 30) * 2)){
-        LogPrintf("CBudgetManager::SubmitFinalBudget - Too late for finalization. Latest block for finalization before next Superblock: %ld (Superblock=%ld). You are %ld blocks before the next Superblock\n", ((GetBudgetPaymentCycleBlocks() / 30) * 2), nBlockStart, (nBlockStart - nCurrentHeight));
+        LogPrintf("CBudgetManager::SubmitFinalBudget - Too early for finalization. Current block is %ld, next Superblock is %ld.\n", nCurrentHeight, nBlockStart);
+        LogPrintf("CBudgetManager::SubmitFinalBudget - First possible block for finalization: %ld. Last possible block for finalization: %ld. You have to wait for %ld block(s) until Budget finalization will be possible\n", nFinalizationStart, nBlockStart, nOffsetToStart);
+
         return;
     }
 
@@ -342,7 +347,7 @@ void CBudgetManager::SubmitFinalBudget()
         -- This function is tied to NewBlock, so we will propagate this budget while the block is also propagating
     */
     if (conf < Params().Budget_Fee_Confirmations() + 1) {
-        LogPrint("masternode","CBudgetManager::SubmitFinalBudget - Collateral requires at least %d confirmations - %s - %d confirmations\n", Params().Budget_Fee_Confirmations() + 1, txidCollateral.ToString(), conf);
+        LogPrintf("CBudgetManager::SubmitFinalBudget - Collateral requires at least %d confirmations - %s - %d confirmations\n", Params().Budget_Fee_Confirmations() + 1, txidCollateral.ToString(), conf);
         return;
     }
 
@@ -1613,7 +1618,7 @@ bool CBudgetProposal::IsValid(std::string& strError, bool fCheckCollateral)
 
     // if (GetBlockEnd() < pindexPrev->nHeight - GetBudgetPaymentCycleBlocks() / 2) {
     if(nProposalEnd < pindexPrev->nHeight){
-        strError = "Proposal " + strProposalName + ": Invalid nBlockEnd (" + std::to_string(nProposalEnd) + ") < current height (" + std::to_string(pindexPrev->nHeight) + ")";
+        strError = "Invalid nBlockEnd (" + std::to_string(nProposalEnd) + ") < current height (" + std::to_string(pindexPrev->nHeight) + ")";
         return false;
     }
 
@@ -2083,7 +2088,7 @@ bool CFinalizedBudget::IsValid(std::string& strError, bool fCheckCollateral)
         strError = "Invalid BlockStart";
         return false;
     }
-
+    
     // The following 2 checks check the same (basically if vecBudgetPayments.size() > 100)
     if (GetBlockEnd() - nBlockStart > 100) {
         strError = "Invalid BlockEnd";
@@ -2128,10 +2133,12 @@ bool CFinalizedBudget::IsValid(std::string& strError, bool fCheckCollateral)
     CBlockIndex* pindexPrev = chainActive.Tip();
     if (pindexPrev == NULL) return true;
 
-    if (nBlockStart < pindexPrev->nHeight - 100) {
-        strError = "Budget " + strBudgetName + " Older than current blockHeight" ;
-        return false;
-    }
+// TODO: verify if we can safely remove this
+//
+//    if (nBlockStart < pindexPrev->nHeight - 100) {
+//        strError = "Budget " + strBudgetName + " Older than current blockHeight" ;
+//        return false;
+//    }
 
     return true;
 }

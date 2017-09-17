@@ -734,7 +734,7 @@ bool CBudgetManager::IsBudgetPaymentBlock(int nBlockHeight)
         ++it;
     }
 
-    LogPrintf("CBudgetManager::IsBudgetPaymentBlock() - nHighestCount: %lli, 5% of Masternodes: %lli\n", nHighestCount, nFivePercent);
+    LogPrintf("CBudgetManager::IsBudgetPaymentBlock() - nHighestCount: %lli, 5%% of Masternodes: %lli\n", nHighestCount, nFivePercent);
 
     /*
         If budget doesn't have 5% of the network votes, then we should pay a masternode instead
@@ -766,7 +766,7 @@ bool CBudgetManager::IsTransactionValid(const CTransaction& txNew, int nBlockHei
         ++it;
     }
 
-    LogPrintf("CBudgetManager::IsTransactionValid() - nHighestCount: %lli, 5% of Masternodes: %lli\n", nHighestCount, nFivePercent);
+    LogPrintf("CBudgetManager::IsTransactionValid() - nHighestCount: %lli, 5%% of Masternodes: %lli\n", nHighestCount, nFivePercent);
     /*
         If budget doesn't have 5% of the network votes, then we should pay a masternode instead
     */

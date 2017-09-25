@@ -90,7 +90,9 @@ public:
     const std::vector<CAddress>& FixedSeeds() const { return vFixedSeeds; }
     virtual const Checkpoints::CCheckpointData& Checkpoints() const = 0;
     int PoolMaxTransactions() const { return nPoolMaxTransactions; }
+    std::string SporkKeyOld() const { return strSporkKeyOld; }
     std::string SporkKey() const { return strSporkKey; }
+    int64_t StopDualSporkKeys() const { return nStopDualSporkKeys; }
     std::string ObfuscationPoolDummyAddress() const { return strObfuscationPoolDummyAddress; }
     int64_t StartMasternodePayments() const { return nStartMasternodePayments; }
     int64_t Budget_Fee_Confirmations() const { return nBudget_Fee_Confirmations; }
@@ -138,7 +140,9 @@ protected:
     bool fHeadersFirstSyncingActive;
     int nPoolMaxTransactions;
     std::string strSporkKey;
+    std::string strSporkKeyOld;
     std::string strObfuscationPoolDummyAddress;
+    int64_t nStopDualSporkKeys;
     int64_t nStartMasternodePayments;
     int nNewMasternodeReward_StartBlock;
     int nNewMasternodeReward_Collateral;

@@ -27,7 +27,7 @@ More information at [piex.io](http://www.piex.io)
 
 <table>
 <th colspan=4>PoW Phase</th>
-<tr><th>Block Height</th><th>Reward Amount</th><th>Notes</th><th>Duration (Days)</th></tr>
+<tr><th>Block Height</th><th>Mined Amount</th><th>Notes</th><th>Duration (Days)</th></tr>
 <tr><td>1-1000</td><td>78Mil PIEX</td><td>Initial Premine</td><td>3 Days</td></tr>
 <tr><th colspan=4>Proof Of Stake</th></tr>
 <tr><th>Block Height</th><th colspan=3>Reward Amount</th></tr>

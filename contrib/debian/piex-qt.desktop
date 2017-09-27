@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Piex
+Comment=Piex P2P Cryptocurrency
+Comment[fr]=Piex, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Piex, eşten eşe kriptografik sanal para birimi
+Exec=piex-qt %u
+Terminal=false
+Type=Application
+Icon=piex128
+MimeType=x-scheme-handler/piex;
+Categories=Office;Finance;

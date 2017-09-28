@@ -570,11 +570,10 @@ void CBudgetManager::CheckAndRemove()
 
         pfinalizedBudget->fValid = pfinalizedBudget->IsValid(strError);
         if (!strError.empty ()) {
-            LogPrint("masternode","CBudgetManager::CheckAndRemove - Invalid finalized budget: %s\n", strError);
+            LogPrintf("CBudgetManager::CheckAndRemove - pfinalizedBudget->IsValid - strError: %s\n", strError);
         }
         else {
-            LogPrint("masternode","CBudgetManager::CheckAndRemove - Found valid finalized budget: %s %s\n",
-                      pfinalizedBudget->strBudgetName.c_str(), pfinalizedBudget->nFeeTXHash.ToString().c_str());
+            LogPrintf("CBudgetManager::CheckAndRemove - Found valid budget: %s\n", pfinalizedBudget->strBudgetName.c_str());
         }
 
         if (pfinalizedBudget->fValid) {
@@ -879,32 +878,32 @@ std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
     while (it2 != vBudgetPorposalsSort.end()) {
         CBudgetProposal* pbudgetProposal = (*it2).first;
 
-        LogPrint("masternode","CBudgetManager::GetBudget() - Processing Budget %s\n", pbudgetProposal->strProposalName.c_str());
+        LogPrintf("CBudgetManager::GetBudget() - Processing Budget %s\n", pbudgetProposal->strProposalName.c_str());
         //prop start/end should be inside this period
         if (pbudgetProposal->fValid && pbudgetProposal->nBlockStart <= nBlockStart &&
             pbudgetProposal->nBlockEnd >= nBlockEnd &&
             pbudgetProposal->GetYeas() - pbudgetProposal->GetNays() > mnodeman.CountEnabled(ActiveProtocol()) / 10 &&
             pbudgetProposal->IsEstablished()) {
-
-            LogPrint("masternode","CBudgetManager::GetBudget() -   Check 1 passed: valid=%d | %ld <= %ld | %ld >= %ld | Yeas=%d Nays=%d Count=%d | established=%d\n",
-                      pbudgetProposal->fValid, pbudgetProposal->nBlockStart, nBlockStart, pbudgetProposal->nBlockEnd,
-                      nBlockEnd, pbudgetProposal->GetYeas(), pbudgetProposal->GetNays(), mnodeman.CountEnabled(ActiveProtocol()) / 10,
+            
+            LogPrintf("CBudgetManager::GetBudget() -   Check 1 passed: valid=%d | %ld <= %ld | %ld >= %ld | Yeas=%d Nays=%d Count=%d | established=%d\n",
+                      pbudgetProposal->fValid, pbudgetProposal->nBlockStart, nBlockStart, pbudgetProposal->nBlockEnd, 
+                      nBlockEnd, pbudgetProposal->GetYeas(), pbudgetProposal->GetNays(), mnodeman.CountEnabled(ActiveProtocol()) / 10, 
                       pbudgetProposal->IsEstablished());
-
+            
             if (pbudgetProposal->GetAmount() + nBudgetAllocated <= nTotalBudget) {
                 pbudgetProposal->SetAllotted(pbudgetProposal->GetAmount());
                 nBudgetAllocated += pbudgetProposal->GetAmount();
                 vBudgetProposalsRet.push_back(pbudgetProposal);
-                LogPrint("masternode","CBudgetManager::GetBudget() -     Check 2 passed: Budget added\n");
+                LogPrintf("CBudgetManager::GetBudget() -     Check 2 passed: Budget added\n");
             } else {
                 pbudgetProposal->SetAllotted(0);
-                LogPrint("masternode","CBudgetManager::GetBudget() -     Check 2 failed: no amount allotted\n");
+                LogPrintf("CBudgetManager::GetBudget() -     Check 2 failed: no amount allotted\n");
             }
         }
         else {
-            LogPrint("masternode","CBudgetManager::GetBudget() -   Check 1 failed: valid=%d | %ld <= %ld | %ld >= %ld | Yeas=%d Nays=%d Count=%d | established=%d\n",
-                      pbudgetProposal->fValid, pbudgetProposal->nBlockStart, nBlockStart, pbudgetProposal->nBlockEnd,
-                      nBlockEnd, pbudgetProposal->GetYeas(), pbudgetProposal->GetNays(), mnodeman.CountEnabled(ActiveProtocol()) / 10,
+            LogPrintf("CBudgetManager::GetBudget() -   Check 1 failed: valid=%d | %ld <= %ld | %ld >= %ld | Yeas=%d Nays=%d Count=%d | established=%d\n",
+                      pbudgetProposal->fValid, pbudgetProposal->nBlockStart, nBlockStart, pbudgetProposal->nBlockEnd, 
+                      nBlockEnd, pbudgetProposal->GetYeas(), pbudgetProposal->GetNays(), mnodeman.CountEnabled(ActiveProtocol()) / 10, 
                       pbudgetProposal->IsEstablished());
         }
 
@@ -1780,12 +1779,12 @@ CBudgetProposalBroadcast::CBudgetProposalBroadcast(std::string strProposalNameIn
     nBlockStart = nBlockStartIn;
 
     int nCycleStart = nBlockStart - nBlockStart % GetBudgetPaymentCycleBlocks();
-
+    
     // XX42: right now single payment proposals have nBlockEnd have a cycle too early!
     // switch back if it break something else
     //calculate the end of the cycle for this vote, add half a cycle (vote will be deleted after that block)
     // nBlockEnd = nCycleStart + GetBudgetPaymentCycleBlocks() * nPaymentCount + GetBudgetPaymentCycleBlocks() / 2;
-
+    
     // Calculate the end of the cycle for this vote, vote will be deleted after next cycle
     nBlockEnd = nCycleStart + (GetBudgetPaymentCycleBlocks() + 1)  * nPaymentCount;
 

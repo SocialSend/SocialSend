@@ -1620,33 +1620,33 @@ int64_t GetBlockValue(int nHeight)
     //}
 
     if (nHeight == 0) {
-        nSubsidy = 60001 * COIN;
-    } else if (nHeight < 86400 && nHeight > 0) {
-        nSubsidy = 250 * COIN;
-    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 86400) {
-        nSubsidy = 225 * COIN;
-    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 151200) {
-        nSubsidy = 45 * COIN;
-    } else if (nHeight <= 302399 && nHeight > Params().LAST_POW_BLOCK()) {
-        nSubsidy = 45 * COIN;
+        nSubsidy = 1 * COIN;
+    } else if (nHeight < 1000 && nHeight > 0) {
+        nSubsidy = 60 * COIN;
+    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 1000) {
+        nSubsidy = 60 * COIN;
+    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 2000) {
+        nSubsidy = 58 * COIN;
+    } else if (nHeight <= 172000 && nHeight > Params().LAST_POW_BLOCK()) {
+        nSubsidy = 57 * COIN;
     } else if (nHeight <= 345599 && nHeight >= 302400) {
-        nSubsidy = 40.5 * COIN;
+        nSubsidy = 56 * COIN;
     } else if (nHeight <= 388799 && nHeight >= 345600) {
-        nSubsidy = 36 * COIN;
+        nSubsidy = 55 * COIN;
     } else if (nHeight <= 431999 && nHeight >= 388800) {
-        nSubsidy = 31.5 * COIN;
+        nSubsidy = 50 * COIN;
     } else if (nHeight <= 475199 && nHeight >= 432000) {
-        nSubsidy = 27 * COIN;
+        nSubsidy = 49.5 * COIN;
     } else if (nHeight <= 518399 && nHeight >= 475200) {
-        nSubsidy = 22.5 * COIN;
+        nSubsidy = 48 * COIN;
     } else if (nHeight <= 561599 && nHeight >= 518400) {
-        nSubsidy = 18 * COIN;
+        nSubsidy = 47 * COIN;
     } else if (nHeight <= 604799 && nHeight >= 561600) {
-        nSubsidy = 13.5 * COIN;
+        nSubsidy = 46 * COIN;
     } else if (nHeight <= 647999 && nHeight >= 604800) {
-        nSubsidy = 9 * COIN;
+        nSubsidy = 45 * COIN;
     } else if (nHeight >= 648000) {
-        nSubsidy = 4.5 * COIN;
+        nSubsidy = 40 * COIN;
     } else {
         nSubsidy = 0 * COIN;
     }
@@ -1672,11 +1672,11 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
         ret = blockValue / 2;
     } else if (nHeight > Params().LAST_POW_BLOCK()) {
         int64_t nMoneySupply = chainActive.Tip()->nMoneySupply;
-        int64_t mNodeCoins = mnodeman.size() * 10000 * COIN;
+        int64_t mNodeCoins = mnodeman.size() * 25000 * COIN;
 
         //if a mn count is inserted into the function we are looking for a specific result for a masternode count
         if(nMasternodeCount)
-            mNodeCoins = nMasternodeCount * 10000 * COIN;
+            mNodeCoins = nMasternodeCount * 25000 * COIN;
 
         // Use this log to compare the masternode count for different clients
         LogPrintf("Adjusting seesaw at height %d with %d masternodes (without drift: %d) at %ld\n", nHeight, nMasternodeCount, nMasternodeCount - Params().MasternodeCountDrift(), GetTime());

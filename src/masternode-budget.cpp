@@ -558,8 +558,8 @@ void CBudgetManager::CheckAndRemove()
 {
     LogPrint("mnbudget", "CBudgetManager::CheckAndRemove\n");
 
-    map<uint256, CFinalizedBudget> tmpMapFinalizedBudgets;
-    map<uint256, CBudgetProposal> tmpMapProposals;
+    // map<uint256, CFinalizedBudget> tmpMapFinalizedBudgets;
+    // map<uint256, CBudgetProposal> tmpMapProposals;
 
     std::string strError = "";
 
@@ -579,7 +579,7 @@ void CBudgetManager::CheckAndRemove()
 
         if (pfinalizedBudget->fValid) {
             pfinalizedBudget->AutoCheck();
-            tmpMapFinalizedBudgets.insert(make_pair(pfinalizedBudget->GetHash(), *pfinalizedBudget));
+            // tmpMapFinalizedBudgets.insert(make_pair(pfinalizedBudget->GetHash(), *pfinalizedBudget));
         }
 
         ++it;
@@ -599,17 +599,18 @@ void CBudgetManager::CheckAndRemove()
                       pbudgetProposal->strProposalName.c_str(), pbudgetProposal->nFeeTXHash.ToString().c_str());
         }
         if (pbudgetProposal->fValid) {
-            tmpMapProposals.insert(make_pair(pbudgetProposal->GetHash(), *pbudgetProposal));
+            // tmpMapProposals.insert(make_pair(pbudgetProposal->GetHash(), *pbudgetProposal));
         }
 
         ++it2;
     }
     // Remove invalid entries by overwriting complete map
-    mapFinalizedBudgets = tmpMapFinalizedBudgets;
-    mapProposals = tmpMapProposals;
+    // mapFinalizedBudgets = tmpMapFinalizedBudgets;
+    // mapProposals = tmpMapProposals;
 
-    LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapFinalizedBudgets cleanup - size after: %d\n", mapFinalizedBudgets.size());
-    LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapProposals cleanup - size after: %d\n", mapProposals.size());
+    // LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapFinalizedBudgets cleanup - size after: %d\n", mapFinalizedBudgets.size());
+    // LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapProposals cleanup - size after: %d\n", mapProposals.size());
+    LogPrintf("CBudgetManager::CheckAndRemove - PASSED\n");
 
 }
 

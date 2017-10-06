@@ -990,7 +990,7 @@ EOF
 	test "x$CPU" != x && { echo "$CPU-unknown-linux-$LIBC"; exit; }
 	;;
     mips64el:Linux:*:*)
-	echo "$UNAME_MACHINE"-unknown-linux-"$LIBC"
+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
 	exit ;;
     openrisc*:Linux:*:*)
 	echo or1k-unknown-linux-"$LIBC"
@@ -1026,6 +1026,9 @@ EOF
 	exit ;;
     riscv32:Linux:*:* | riscv64:Linux:*:*)
 	echo "$UNAME_MACHINE"-unknown-linux-"$LIBC"
+	exit ;;
+    riscv32:Linux:*:* | riscv64:Linux:*:*)
+	echo ${UNAME_MACHINE}-unknown-linux-${LIBC}
 	exit ;;
     s390:Linux:*:* | s390x:Linux:*:*)
 	echo "$UNAME_MACHINE"-ibm-linux-"$LIBC"

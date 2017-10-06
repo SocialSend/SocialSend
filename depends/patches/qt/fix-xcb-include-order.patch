@@ -1,6 +1,6 @@
 --- old/qtbase/src/plugins/platforms/xcb/xcb_qpa_lib.pro 2015-03-17
 +++ new/qtbase/src/plugins/platforms/xcb/xcb_qpa_lib.pro 2015-03-17
-@@ -74,8 +74,6 @@
+@@ -76,8 +76,6 @@
  
  DEFINES += $$QMAKE_DEFINES_XCB
  LIBS += $$QMAKE_LIBS_XCB
@@ -9,14 +9,14 @@
  
  CONFIG += qpa/genericunixfontdatabase
  
-@@ -87,7 +85,8 @@
+@@ -89,7 +87,8 @@
  contains(QT_CONFIG, xcb-qt) {
      DEFINES += XCB_USE_RENDER
      XCB_DIR = ../../../3rdparty/xcb
 -    INCLUDEPATH += $$XCB_DIR/include $$XCB_DIR/sysinclude
 +    QMAKE_CFLAGS += -I$$XCB_DIR/include -I$$XCB_DIR/sysinclude $$QMAKE_CFLAGS_XCB
 +    QMAKE_CXXFLAGS += -I$$XCB_DIR/include -I$$XCB_DIR/sysinclude $$QMAKE_CFLAGS_XCB
-     LIBS += -lxcb -L$$OUT_PWD/xcb-static -lxcb-static
+     LIBS += -lxcb -L$$MODULE_BASE_OUTDIR/lib -lxcb-static$$qtPlatformTargetSuffix()
  } else {
      LIBS += -lxcb -lxcb-image -lxcb-icccm -lxcb-sync -lxcb-xfixes -lxcb-shm -lxcb-randr -lxcb-shape -lxcb-keysyms -lxcb-xinerama
 --- old/qtbase/src/plugins/platforms/xcb/xcb-static/xcb-static.pro

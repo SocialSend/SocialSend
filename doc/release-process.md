@@ -136,6 +136,7 @@ Verify the signatures
     ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-linux ../send/contrib/gitian-descriptors/gitian-linux.yml
     ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-unsigned ../send/contrib/gitian-descriptors/gitian-win.yml
     ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../send/contrib/gitian-descriptors/gitian-osx.yml
+    ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-aarch64 ../send/contrib/gitian-descriptors/gitian-aarch64.yml
     popd
 
 ### Next steps:
@@ -146,6 +147,7 @@ Commit your signature to gitian.sigs:
     git add ${VERSION}-linux/${SIGNER}
     git add ${VERSION}-win-unsigned/${SIGNER}
     git add ${VERSION}-osx-unsigned/${SIGNER}
+    git add ${VERSION}-aarch64/${SIGNER}
     git commit -a
     git push  # Assuming you can push to the gitian.sigs tree
     popd

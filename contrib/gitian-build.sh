@@ -44,7 +44,7 @@ Options:
 -b|--build	Do a gitian build
 -s|--sign	Make signed binaries for Windows and Mac OSX
 -B|--buildsign	Build both signed and unsigned binaries
--o|--os		Specify which Operating Systems the build is for. Default is lwx. l for linux, w for windows, x for osx
+-o|--os		Specify which Operating Systems the build is for. Default is lwx. l for linux, w for windows, x for osx, a for aarch64
 -j		Number of processes to use. Default 2
 -m		Memory to allocate in MiB. Default 2000
 --kvm           Use KVM instead of LXC
@@ -92,6 +92,7 @@ while :; do
 		linux=false
 		windows=false
 		osx=false
+		aarch64=false
 		if [[ "$2" = *"l"* ]]
 		then
 		    linux=true
@@ -104,9 +105,13 @@ while :; do
 		then
 		    osx=true
 		fi
+		if [[ "$2" = *"a"* ]]
+		then
+		    aarch64=true
+		fi
 		shift
 	    else
-		echo 'Error: "--os" requires an argument containing an l (for linux), w (for windows), or x (for Mac OSX)\n'
+		echo 'Error: "--os" requires an argument containing an l (for linux), w (for windows), x (for Mac OSX), or a (for aarch64)\n'
 		exit 1
 	    fi
 	    ;;
@@ -300,6 +305,15 @@ then
 	    mv build/out/send-*-osx-unsigned.tar.gz inputs/send-osx-unsigned.tar.gz
 	    mv build/out/send-*.tar.gz build/out/send-*.dmg ../send-binaries/${VERSION}
 	fi
+	# AArch64
+	if [[ $aarch64 = true ]]
+	then
+	    echo ""
+	    echo "Compiling ${VERSION} AArch64"
+	    echo ""
+	    ./bin/gbuild -j ${proc} -m ${mem} --commit pivx=${COMMIT} --url pivx=${url} ../pivx/contrib/gitian-descriptors/gitian-aarch64.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../pivx/contrib/gitian-descriptors/gitian-aarch64.yml
+	    mv build/out/pivx-*.tar.gz build/out/src/pivx-*.tar.gz ../pivx-binaries/${VERSION}
 	popd
 
         if [[ $commitFiles = true ]]
@@ -310,6 +324,7 @@ then
             echo ""
             pushd gitian.sigs
             git add ${VERSION}-linux/${SIGNER}
+            git add ${VERSION}-aarch64/${SIGNER}
             git add ${VERSION}-win-unsigned/${SIGNER}
             git add ${VERSION}-osx-unsigned/${SIGNER}
             git commit -a -m "Add ${VERSION} unsigned sigs for ${SIGNER}"

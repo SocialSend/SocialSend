@@ -145,6 +145,7 @@ BITCOIN_CORE_H = \
   threadsafety.h \
   timedata.h \
   tinyformat.h \
+  torcontrol.h \
   txdb.h \
   txmempool.h \
   ui_interface.h \
@@ -182,8 +183,8 @@ obj/build.h: FORCE
 	  $(abs_top_srcdir)
 libbitcoin_util_a-clientversion.$(OBJEXT): obj/build.h
 
-# server: shared between sendd and send-qt
-libbitcoin_server_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS)
+# server: shared between send and send-qt
+libbitcoin_server_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
 libbitcoin_server_a_SOURCES = \
   addrman.cpp \
   alert.cpp \
@@ -210,6 +211,7 @@ libbitcoin_server_a_SOURCES = \
   script/sigcache.cpp \
   sporkdb.cpp \
   timedata.cpp \
+  torcontrol.cpp \
   txdb.cpp \
   txmempool.cpp \
   validationinterface.cpp \
@@ -389,7 +391,7 @@ if TARGET_WINDOWS
 sendd_SOURCES += sendd-res.rc
 endif
 
-sendd_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS)
+sendd_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS)
 sendd_CPPFLAGS = $(BITCOIN_INCLUDES)
 sendd_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
@@ -400,12 +402,16 @@ send_cli_LDADD = \
   $(LIBBITCOIN_UTIL) \
   $(BOOST_LIBS) \
   $(SSL_LIBS) \
-  $(CRYPTO_LIBS)
+  $(CRYPTO_LIBS) \
+  $(EVENT_LIBS)
 
 send_cli_SOURCES = \
   send-cli.cpp
 
-send_cli_CPPFLAGS = $(BITCOIN_INCLUDES)
+send_cli_SOURCES = \
+  send-cli.cpp
+
+send_cli_CPPFLAGS = $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
 #
 
 # send-tx binary #

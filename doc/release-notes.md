@@ -9,6 +9,18 @@ Please report bugs using the issue tracker at github:
 
   <https://github.com/send-project/send/issues>
 
+Mandatory Update
+==============
+
+PIVX Core v3.0.0 is a mandatory update for all users. This release contains new consensus rules and improvements that are not backwards compatible with older versions. Users will have a grace period of one week to update their clients before enforcement of this update is enabled.
+
+Users updating from a previous version after the 16th of October will require a full resync of their local blockchain from either the P2P network or by way of the bootstrap.
+
+How to Upgrade
+==============
+
+If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/PIVX-Qt (on Mac) or pivxd/pivx-qt (on Linux).
+
 Compatibility
 ==============
 
@@ -26,110 +38,23 @@ frequently tested on them.
 Notable Changes
 ===============
 
-RPC changes
---------------
+Zerocoin (zPIV) Protocol
+---------------------
 
-#### masternode command
-The `masternode` RPC command has been re-worked to ease
-it's usage and return valid JSON in it's results. The following is an overview of the changed command parameters:
+At long last, the zPIV release is here and the zerocoin protocol has been fully implemented! This allows users to send transactions with 100% fungible coins and absolutely zero history or link-ability to their previous owners.
 
-| Command Parameter | Changes |
-| --- | --- |
-| `budget` | Removed (did nothing) |
-| `count` | The optional "mode" paramater has been removed. Command now always outputs full details in JSON format. |
-| `current` | Result fields changed: IP:Port removed, vin renamed to txhash |
-| `list-conf` | Result is now an array of objects, instead of an object of objects |
-| `outputs` | Result is now an array of objects instead of a list of *n* objects |
-| `status` | Added additional fields for txhash, outputidx, netaddr, and message |
-| `winners` | Result is now an array of objects instead of a list of *n* objects. See below |
-| `list` | Remove all optional "modes" and standardized the results. Note: `masternode list` is the same as `masternodelist`. See below |
+Full and comprehensive details about the process and the use will be posted here during the days between Oct 6 and Oct 13.
 
-For the `winners` parameter, the results are now in a standard JSON format as follows:
+Tor Service Integration Improvements
+---------------------
 
-```
-[
-  {
-    nHeight: n,           (int) block height
-    winner: {
-        address: addr,    (string) SEND MN Address,
-        nVotes: n,        (int) Number of votes for winner,
-    }
-  },
-  ...
-]
-```
+Integrating with Tor is now easier than ever! Starting with Tor version 0.2.7.1 it is possible, through Tor's control socket API, to create and destroy 'ephemeral' hidden services programmatically. PIVX Core has been updated to make use of this.
 
-In the case of multiple winners being associated with a single block, the results are in the following format (the `winner` object becomes an array of objects):
+This means that if Tor is running (and proper authorization is available), PIVX Core automatically creates a hidden service to listen on, without manual configuration. PIVX Core will also use Tor automatically to connect to other .onion nodes if the control socket can be successfully opened. This will positively affect the number of available .onion nodes and their usage.
 
-```
-[
-  {
-    nHeight: n,           (int) block height,
-    winner: [
-      {
-        address: addr,    (string) SEND MN Address,
-        nVotes: n,        (int) Number of votes for winner,
-      },
-      ...
-    ]
-  },
-  ...
-]
-```
+This new feature is enabled by default if PIVX Core is listening, and a connection to Tor can be made. It can be configured with the `-listenonion`, `-torcontrol` and `-torpassword` settings. To show verbose debugging information, pass `-debug=tor`.
 
-For the `list` (aka `masternodelist`) parameter, the various "modes" have been removed in favor of a unified and standardized result format. The result is now an array of objects instead of an object of objects. Further, the individual objects now have a standard JSON format. The result format is as follows:
-
-```
-[
-  {
-    "rank": n,         (numeric) Masternode rank (or 0 if not enabled)
-    "txhash": hash,    (string) Collateral transaction hash
-    "outidx": n,       (numeric) Collateral transaction output index
-    "status": s,       (string) Status (ENABLED/EXPIRED/REMOVE/etc)
-    "addr": addr,      (string) Masternode SEND address
-    "version": v,      (numeric) Masternode Protocol version
-    "lastseen": ttt,   (numeric) The time in seconds since epoch (Jan 1 1970 GMT) the masternode was last seen
-    "activetime": ttt, (numeric) The time in seconds since epoch (Jan 1 1970 GMT) masternode has been active
-    "lastpaid": ttt,   (numeric) The time in seconds since epoch (Jan 1 1970 GMT) masternode was last paid
-  },
-  ...
-]
-```
-
-#### mnbudget command
-
-An additional parameter has been added to `mnbudget` to allow a controller wallet to issue per-MN votes. The new parameter is `vote-alias` and it's use format is as follows:
-
-`mnbudget vote-alias <proposal-hash> <yes|no> <alias>`
-
-All fields are required to successfully vote.
-
-#### walletpassphrase command
-
-CLI users that are staking their coins will now have the option of unlocking the wallet with no re-lock timeout. Similar to using `9999999` as the timeout, the `walletpassphrase` command now accepts `0` as a timeout to indicate that no re-locking should occur based on elapsed time.
-
-Usage: `walletpassphrase <passphrase> 0 <true|false>`
-
-The third parameter indicates if the wallet should be unlocked for staking and anonymization only (true), or to allow send operations (false, full unlock).
-
-ZeroMQ (ZMQ) Notifications
---------------
-
-sendd can now (optionally) asynchronously notify clients through a ZMQ-based PUB socket of the arrival of new transactions and blocks. This feature requires installation of the ZMQ C API library 4.x and configuring its use through the command line or configuration file. Please see [docs/zmq.md](/doc/zmq.md) for details of operation.
-
-**All** Masternodes List GUI Removal
---------------
-
-With the standardization and reformatting of the `masternode list` (`masternodelist`) RPC command, there is no real use case to keep the full list of masternodes in the GUI. This GUI element causes a great deal of extra overhead, even when it is not being actively displayed. The removal of this list has also proven to resolve a number of linux-based errors
-
-Note that the GUI list of masternodes associated with a controller wallet remains intact.
-
-SPV Client Support
---------------
-
-SEND Core now enables bloom filters by default to support SPV clients like mobile wallets. This feature can be disabled by using the `-peerbloomfilters` option on startup.
-
-2.3.0 Change log
+*version* Change log
 =================
 
 Detailed release notes follow. This overview includes changes that affect
@@ -137,57 +62,27 @@ behavior, not code moves, refactors and string updates. For convenience in locat
 the code changes and accompanying discussion, both the pull request and
 git merge commit are mentioned.
 
-### RPC and other APIs
-- #179 `a64fa3d` [RPC] Allow infinite unlock (Mrs-X)
-- #183 `dc77b86` [RPC] Add proposal name to removal log (Mrs-X)
-- #189 `6dd8146` [RPC] Add missing 'vote-alias' implementation (Mrs-X)
-- #195 `aee05fe` [ZMQ] ZMQ integration for SEND (Mrs-X)
-- #211 `b8c110b` [RPC] Refactor & JSONify results from masternode command(s) (Fuzzbawls)
-- #201 `f0e87b1` [RPC] Add active/incative flag to getstakingstatus RPC call (Mrs-X)
-
-### Configuration and command-line options
-- #180 `16b8601` [Wallet] Add parameter interaction between -disablewallet and -staking (Aaron Miller)
-- #208 `5f494c4` [Qt] Fix segfault when running with `-help` (Fuzzbawls)
-- #193 `ac7590b` [Output] Reformat help messages (Fuzzbawls)
-- #230 `aa47fa4` [Output] Update default value for -peerbloomfilters in help (Fuzzbawls)
-
-### Wallet
-- #192 `283cf3b` [Trivial] Pre-release warning message fixed. (Mrs-X)
-- #169 `05c9a75` Add IsNull and SetNull interfaces to uint256 (Jon Spock)
-- #198 `d45c869` Update EXT_COIN_TYPE according to BIP44 (Jon Spock)
+### Broad Features
+- #264 `15e84e5` zPIV is here! (Fuzzbawls Mrs-X Presstab Spock PIVX)
 
 ### P2P Protocol and Network Code
-- #219 `d2c3fdf` [P2P] Enable Bloom filter and add new nService for light clients. (furszy)
-- #234 `ed99e7b` [Consensus/Net] Ignore newly activated MNs in ranking/seesaw (Mrs-X Fuzzbawls presstab)
+- #242 `0ecd77f` [P2P] Improve TOR service connectivity (Fuzzbawls)
 
 ### GUI
-- #200 `bb1f255` [UI] Improved unlock usability (Mrs-X)
-- #207 `7a41f46` [Qt] Adjust size of splash screen image. (Fuzzbawls)
-- #206 `9c675ee` [Qt] Remove the All Masternodes UI tab/list (Fuzzbawls)
-- #220 `b80bc29` [Qt] Add "NODE_BLOOM" and "NODE_BLOOM_WITHOUT_MN" to guiutil (Fuzzbawls)
-- #225 `02209ec` [Qt] Add autocomplete to Qt client's debug console (Fuzzbawls)
-- #233 `2921a4d` [Qt] Enable support for Qt's HighDpiScaling (Fuzzbawls)
-
-### Tests and QA
-- #191 `3a778c3` [Tests] Fix the unit test suite for use with SEND (Fuzzbawls)
-- #122 `7d135a1` [Utils] updated netmagic/port for linearize script (Satoshi Ninja)
+- #251 `79af8d2` [Qt] Adjust masternode count in information UI (Mrs-X)
 
 ### Miscellaneous
-- #231 `af0aa68` [Utils] Fix update-translations.py to allow % end of string (Fuzzbawls)
-- #175 `8727f1c` [Docs] Reformat main README.md (Fuzzbawls)
-- #213 `ddd8994` [Trivial] Reduce debug.log spam for masternode messages (Fuzzbawls)
+- #258 `c950765` [Depends] Update Depends with newer versions (Fuzzbawls)
 
 Credits
 =======
 
 Thanks to everyone who directly contributed to this release:
-- Aaron Miller
 - Fuzzbawls
-- Mrs-X
-- SEND
-- Satoshi Ninja
 - Jon Spock
-- furszy
+- Mrs-X
+- PIVX
+- amirabrams
 - presstab
 
-As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/send-project-translations/).
+As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/pivx-project-translations/).

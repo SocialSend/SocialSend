@@ -25,6 +25,7 @@ More information at [piex.io](http://www.piex.io)
 </table>
 
 *First 1000 Blocks PoW. 1001 - Infinite Blocks PoS only.
+
 **78Mil PieX initial coins Premined to Swap over prior PIE Block Chain.
 
 ### PoS/PoW Block Details

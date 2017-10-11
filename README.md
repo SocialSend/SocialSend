@@ -45,6 +45,7 @@ More information at [piex.io](http://www.piex.io)
 <tr><td>PieX Produced</td><td>60 PieX Per Block</td></tr>
 <tr><td>Amount Designated for Rewards</td><td>100% of PieX produced goes to Staking Rewards</td></tr>
 <tr><td>Rewards Algorithm</td><td>Teeter Totter Based Targeting System</td></tr>
+<tr><td>Amount of Rewards Per Block</td><td>2 Rewards, 1 for Masternodes, 1 for Wallet Staking</td></tr>
 <tr><td>Coin Maturity to Stake</td><td>150 Blocks</td></tr>
 
 
@@ -53,8 +54,13 @@ More information at [piex.io](http://www.piex.io)
 ### Rewards Amounts
 
 Block 1000 to 172000:
+
 50/10 When Wallet Staking has dominance over network.*
+
 48/12 When Master nodes have dominance over network.**
 
+
 *50 Piex to Masternodes that win block, 10 Piex to Wallet Stakers that win block.
+
 **48 Piex to Wallet Staker that win block, 12 Piex to Masternodes that win block.
+

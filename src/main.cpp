@@ -3587,8 +3587,9 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
 
     int nHeight = pindexPrev->nHeight + 1;
 
-    //If this is a reorg, check that it is not too depp
-    if (chainActive.Height() - nHeight >= Params().MaxReorganizationDepth())
+    //If this is a reorg, check that it is not too deep
+    int nMaxReorgDepth = GetArg("-maxreorg", Params().MaxReorganizationDepth());
+    if (chainActive.Height() - nHeight >= nMaxReorgDepth)
         return state.DoS(1, error("%s: forked chain older than max reorganization depth (height %d)", __func__, nHeight));
 
     // Check timestamp against prev
@@ -3646,6 +3647,20 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
         if (block.vtx[0].vin[0].scriptSig.size() < expect.size() ||
             !std::equal(expect.begin(), expect.end(), block.vtx[0].vin[0].scriptSig.begin())) {
             return state.DoS(100, error("%s : block height mismatch in coinbase", __func__), REJECT_INVALID, "bad-cb-height");
+        }
+    }
+
+    for (CTransaction tx : block.vtx) {
+        if (tx.IsZerocoinSpend()) {
+            if (fVerifyingBlocks)
+                continue;
+
+            //Check that this transaction is not already in the blockchain
+            uint256 hashFromChain;
+            CTransaction txTest;
+            GetTransaction(tx.GetHash(), txTest, hashFromChain, true);
+            if (hashFromChain != 0 && mapBlockIndex.count(hashFromChain) && chainActive.Contains(mapBlockIndex[hashFromChain]) && pindexPrev->nHeight + 1 > mapBlockIndex[hashFromChain]->nHeight)
+                return state.DoS(100, error("CheckTransaction(): transaction already exists in blockchain!"));
         }
     }
 

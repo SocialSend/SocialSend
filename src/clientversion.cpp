@@ -45,7 +45,6 @@ const std::string CLIENT_NAME("SEND Core");
 #endif
 
 //! git will put "#define GIT_ARCHIVE 1" on the next line inside archives.
-
 #ifdef GIT_ARCHIVE
     #define GIT_COMMIT_ID "$Format:%h$"
     #define GIT_COMMIT_DATE "$Format:%cD$"

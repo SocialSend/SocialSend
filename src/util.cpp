@@ -110,6 +110,7 @@ bool fMasterNode = false;
 string strMasterNodePrivKey = "";
 string strMasterNodeAddr = "";
 bool fLiteMode = false;
+// SwiftX
 bool fEnableSwiftTX = true;
 int nSwiftTXDepth = 5;
 int nObfuscationRounds = 2;
@@ -234,7 +235,7 @@ bool LogAcceptCategory(const char* category)
             // "send" is a composite category enabling all SEND-related debug output
             if (ptrCategory->count(string("send"))) {
                 ptrCategory->insert(string("obfuscation"));
-                ptrCategory->insert(string("swifttx"));
+                ptrCategory->insert(string("swiftx"));
                 ptrCategory->insert(string("masternode"));
                 ptrCategory->insert(string("mnpayments"));
                 ptrCategory->insert(string("mnbudget"));

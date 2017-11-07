@@ -482,6 +482,11 @@
      </column>
      <column>
       <property name="text">
+	<string>Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">	 
        <string>Date</string>
       </property>
      </column>

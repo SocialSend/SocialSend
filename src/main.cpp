@@ -1696,7 +1696,7 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
         ret = blockValue / (100 / 40);
     } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 518401) {
         ret = 5 * COIN;
-    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 151200) {
+    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 998) {
         ret = blockValue / 2;
     } else if (nHeight > Params().LAST_POW_BLOCK()) {
         int64_t nMoneySupply = chainActive.Tip()->nMoneySupply;

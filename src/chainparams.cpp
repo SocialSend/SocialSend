@@ -387,7 +387,7 @@ public:
         nMaturity = 10;
         nMasternodeCountDrift = 20;
         nModifierUpdateBlock = 615800;
-        nMaxMoneyOut = 0 * COIN;
+        nMaxMoneyOut = 25000000 * COIN;
 
         /**
          * Build the genesis block. Note that the output of the genesis coinbase cannot

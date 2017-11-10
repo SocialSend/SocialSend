@@ -1621,11 +1621,11 @@ int64_t GetBlockValue(int nHeight)
 
     if (nHeight == 0) {
         nSubsidy = 1 * COIN;
-    } else if (nHeight < 500 && nHeight > 0) {
+    } else if (nHeight < 1000 && nHeight > 0) {
         nSubsidy = 0 * COIN;
-    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 501) {
+    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 998) {
         nSubsidy = 0 * COIN;
-    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 601) {
+    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 999) {
         nSubsidy = 0 * COIN;
     } else if (nHeight <= 2880 && nHeight > Params().LAST_POW_BLOCK()) {
         nSubsidy = 0 * COIN;

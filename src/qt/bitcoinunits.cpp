@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The PIEX developers
+// Copyright (c) 2015-2017 The SEND developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -19,18 +19,18 @@ BitcoinUnits::BitcoinUnits(QObject* parent) : QAbstractListModel(parent),
 QList<BitcoinUnits::Unit> BitcoinUnits::availableUnits()
 {
     QList<BitcoinUnits::Unit> unitlist;
-    unitlist.append(PIE);
-    unitlist.append(mPIE);
-    unitlist.append(uPIE);
+    unitlist.append(SEND);
+    unitlist.append(mSEND);
+    unitlist.append(uSEND);
     return unitlist;
 }
 
 bool BitcoinUnits::valid(int unit)
 {
     switch (unit) {
-    case PIE:
-    case mPIE:
-    case uPIE:
+    case SEND:
+    case mSEND:
+    case uSEND:
         return true;
     default:
         return false;
@@ -40,12 +40,12 @@ bool BitcoinUnits::valid(int unit)
 QString BitcoinUnits::id(int unit)
 {
     switch (unit) {
-    case PIE:
-        return QString("piex");
-    case mPIE:
-        return QString("mpiex");
-    case uPIE:
-        return QString::fromUtf8("upiex");
+    case SEND:
+        return QString("send");
+    case mSEND:
+        return QString("msend");
+    case uSEND:
+        return QString::fromUtf8("usend");
     default:
         return QString("???");
     }
@@ -55,23 +55,23 @@ QString BitcoinUnits::name(int unit)
 {
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
         switch (unit) {
-        case PIE:
-            return QString("PIE");
-        case mPIE:
-            return QString("mPIE");
-        case uPIE:
-            return QString::fromUtf8("μPIE");
+        case SEND:
+            return QString("SEND");
+        case mSEND:
+            return QString("mSEND");
+        case uSEND:
+            return QString::fromUtf8("μSEND");
         default:
             return QString("???");
         }
     } else {
         switch (unit) {
-        case PIE:
-            return QString("tPIE");
-        case mPIE:
-            return QString("mtPIE");
-        case uPIE:
-            return QString::fromUtf8("μtPIE");
+        case SEND:
+            return QString("tSEND");
+        case mSEND:
+            return QString("mtSEND");
+        case uSEND:
+            return QString::fromUtf8("μtSEND");
         default:
             return QString("???");
         }
@@ -82,23 +82,23 @@ QString BitcoinUnits::description(int unit)
 {
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
         switch (unit) {
-        case PIE:
-            return QString("PIE");
-        case mPIE:
-            return QString("Milli-PIE (1 / 1" THIN_SP_UTF8 "000)");
-        case uPIE:
-            return QString("Micro-PIE (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+        case SEND:
+            return QString("SEND");
+        case mSEND:
+            return QString("Milli-SEND (1 / 1" THIN_SP_UTF8 "000)");
+        case uSEND:
+            return QString("Micro-SEND (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
         default:
             return QString("???");
         }
     } else {
         switch (unit) {
-        case PIE:
-            return QString("TestPIEs");
-        case mPIE:
-            return QString("Milli-TestPIE (1 / 1" THIN_SP_UTF8 "000)");
-        case uPIE:
-            return QString("Micro-TestPIE (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+        case SEND:
+            return QString("TestSENDs");
+        case mSEND:
+            return QString("Milli-TestSEND (1 / 1" THIN_SP_UTF8 "000)");
+        case uSEND:
+            return QString("Micro-TestSEND (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
         default:
             return QString("???");
         }
@@ -108,11 +108,11 @@ QString BitcoinUnits::description(int unit)
 qint64 BitcoinUnits::factor(int unit)
 {
     switch (unit) {
-    case PIE:
+    case SEND:
         return 100000000;
-    case mPIE:
+    case mSEND:
         return 100000;
-    case uPIE:
+    case uSEND:
         return 100;
     default:
         return 100000000;
@@ -122,11 +122,11 @@ qint64 BitcoinUnits::factor(int unit)
 int BitcoinUnits::decimals(int unit)
 {
     switch (unit) {
-    case PIE:
+    case SEND:
         return 8;
-    case mPIE:
+    case mSEND:
         return 5;
-    case uPIE:
+    case uSEND:
         return 2;
     default:
         return 0;

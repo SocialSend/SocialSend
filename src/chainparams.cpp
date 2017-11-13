@@ -459,7 +459,7 @@ const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
 
 
         assert(hashGenesisBlock == uint256(""));
-        //assert(genesis.hashMerkleRoot == uint256("0x1b2ef6e2f28be914103a277377ae7729dcd125dfeb8bf97bd5964ba72b6dc39b"));
+        //assert(genesis.hashMerkleRoot == uint256(""));
 
         //vSeeds.push_back(CDNSSeedData("address.com", "address2.com"));     // Primary DNS Seeder
         //vSeeds.push_back(CDNSSeedData("address.com", "address2.com"));    // Secondary DNS Seeder
@@ -467,7 +467,7 @@ const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
         //vSeeds.push_back(CDNSSeedData("address.com", "address2.com")); // Single node address
         //vSeeds.push_back(CDNSSeedData("xxx.xxx.xxx.xxx", "xxx.xxx.xxx.xxx"));           // Single node address
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 75);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 63); // Addresses Prefix S (base58 code)
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 13);
         base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 212);
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x02)(0x2D)(0x25)(0x33).convert_to_container<std::vector<unsigned char> >();
@@ -534,11 +534,11 @@ public:
         genesis.nNonce = 2402015;
 
         hashGenesisBlock = genesis.GetHash();
-        //assert(hashGenesisBlock == uint256("0x0000041e482b9b9691d98eefb48473405c0b8ec31b76df3797c74a78680ef818"));
+        //assert(hashGenesisBlock == uint256(""));
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet SEND addresses start with 'x' or 'y'
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 55); // Testnet SEND addresses start with 'T'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet SEND script addresses start with '8' or '9'
         base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 239);     // Testnet private keys start with '9' or 'c' (Bitcoin defaults)
         // Testnet SEND BIP32 pubkeys start with 'DRKV'
@@ -599,7 +599,7 @@ public:
 
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 51476;
-        //assert(hashGenesisBlock == uint256("0x4f023a2120d9127b21bbad01724fdb79b519f593f2a85b60d3d79160ec5f29df"));
+        //assert(hashGenesisBlock == uint256(""));
 
         vFixedSeeds.clear(); //! Testnet mode doesn't have any fixed seeds.
         vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.

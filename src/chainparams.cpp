@@ -387,7 +387,7 @@ public:
         nMaturity = 10;
         nMasternodeCountDrift = 20;
         nModifierUpdateBlock = 615800;
-        nMaxMoneyOut = 25000000 * COIN;
+        nMaxMoneyOut = 28000000 * COIN;
 
         /**
          * Build the genesis block. Note that the output of the genesis coinbase cannot
@@ -541,11 +541,11 @@ public:
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet SEND addresses start with 'x' or 'y'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet SEND script addresses start with '8' or '9'
         base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 239);     // Testnet private keys start with '9' or 'c' (Bitcoin defaults)
-        // Testnet piex BIP32 pubkeys start with 'DRKV'
+        // Testnet SEND BIP32 pubkeys start with 'DRKV'
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x3a)(0x80)(0x61)(0xa0).convert_to_container<std::vector<unsigned char> >();
-        // Testnet piex BIP32 prvkeys start with 'DRKP'
+        // Testnet SEND BIP32 prvkeys start with 'DRKP'
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x3a)(0x80)(0x58)(0x37).convert_to_container<std::vector<unsigned char> >();
-        // Testnet piex BIP44 coin type is '1' (All coin's testnet default)
+        // Testnet SEND BIP44 coin type is '1' (All coin's testnet default)
         base58Prefixes[EXT_COIN_TYPE] = boost::assign::list_of(0x80)(0x00)(0x00)(0x01).convert_to_container<std::vector<unsigned char> >();
 
         convertSeed6(vFixedSeeds, pnSeed6_test, ARRAYLEN(pnSeed6_test));

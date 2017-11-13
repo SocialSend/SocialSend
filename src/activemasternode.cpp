@@ -8,7 +8,7 @@
 #include "spork.h"
 
 //
-// Bootup the Masternode, look for a 10000 PIEX input and register on the network
+// Bootup the Masternode, look for a 6250 SEND input and register on the network
 //
 void CActiveMasternode::ManageStatus()
 {
@@ -64,13 +64,13 @@ void CActiveMasternode::ManageStatus()
         }
 
         if (Params().NetworkID() == CBaseChainParams::MAIN) {
-            if (service.GetPort() != 53472) {
-                notCapableReason = strprintf("Invalid port: %u - only 53472 is supported on mainnet.", service.GetPort());
+            if (service.GetPort() != 50050) {
+                notCapableReason = strprintf("Invalid port: %u - only 50050 is supported on mainnet.", service.GetPort());
                 LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason);
                 return;
             }
-        } else if (service.GetPort() == 53472) {
-            notCapableReason = strprintf("Invalid port: %u - 53472 is only supported on mainnet.", service.GetPort());
+        } else if (service.GetPort() == 50050) {
+            notCapableReason = strprintf("Invalid port: %u - 50050 is only supported on mainnet.", service.GetPort());
             LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason);
             return;
         }
@@ -268,8 +268,8 @@ bool CActiveMasternode::Register(std::string strService, std::string strKeyMaste
             LogPrintf("CActiveMasternode::Register() - %s\n", errorMessage);
             return false;
         }
-    } else if (service.GetPort() == 53472) {
-        errorMessage = strprintf("Invalid port %u for masternode %s - 53472 is only supported on mainnet.", service.GetPort(), strService);
+    } else if (service.GetPort() == 50050) {
+        errorMessage = strprintf("Invalid port %u for masternode %s - 50050 is only supported on mainnet.", service.GetPort(), strService);
         LogPrintf("CActiveMasternode::Register() - %s\n", errorMessage);
         return false;
     }

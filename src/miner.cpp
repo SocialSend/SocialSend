@@ -1,7 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The PIEX developers
+// Copyright (c) 2015-2017 The SEND developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -30,7 +30,7 @@ using namespace std;
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// PIEXMiner
+// SENDMiner
 //
 
 //
@@ -113,7 +113,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     txNew.vout[0].scriptPubKey = scriptPubKeyIn;
 
     CBlockIndex* prev = chainActive.Tip();
-    if(prev->nHeight <= 1000) txNew.vout[0].nValue = 80000 * COIN;
+    if(prev->nHeight <= 1000) txNew.vout[0].nValue = 28000 * COIN;
 
 
     pblock->vtx.push_back(txNew);

@@ -1,32 +1,32 @@
-bin_PROGRAMS += qt/piex-qt
+bin_PROGRAMS += qt/send-qt
 EXTRA_LIBRARIES += qt/libbitcoinqt.a
 
-# piex qt core #
+# send qt core #
 QT_TS = \
-  qt/locale/piex_bg.ts \
-  qt/locale/piex_ca.ts \
-  qt/locale/piex_cs.ts \
-  qt/locale/piex_da.ts \
-  qt/locale/piex_de.ts \
-  qt/locale/piex_en.ts \
-  qt/locale/piex_en_US.ts \
-  qt/locale/piex_es.ts \
-  qt/locale/piex_fi.ts \
-  qt/locale/piex_fr_FR.ts \
-  qt/locale/piex_it.ts \
-  qt/locale/piex_ja.ts \
-  qt/locale/piex_ko_KR.ts \
-  qt/locale/piex_nl.ts \
-  qt/locale/piex_pl.ts \
-  qt/locale/piex_pt.ts \
-  qt/locale/piex_pt_BR.ts \
-  qt/locale/piex_ro_RO.ts \
-  qt/locale/piex_ru.ts \
-  qt/locale/piex_sk.ts \
-  qt/locale/piex_sv.ts \
-  qt/locale/piex_uk.ts \
-  qt/locale/piex_zh_CN.ts \
-  qt/locale/piex_zh_TW.ts
+  qt/locale/send_bg.ts \
+  qt/locale/send_ca.ts \
+  qt/locale/send_cs.ts \
+  qt/locale/send_da.ts \
+  qt/locale/send_de.ts \
+  qt/locale/send_en.ts \
+  qt/locale/send_en_US.ts \
+  qt/locale/send_es.ts \
+  qt/locale/send_fi.ts \
+  qt/locale/send_fr_FR.ts \
+  qt/locale/send_it.ts \
+  qt/locale/send_ja.ts \
+  qt/locale/send_ko_KR.ts \
+  qt/locale/send_nl.ts \
+  qt/locale/send_pl.ts \
+  qt/locale/send_pt.ts \
+  qt/locale/send_pt_BR.ts \
+  qt/locale/send_ro_RO.ts \
+  qt/locale/send_ru.ts \
+  qt/locale/send_sk.ts \
+  qt/locale/send_sv.ts \
+  qt/locale/send_uk.ts \
+  qt/locale/send_zh_CN.ts \
+  qt/locale/send_zh_TW.ts
 
 QT_FORMS_UI = \
   qt/forms/addressbookpage.ui \
@@ -106,16 +106,16 @@ BITCOIN_MM = \
   qt/macnotificationhandler.mm
 
 QT_MOC = \
-  qt/piex.moc \
+  qt/send.moc \
   qt/bitcoinamountfield.moc \
   qt/intro.moc \
   qt/overviewpage.moc \
   qt/rpcconsole.moc
 
-QT_QRC_CPP = qt/qrc_piex.cpp
-QT_QRC = qt/piex.qrc
-QT_QRC_LOCALE_CPP = qt/qrc_piex_locale.cpp
-QT_QRC_LOCALE = qt/piex_locale.qrc
+QT_QRC_CPP = qt/qrc_send.cpp
+QT_QRC = qt/send.qrc
+QT_QRC_LOCALE_CPP = qt/qrc_send_locale.cpp
+QT_QRC_LOCALE = qt/send_locale.qrc
 
 PROTOBUF_CC = qt/paymentrequest.pb.cc
 PROTOBUF_H = qt/paymentrequest.pb.h
@@ -229,12 +229,12 @@ RES_ICONS = \
   qt/res/icons/tx_input.png \
   qt/res/icons/tx_output.png \
   qt/res/icons/tx_mined.png \
-  qt/res/icons/unit_piex.png \
-  qt/res/icons/unit_mpiex.png \
-  qt/res/icons/unit_upiex.png \
-  qt/res/icons/unit_tpiex.png \
-  qt/res/icons/unit_tmpiex.png \
-  qt/res/icons/unit_tupiex.png
+  qt/res/icons/unit_send.png \
+  qt/res/icons/unit_msend.png \
+  qt/res/icons/unit_usend.png \
+  qt/res/icons/unit_tsend.png \
+  qt/res/icons/unit_tmsend.png \
+  qt/res/icons/unit_tusend.png
 
 BITCOIN_QT_CPP = \
   qt/bitcoinaddressvalidator.cpp \
@@ -301,7 +301,7 @@ RES_IMAGES = \
   qt/res/images/about.png \
   qt/res/images/splash.png \
   qt/res/images/splash_testnet.png \
-  qt/res/images/piex_logo_horizontal.png \
+  qt/res/images/send_logo_horizontal.png \
   qt/res/images/downArrow.png \
   qt/res/images/downArrow_small.png \
   qt/res/images/upArrow_small.png \
@@ -317,7 +317,7 @@ RES_CSS = \
 
 RES_MOVIES = $(wildcard $(srcdir)/qt/res/movies/spinner-*.png)
 
-BITCOIN_RC = qt/res/piex-qt-res.rc
+BITCOIN_RC = qt/res/send-qt-res.rc
 
 BITCOIN_QT_INCLUDES = -I$(builddir)/qt -I$(srcdir)/qt -I$(srcdir)/qt/forms \
   -I$(builddir)/qt/forms
@@ -337,68 +337,68 @@ QT_FORMS_H=$(join $(dir $(QT_FORMS_UI)),$(addprefix ui_, $(notdir $(QT_FORMS_UI:
 # Most files will depend on the forms and moc files as includes. Generate them
 # before anything else.
 $(QT_MOC): $(QT_FORMS_H)
-$(qt_libbitcoinqt_a_OBJECTS) $(qt_piex_qt_OBJECTS) : | $(QT_MOC)
+$(qt_libbitcoinqt_a_OBJECTS) $(qt_send_qt_OBJECTS) : | $(QT_MOC)
 
 #Generating these with a half-written protobuf header leads to wacky results.
 #This makes sure it's done.
 $(QT_MOC): $(PROTOBUF_H)
 $(QT_MOC_CPP): $(PROTOBUF_H)
 
-# piex-qt binary #
-qt_piex_qt_CPPFLAGS = $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
+# send-qt binary #
+qt_send_qt_CPPFLAGS = $(BITCOIN_INCLUDES) $(BITCOIN_QT_INCLUDES) \
   $(QT_INCLUDES) $(PROTOBUF_CFLAGS) $(QR_CFLAGS)
 
-qt_piex_qt_SOURCES = qt/piex.cpp
+qt_send_qt_SOURCES = qt/send.cpp
 if TARGET_DARWIN
-  qt_piex_qt_SOURCES += $(BITCOIN_MM)
+  qt_send_qt_SOURCES += $(BITCOIN_MM)
 endif
 if TARGET_WINDOWS
-  qt_piex_qt_SOURCES += $(BITCOIN_RC)
+  qt_send_qt_SOURCES += $(BITCOIN_RC)
 endif
-qt_piex_qt_LDADD = qt/libbitcoinqt.a $(LIBBITCOIN_SERVER)
+qt_send_qt_LDADD = qt/libbitcoinqt.a $(LIBBITCOIN_SERVER)
 if ENABLE_WALLET
-qt_piex_qt_LDADD += $(LIBBITCOIN_WALLET)
+qt_send_qt_LDADD += $(LIBBITCOIN_WALLET)
 endif
 if ENABLE_ZMQ
-qt_piex_qt_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
+qt_send_qt_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
 endif
-qt_piex_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBBITCOIN_UNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) \
+qt_send_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBBITCOIN_UNIVALUE) $(LIBLEVELDB) $(LIBMEMENV) \
   $(BOOST_LIBS) $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(PROTOBUF_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(LIBSECP256K1)
-qt_piex_qt_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
-qt_piex_qt_LIBTOOLFLAGS = --tag CXX
+qt_send_qt_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+qt_send_qt_LIBTOOLFLAGS = --tag CXX
 
 #locale/foo.ts -> locale/foo.qm
 QT_QM=$(QT_TS:.ts=.qm)
 
 .SECONDARY: $(QT_QM)
 
-qt/piexstrings.cpp: $(libbitcoin_server_a_SOURCES) $(libbitcoin_wallet_a_SOURCES) $(libbitcoin_common_a_SOURCES)
+qt/sendstrings.cpp: $(libbitcoin_server_a_SOURCES) $(libbitcoin_wallet_a_SOURCES) $(libbitcoin_common_a_SOURCES)
 	@test -n $(XGETTEXT) || echo "xgettext is required for updating translations"
 	$(AM_V_GEN) cd $(srcdir); XGETTEXT=$(XGETTEXT) $(PYTHON) ../share/qt/extract_strings_qt.py $^
 
-translate: qt/piexstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_QT_CPP) $(BITCOIN_QT_H) $(BITCOIN_MM)
+translate: qt/sendstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(BITCOIN_QT_CPP) $(BITCOIN_QT_H) $(BITCOIN_MM)
 	@test -n $(LUPDATE) || echo "lupdate is required for updating translations"
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) $^ -locations relative -no-obsolete -ts qt/locale/piex_en.ts
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) $^ -locations relative -no-obsolete -ts qt/locale/send_en.ts
 
 $(QT_QRC_LOCALE_CPP): $(QT_QRC_LOCALE) $(QT_QM)
 	@test -f $(RCC)
 	@test -f $(@D)/$(<F) || cp -f $< $(@D)
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name piex_locale $(@D)/$(<F) | \
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name send_locale $(@D)/$(<F) | \
 	  $(SED) -e '/^\*\*.*Created:/d' -e '/^\*\*.*by:/d' > $@
 
 $(QT_QRC_CPP): $(QT_QRC) $(QT_FORMS_H) $(RES_ICONS) $(RES_IMAGES) $(RES_CSS) $(RES_MOVIES) $(PROTOBUF_H)
 	@test -f $(RCC)
-	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name piex $< | \
+	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name send $< | \
 	  $(SED) -e '/^\*\*.*Created:/d' -e '/^\*\*.*by:/d' > $@
 
 CLEAN_QT = $(nodist_qt_libbitcoinqt_a_SOURCES) $(QT_QM) $(QT_FORMS_H) qt/*.gcda qt/*.gcno
 
 CLEANFILES += $(CLEAN_QT)
 
-piex_qt_clean: FORCE
-	rm -f $(CLEAN_QT) $(qt_libbitcoinqt_a_OBJECTS) $(qt_piex_qt_OBJECTS) qt/piex-qt$(EXEEXT) $(LIBBITCOINQT)
+send_qt_clean: FORCE
+	rm -f $(CLEAN_QT) $(qt_libbitcoinqt_a_OBJECTS) $(qt_send_qt_OBJECTS) qt/send-qt$(EXEEXT) $(LIBBITCOINQT)
 
-piex_qt : qt/piex-qt$(EXEEXT)
+send_qt : qt/send-qt$(EXEEXT)
 
 ui_%.h: %.ui
 	@test -f $(UIC)

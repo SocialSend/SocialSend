@@ -1,12 +1,12 @@
-// Copyright (c) 2009-2010 Satoshi Nakamoto
+SEND// Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The PIEX developers
+// Copyright (c) 2015-2017 The SEND developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include "config/piex-config.h"
+#include "config/send-config.h"
 #endif
 
 #include "init.h"
@@ -171,7 +171,7 @@ void PrepareShutdown()
     /// for example if the data directory was found to be locked.
     /// Be sure that anything that writes files or flushes caches only does this if the respective
     /// module was initialized.
-    RenameThread("piex-shutoff");
+    RenameThread("send-shutoff");
     mempool.AddTransactionsUpdated(1);
     StopRPCThreads();
 #ifdef ENABLE_WALLET
@@ -305,7 +305,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-blocknotify=<cmd>", _("Execute command when the best block changes (%s in cmd is replaced by block hash)"));
     strUsage += HelpMessageOpt("-checkblocks=<n>", strprintf(_("How many blocks to check at startup (default: %u, 0 = all)"), 500));
     strUsage += HelpMessageOpt("-checklevel=<n>", strprintf(_("How thorough the block verification of -checkblocks is (0-4, default: %u)"), 3));
-    strUsage += HelpMessageOpt("-conf=<file>", strprintf(_("Specify configuration file (default: %s)"), "piex.conf"));
+    strUsage += HelpMessageOpt("-conf=<file>", strprintf(_("Specify configuration file (default: %s)"), "send.conf"));
     if (mode == HMM_BITCOIND) {
 #if !defined(WIN32)
         strUsage += HelpMessageOpt("-daemon", _("Run in the background as a daemon and accept commands"));
@@ -317,7 +317,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-maxorphantx=<n>", strprintf(_("Keep at most <n> unconnectable transactions in memory (default: %u)"), DEFAULT_MAX_ORPHAN_TRANSACTIONS));
     strUsage += HelpMessageOpt("-par=<n>", strprintf(_("Set the number of script verification threads (%u to %d, 0 = auto, <0 = leave that many cores free, default: %d)"), -(int)boost::thread::hardware_concurrency(), MAX_SCRIPTCHECK_THREADS, DEFAULT_SCRIPTCHECK_THREADS));
 #ifndef WIN32
-    strUsage += HelpMessageOpt("-pid=<file>", strprintf(_("Specify pid file (default: %s)"), "piexd.pid"));
+    strUsage += HelpMessageOpt("-pid=<file>", strprintf(_("Specify pid file (default: %s)"), "sendd.pid"));
 #endif
     strUsage += HelpMessageOpt("-reindex", _("Rebuild block chain index from current blk000??.dat files") + " " + _("on startup"));
 #if !defined(WIN32)
@@ -345,7 +345,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-onlynet=<net>", _("Only connect to nodes in network <net> (ipv4, ipv6 or onion)"));
     strUsage += HelpMessageOpt("-permitbaremultisig", strprintf(_("Relay non-P2SH multisig (default: %u)"), 1));
     strUsage += HelpMessageOpt("-peerbloomfilters", strprintf(_("Support filtering of blocks and transaction with bloom filters (default: %u)"), DEFAULT_PEERBLOOMFILTERS));
-    strUsage += HelpMessageOpt("-port=<port>", strprintf(_("Listen for connections on <port> (default: %u or testnet: %u)"), 53472, 51474));
+    strUsage += HelpMessageOpt("-port=<port>", strprintf(_("Listen for connections on <port> (default: %u or testnet: %u)"), 50050, 51474));
     strUsage += HelpMessageOpt("-proxy=<ip:port>", _("Connect through SOCKS5 proxy"));
     strUsage += HelpMessageOpt("-seednode=<ip>", _("Connect to a node to retrieve peer addresses, and disconnect"));
     strUsage += HelpMessageOpt("-timeout=<n>", strprintf(_("Specify connection timeout in milliseconds (minimum: 1, default: %d)"), DEFAULT_CONNECT_TIMEOUT));
@@ -367,9 +367,9 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-disablewallet", _("Do not load the wallet and disable wallet RPC calls"));
     strUsage += HelpMessageOpt("-keypool=<n>", strprintf(_("Set key pool size to <n> (default: %u)"), 100));
     if (GetBoolArg("-help-debug", false))
-        strUsage += HelpMessageOpt("-mintxfee=<amt>", strprintf(_("Fees (in PIE/Kb) smaller than this are considered zero fee for transaction creation (default: %s)"),
+        strUsage += HelpMessageOpt("-mintxfee=<amt>", strprintf(_("Fees (in SEND/Kb) smaller than this are considered zero fee for transaction creation (default: %s)"),
             FormatMoney(CWallet::minTxFee.GetFeePerK())));
-    strUsage += HelpMessageOpt("-paytxfee=<amt>", strprintf(_("Fee (in PIE/kB) to add to transactions you send (default: %s)"), FormatMoney(payTxFee.GetFeePerK())));
+    strUsage += HelpMessageOpt("-paytxfee=<amt>", strprintf(_("Fee (in SEND/kB) to add to transactions you send (default: %s)"), FormatMoney(payTxFee.GetFeePerK())));
     strUsage += HelpMessageOpt("-rescan", _("Rescan the block chain for missing wallet transactions") + " " + _("on startup"));
     strUsage += HelpMessageOpt("-salvagewallet", _("Attempt to recover private keys from a corrupt wallet.dat") + " " + _("on startup"));
     strUsage += HelpMessageOpt("-sendfreetransactions", strprintf(_("Send transactions as zero-fee transactions if possible (default: %u)"), 0));
@@ -410,7 +410,7 @@ std::string HelpMessage(HelpMessageMode mode)
         strUsage += HelpMessageOpt("-stopafterblockimport", strprintf(_("Stop running after importing blocks from disk (default: %u)"), 0));
         strUsage += HelpMessageOpt("-sporkkey=<privkey>", _("Enable spork administration functionality with the appropriate private key."));
     }
-    string debugCategories = "addrman, alert, bench, coindb, db, lock, rand, rpc, selectcoins, mempool, net, piex, (obfuscation, swifttx, masternode, mnpayments, mnbudget)"; // Don't translate these and qt below
+    string debugCategories = "addrman, alert, bench, coindb, db, lock, rand, rpc, selectcoins, mempool, net, send, (obfuscation, swifttx, masternode, mnpayments, mnbudget)"; // Don't translate these and qt below
     if (mode == HMM_BITCOIN_QT)
         debugCategories += ", qt";
     strUsage += HelpMessageOpt("-debug=<category>", strprintf(_("Output debugging information (default: %u, supplying <category> is optional)"), 0) + ". " +
@@ -429,7 +429,7 @@ std::string HelpMessage(HelpMessageMode mode)
         strUsage += HelpMessageOpt("-relaypriority", strprintf(_("Require high priority for relaying free or low-fee transactions (default:%u)"), 1));
         strUsage += HelpMessageOpt("-maxsigcachesize=<n>", strprintf(_("Limit size of signature cache to <n> entries (default: %u)"), 50000));
     }
-    strUsage += HelpMessageOpt("-minrelaytxfee=<amt>", strprintf(_("Fees (in PIE/Kb) smaller than this are considered zero fee for relaying (default: %s)"), FormatMoney(::minRelayTxFee.GetFeePerK())));
+    strUsage += HelpMessageOpt("-minrelaytxfee=<amt>", strprintf(_("Fees (in SEND/Kb) smaller than this are considered zero fee for relaying (default: %s)"), FormatMoney(::minRelayTxFee.GetFeePerK())));
     strUsage += HelpMessageOpt("-printtoconsole", strprintf(_("Send trace/debug info to console instead of debug.log file (default: %u)"), 0));
     if (GetBoolArg("-help-debug", false)) {
         strUsage += HelpMessageOpt("-printpriority", strprintf(_("Log transaction priority and fee per kB when mining blocks (default: %u)"), 0));
@@ -440,7 +440,7 @@ std::string HelpMessage(HelpMessageMode mode)
     }
     strUsage += HelpMessageOpt("-shrinkdebugfile", _("Shrink debug.log file on client startup (default: 1 when no -debug)"));
     strUsage += HelpMessageOpt("-testnet", _("Use the test network"));
-    strUsage += HelpMessageOpt("-litemode=<n>", strprintf(_("Disable all PIEX specific functionality (Masternodes, Obfuscation, SwiftTX, Budgeting) (0-1, default: %u)"), 0));
+    strUsage += HelpMessageOpt("-litemode=<n>", strprintf(_("Disable all send specific functionality (Masternodes, Obfuscation, SwiftTX, Budgeting) (0-1, default: %u)"), 0));
 
 #ifdef ENABLE_WALLET
     strUsage += HelpMessageGroup(_("Staking options:"));
@@ -457,13 +457,13 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-mnconf=<file>", strprintf(_("Specify masternode configuration file (default: %s)"), "masternode.conf"));
     strUsage += HelpMessageOpt("-mnconflock=<n>", strprintf(_("Lock masternodes from masternode configuration file (default: %u)"), 1));
     strUsage += HelpMessageOpt("-masternodeprivkey=<n>", _("Set the masternode private key"));
-    strUsage += HelpMessageOpt("-masternodeaddr=<n>", strprintf(_("Set external address:port to get to this masternode (example: %s)"), "128.127.106.235:53472"));
+    strUsage += HelpMessageOpt("-masternodeaddr=<n>", strprintf(_("Set external address:port to get to this masternode (example: %s)"), "128.127.106.235:50050"));
     strUsage += HelpMessageOpt("-budgetvotemode=<mode>", _("Change automatic finalized budget voting behavior. mode=auto: Vote for only exact finalized budget match to my generated budget. (string, default: auto)"));
 
     strUsage += HelpMessageGroup(_("Obfuscation options:"));
     strUsage += HelpMessageOpt("-enableobfuscation=<n>", strprintf(_("Enable use of automated obfuscation for funds stored in this wallet (0-1, default: %u)"), 0));
     strUsage += HelpMessageOpt("-obfuscationrounds=<n>", strprintf(_("Use N separate masternodes to anonymize funds  (2-8, default: %u)"), 2));
-    strUsage += HelpMessageOpt("-anonymizepiexamount=<n>", strprintf(_("Keep N PIE anonymized (default: %u)"), 0));
+    strUsage += HelpMessageOpt("-anonymizesendamount=<n>", strprintf(_("Keep N SEND anonymized (default: %u)"), 0));
     strUsage += HelpMessageOpt("-liquidityprovider=<n>", strprintf(_("Provide liquidity to Obfuscation by infrequently mixing coins on a continual basis (0-100, default: %u, 1=very frequent, high fees, 100=very infrequent, low fees)"), 0));
 
     strUsage += HelpMessageGroup(_("SwiftTX options:"));
@@ -508,7 +508,7 @@ std::string LicenseInfo()
            "\n" +
            FormatParagraph(strprintf(_("Copyright (C) 2014-%i The Dash Core Developers"), COPYRIGHT_YEAR)) + "\n" +
            "\n" +
-           FormatParagraph(strprintf(_("Copyright (C) 2015-%i The PIEX Core Developers"), COPYRIGHT_YEAR)) + "\n" +
+           FormatParagraph(strprintf(_("Copyright (C) 2015-%i The send Core Developers"), COPYRIGHT_YEAR)) + "\n" +
            "\n" +
            FormatParagraph(_("This is experimental software.")) + "\n" +
            "\n" +
@@ -542,7 +542,7 @@ struct CImportingNow {
 
 void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 {
-    RenameThread("piex-loadblk");
+    RenameThread("send-loadblk");
 
     // -reindex
     if (fReindex) {
@@ -600,7 +600,7 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 }
 
 /** Sanity checks
- *  Ensure that PIEX is running in a usable environment with all
+ *  Ensure that send is running in a usable environment with all
  *  necessary library support.
  */
 bool InitSanityCheck(void)
@@ -617,7 +617,7 @@ bool InitSanityCheck(void)
 }
 
 
-/** Initialize piex.
+/** Initialize send.
  *  @pre Parameters should be parsed and config file should be read.
  */
 bool AppInit2(boost::thread_group& threadGroup)
@@ -886,7 +886,7 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     // Sanity check
     if (!InitSanityCheck())
-        return InitError(_("Initialization sanity check failed. PIEX Core is shutting down."));
+        return InitError(_("Initialization sanity check failed. SEND Core is shutting down."));
 
     std::string strDataDir = GetDataDir().string();
 #ifdef ENABLE_WALLET
@@ -894,7 +894,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     if (strWalletFile != boost::filesystem::basename(strWalletFile) + boost::filesystem::extension(strWalletFile))
         return InitError(strprintf(_("Wallet %s resides outside data directory %s"), strWalletFile, strDataDir));
 #endif
-    // Make sure only a single PIEX process is using the data directory.
+    // Make sure only a single SEND process is using the data directory.
     boost::filesystem::path pathLockFile = GetDataDir() / ".lock";
     FILE* file = fopen(pathLockFile.string().c_str(), "a"); // empty lock file; created if it doesn't exist.
     if (file) fclose(file);
@@ -902,7 +902,7 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     // Wait maximum 10 seconds if an old wallet is still running. Avoids lockup during restart
     if (!lock.timed_lock(boost::get_system_time() + boost::posix_time::seconds(10)))
-        return InitError(strprintf(_("Cannot obtain a lock on data directory %s. PIEX Core is probably already running."), strDataDir));
+        return InitError(strprintf(_("Cannot obtain a lock on data directory %s. SEND Core is probably already running."), strDataDir));
 
 #ifndef WIN32
     CreatePidFile(GetPidFile(), getpid());
@@ -910,7 +910,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     if (GetBoolArg("-shrinkdebugfile", !fDebug))
         ShrinkDebugFile();
     LogPrintf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    LogPrintf("PIEX version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
+    LogPrintf("SEND version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
     LogPrintf("Using OpenSSL version %s\n", SSLeay_version(SSLEAY_VERSION));
 #ifdef ENABLE_WALLET
     LogPrintf("Using BerkeleyDB version %s\n", DbEnv::version(0, 0, 0));
@@ -1345,9 +1345,9 @@ bool AppInit2(boost::thread_group& threadGroup)
                              " or address book entries might be missing or incorrect."));
                 InitWarning(msg);
             } else if (nLoadWalletRet == DB_TOO_NEW)
-                strErrors << _("Error loading wallet.dat: Wallet requires newer version of PIEX Core") << "\n";
+                strErrors << _("Error loading wallet.dat: Wallet requires newer version of SEND Core") << "\n";
             else if (nLoadWalletRet == DB_NEED_REWRITE) {
-                strErrors << _("Wallet needed to be rewritten: restart PIEX Core to complete") << "\n";
+                strErrors << _("Wallet needed to be rewritten: restart SEND Core to complete") << "\n";
                 LogPrintf("%s", strErrors.str());
                 return InitError(strErrors.str());
             } else
@@ -1570,9 +1570,9 @@ bool AppInit2(boost::thread_group& threadGroup)
         nObfuscationRounds = 99999;
     }
 
-    nAnonymizePiexAmount = GetArg("-anonymizepiexamount", 0);
-    if (nAnonymizePiexAmount > 999999) nAnonymizePiexAmount = 999999;
-    if (nAnonymizePiexAmount < 2) nAnonymizePiexAmount = 2;
+    nAnonymizeSendAmount = GetArg("-anonymizesendamount", 0);
+    if (nAnonymizeSendAmount > 999999) nAnonymizeSendAmount = 999999;
+    if (nAnonymizeSendAmount < 2) nAnonymizeSendAmount = 2;
 
     fEnableSwiftTX = GetBoolArg("-enableswifttx", fEnableSwiftTX);
     nSwiftTXDepth = GetArg("-swifttxdepth", nSwiftTXDepth);
@@ -1587,7 +1587,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     LogPrintf("fLiteMode %d\n", fLiteMode);
     LogPrintf("nSwiftTXDepth %d\n", nSwiftTXDepth);
     LogPrintf("Obfuscation rounds %d\n", nObfuscationRounds);
-    LogPrintf("Anonymize PIEX Amount %d\n", nAnonymizePiexAmount);
+    LogPrintf("Anonymize SEND Amount %d\n", nAnonymizeSendAmount);
     LogPrintf("Budget Mode %s\n", strBudgetMode.c_str());
 
     /* Denominations
@@ -1596,8 +1596,8 @@ bool AppInit2(boost::thread_group& threadGroup)
        is convertable to another.
 
        For example:
-       1PIE+1000 == (.1PIE+100)*10
-       10PIE+10000 == (1PIE+1000)*10
+       1SEND+1000 == (.1SEND+100)*10
+       10SEND+10000 == (1SEND+1000)*10
     */
     obfuScationDenominations.push_back((10000 * COIN) + 10000000);
     obfuScationDenominations.push_back((1000 * COIN) + 1000000);

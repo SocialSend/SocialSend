@@ -2312,7 +2312,7 @@ static CCheckQueue<CScriptCheck> scriptcheckqueue(128);
 
 void ThreadScriptCheck()
 {
-    RenameThread("piex-scriptch");
+    RenameThread("send-scriptch");
     scriptcheckqueue.Thread();
 }
 

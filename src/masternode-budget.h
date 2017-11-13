@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The PIEX developers
+// Copyright (c) 2015-2017 The SEND developers
 
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -31,8 +31,8 @@ class CTxBudgetPayment;
 #define VOTE_YES 1
 #define VOTE_NO 2
 
-static const CAmount PROPOSAL_FEE_TX = (50 * COIN);
-static const CAmount BUDGET_FEE_TX = (50 * COIN);
+static const CAmount PROPOSAL_FEE_TX = (700 * COIN);
+static const CAmount BUDGET_FEE_TX = (700 * COIN);
 static const int64_t BUDGET_FEE_CONFIRMATIONS = 6;
 static const int64_t BUDGET_VOTE_UPDATE_MIN = 60 * 60;
 

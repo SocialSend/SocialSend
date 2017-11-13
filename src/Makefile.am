@@ -68,7 +68,7 @@ if BUILD_BITCOIND
 endif
 
 if BUILD_BITCOIN_UTILS
-  bin_PROGRAMS += send-cli piex-tx
+  bin_PROGRAMS += send-cli send-tx
 endif
 
 .PHONY: FORCE

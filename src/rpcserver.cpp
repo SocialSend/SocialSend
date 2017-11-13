@@ -1,7 +1,7 @@
-// Copyright (c) 2010 Satoshi Nakamoto
+SEND// Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The PIEX developers
+// Copyright (c) 2015-2017 The SEND developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -219,10 +219,10 @@ Value stop(const Array& params, bool fHelp)
     if (fHelp || params.size() > 1)
         throw runtime_error(
             "stop\n"
-            "\nStop PIEX server.");
+            "\nStop SEND server.");
     // Shutdown will take long enough that the response should get back
     StartShutdown();
-    return "PIEX server stopping";
+    return "SEND server stopping";
 }
 
 
@@ -299,16 +299,16 @@ static const CRPCCommand vRPCCommands[] =
         {"hidden", "reconsiderblock", &reconsiderblock, true, true, false},
         {"hidden", "setmocktime", &setmocktime, true, false, false},
 
-        /* Piex features */
-        {"piex", "masternode", &masternode, true, true, false},
-        {"piex", "masternodelist", &masternodelist, true, true, false},
-        {"piex", "mnbudget", &mnbudget, true, true, false},
-        {"piex", "mnbudgetvoteraw", &mnbudgetvoteraw, true, true, false},
-        {"piex", "mnfinalbudget", &mnfinalbudget, true, true, false},
-        {"piex", "mnsync", &mnsync, true, true, false},
-        {"piex", "spork", &spork, true, true, false},
+        /* Send features */
+        {"send", "masternode", &masternode, true, true, false},
+        {"send", "masternodelist", &masternodelist, true, true, false},
+        {"send", "mnbudget", &mnbudget, true, true, false},
+        {"send", "mnbudgetvoteraw", &mnbudgetvoteraw, true, true, false},
+        {"send", "mnfinalbudget", &mnfinalbudget, true, true, false},
+        {"send", "mnsync", &mnsync, true, true, false},
+        {"send", "spork", &spork, true, true, false},
 #ifdef ENABLE_WALLET
-        {"piex", "obfuscation", &obfuscation, false, false, true}, /* not threadSafe because of SendMoney */
+        {"send", "obfuscation", &obfuscation, false, false, true}, /* not threadSafe because of SendMoney */
 
         /* Wallet */
         {"wallet", "addmultisigaddress", &addmultisigaddress, true, false, true},
@@ -573,16 +573,16 @@ void StartRPCThreads()
         unsigned char rand_pwd[32];
         GetRandBytes(rand_pwd, 32);
         uiInterface.ThreadSafeMessageBox(strprintf(
-                                             _("To use piexd, or the -server option to piex-qt, you must set an rpcpassword in the configuration file:\n"
+                                             _("To use sendd, or the -server option to send-qt, you must set an rpcpassword in the configuration file:\n"
                                                "%s\n"
                                                "It is recommended you use the following random password:\n"
-                                               "rpcuser=piexrpc\n"
+                                               "rpcuser=sendrpc\n"
                                                "rpcpassword=%s\n"
                                                "(you do not need to remember this password)\n"
                                                "The username and password MUST NOT be the same.\n"
                                                "If the file does not exist, create it with owner-readable-only file permissions.\n"
                                                "It is also recommended to set alertnotify so you are notified of problems;\n"
-                                               "for example: alertnotify=echo %%s | mail -s \"PIEX Alert\" admin@foo.com\n"),
+                                               "for example: alertnotify=echo %%s | mail -s \"SEND Alert\" admin@foo.com\n"),
                                              GetConfigFile().string(),
                                              EncodeBase58(&rand_pwd[0], &rand_pwd[0] + 32)),
             "", CClientUIInterface::MSG_ERROR | CClientUIInterface::SECURE);
@@ -1033,7 +1033,7 @@ std::vector<std::string> CRPCTable::listCommands() const
 
 std::string HelpExampleCli(string methodname, string args)
 {
-    return "> piex-cli " + methodname + " " + args + "\n";
+    return "> send-cli " + methodname + " " + args + "\n";
 }
 
 std::string HelpExampleRpc(string methodname, string args)

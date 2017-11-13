@@ -64,11 +64,11 @@ bin_PROGRAMS =
 TESTS =
 
 if BUILD_BITCOIND
-  bin_PROGRAMS += piexd
+  bin_PROGRAMS += sendd
 endif
 
 if BUILD_BITCOIN_UTILS
-  bin_PROGRAMS += piex-cli piex-tx
+  bin_PROGRAMS += send-cli piex-tx
 endif
 
 .PHONY: FORCE
@@ -361,7 +361,7 @@ nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # bitcoind binary #
-piexd_LDADD = \
+sendd_LDADD = \
   $(LIBBITCOIN_SERVER) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UNIVALUE) \
@@ -372,40 +372,40 @@ piexd_LDADD = \
   $(LIBSECP256K1)
 
 if ENABLE_ZMQ
-piexd_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
+sendd_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
 endif
 
 if ENABLE_WALLET
-piexd_LDADD += libbitcoin_wallet.a
+sendd_LDADD += libbitcoin_wallet.a
 endif
-piexd_SOURCES = piexd.cpp
+sendd_SOURCES = sendd.cpp
 #
 
 if TARGET_WINDOWS
-piexd_SOURCES += piexd-res.rc
+sendd_SOURCES += sendd-res.rc
 endif
 
-piexd_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS)
-piexd_CPPFLAGS = $(BITCOIN_INCLUDES)
-piexd_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+sendd_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS)
+sendd_CPPFLAGS = $(BITCOIN_INCLUDES)
+sendd_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 
-# piex-cli binary #
-piex_cli_LDADD = \
+# send-cli binary #
+send_cli_LDADD = \
   $(LIBBITCOIN_CLI) \
   $(LIBBITCOIN_UTIL) \
   $(BOOST_LIBS) \
   $(SSL_LIBS) \
   $(CRYPTO_LIBS)
 
-piex_cli_SOURCES = \
-  piex-cli.cpp
+send_cli_SOURCES = \
+  send-cli.cpp
 
-piex_cli_CPPFLAGS = $(BITCOIN_INCLUDES)
+send_cli_CPPFLAGS = $(BITCOIN_INCLUDES)
 #
 
 # piex-tx binary #
-piex_tx_LDADD = \
+send_tx_LDADD = \
   $(LIBBITCOIN_UNIVALUE) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UTIL) \
@@ -414,15 +414,15 @@ piex_tx_LDADD = \
   $(BOOST_LIBS) \
   $(CRYPTO_LIBS)
 
-piex_tx_SOURCES = piex-tx.cpp
-piex_tx_CPPFLAGS = $(BITCOIN_INCLUDES)
+send_tx_SOURCES = send-tx.cpp
+send_tx_CPPFLAGS = $(BITCOIN_INCLUDES)
 #
-piex_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+send_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if TARGET_WINDOWS
-piex_cli_SOURCES += piex-cli-res.rc
+send_cli_SOURCES += send-cli-res.rc
 endif
-piex_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
+send_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
 
 if BUILD_BITCOIN_LIBS
 include_HEADERS = script/bitcoinconsensus.h

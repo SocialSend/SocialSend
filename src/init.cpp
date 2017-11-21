@@ -1335,6 +1335,19 @@ bool AppInit2(boost::thread_group& threadGroup)
                     break;
                 }
 
+                if (fAddrIndex != GetBoolArg("-addrindex", true)) {
+                    strLoadError = _("You need to rebuild the database using -reindex to change -addrindex");
+                    break;
+                }
+
+                // Populate list of invalid/fraudulent outpoints that are banned from the chain
+                PopulateInvalidOutPointMap();
+
+                // Recalculate money supply for blocks that are impacted by accounting issue after zerocoin activation
+                if (GetBoolArg("-reindexmoneysupply", false)) {
+                    RecalculatePHRSupply(1);
+                }
+
                 uiInterface.InitMessage(_("Verifying blocks..."));
 
                 // Zerocoin must check at level 4

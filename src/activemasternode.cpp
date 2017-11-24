@@ -8,7 +8,7 @@
 #include "spork.h"
 
 //
-// Bootup the Masternode, look for a 6250 SEND input and register on the network
+// Bootup the Masternode, look for a 10000 SEND input and register on the network
 //
 void CActiveMasternode::ManageStatus()
 {
@@ -263,8 +263,8 @@ bool CActiveMasternode::Register(std::string strService, std::string strKeyMaste
 
     CService service = CService(strService);
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
-        if (service.GetPort() != 53472) {
-            errorMessage = strprintf("Invalid port %u for masternode %s - only 53472 is supported on mainnet.", service.GetPort(), strService);
+        if (service.GetPort() != 50050) {
+            errorMessage = strprintf("Invalid port %u for masternode %s - only 50050 is supported on mainnet.", service.GetPort(), strService);
             LogPrintf("CActiveMasternode::Register() - %s\n", errorMessage);
             return false;
         }

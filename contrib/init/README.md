@@ -1,10 +1,10 @@
 Sample configuration files for:
 
-SystemD: piexd.service
-Upstart: piexd.conf
-OpenRC:  piexd.openrc
-         piexd.openrcconf
-CentOS:  piexd.init
+SystemD: sendd.service
+Upstart: sendd.conf
+OpenRC:  sendd.openrc
+         sendd.openrcconf
+CentOS:  sendd.init
 
 have been made available to assist packagers in creating node packages here.
 

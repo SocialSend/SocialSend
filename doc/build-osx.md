@@ -1,6 +1,6 @@
 Mac OS X Build Instructions and Notes
 ====================================
-This guide will show you how to build piexd (headless client) for OSX.
+This guide will show you how to build sendd (headless client) for OSX.
 
 Notes
 -----
@@ -40,14 +40,14 @@ Instructions: Homebrew
 
         brew install autoconf automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf qt5
 
-### Building `piexd`
+### Building `sendd`
 
 1. Clone the github tree to get the source code and go into the directory.
 
-        git clone https://github.com/PIEX-Project/PIEX.git
-        cd PIEX
+        git clone https://github.com/SEND-Project/SEND.git
+        cd SEND
 
-2.  Build piexd:
+2.  Build sendd:
 
         ./autogen.sh
         ./configure --with-gui=qt5
@@ -57,7 +57,7 @@ Instructions: Homebrew
 
         make check
 
-4.  (Optional) You can also install piexd to your path:
+4.  (Optional) You can also install sendd to your path:
 
         make install
 
@@ -69,7 +69,7 @@ Download Qt Creator from http://www.qt.io/download/. Download the "community edi
 1. Make sure you installed everything through homebrew mentioned above
 2. Do a proper ./configure --with-gui=qt5 --enable-debug
 3. In Qt Creator do "New Project" -> Import Project -> Import Existing Project
-4. Enter "piex-qt" as project name, enter src/qt as location
+4. Enter "send-qt" as project name, enter src/qt as location
 5. Leave the file selection as it is
 6. Confirm the "summary page"
 7. In the "Projects" tab select "Manage Kits..."
@@ -79,11 +79,11 @@ Download Qt Creator from http://www.qt.io/download/. Download the "community edi
 
 Creating a release build
 ------------------------
-You can ignore this section if you are building `piexd` for your own use.
+You can ignore this section if you are building `sendd` for your own use.
 
-piexd/piex-cli binaries are not included in the piex-Qt.app bundle.
+sendd/send-cli binaries are not included in the send-Qt.app bundle.
 
-If you are building `piexd` or `piex-qt` for others, your build machine should be set up
+If you are building `sendd` or `send-qt` for others, your build machine should be set up
 as follows for maximum compatibility:
 
 All dependencies should be compiled with these flags:
@@ -92,30 +92,30 @@ All dependencies should be compiled with these flags:
  -arch x86_64
  -isysroot $(xcode-select --print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
 
-Once dependencies are compiled, see release-process.md for how the PIEX-Qt.app
+Once dependencies are compiled, see release-process.md for how the SEND-Qt.app
 bundle is packaged and signed to create the .dmg disk image that is distributed.
 
 Running
 -------
 
-It's now available at `./piexd`, provided that you are still in the `src`
+It's now available at `./sendd`, provided that you are still in the `src`
 directory. We have to first create the RPC configuration file, though.
 
-Run `./piexd` to get the filename where it should be put, or just try these
+Run `./sendd` to get the filename where it should be put, or just try these
 commands:
 
-    echo -e "rpcuser=piexrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/PIEX/piex.conf"
-    chmod 600 "/Users/${USER}/Library/Application Support/PIEX/piex.conf"
+    echo -e "rpcuser=sendrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/SEND/send.conf"
+    chmod 600 "/Users/${USER}/Library/Application Support/SEND/send.conf"
 
 The next time you run it, it will start downloading the blockchain, but it won't
 output anything while it's doing this. This process may take several hours;
 you can monitor its process by looking at the debug.log file, like this:
 
-    tail -f $HOME/Library/Application\ Support/PIEX/debug.log
+    tail -f $HOME/Library/Application\ Support/SEND/debug.log
 
 Other commands:
 -------
 
-    ./piexd -daemon # to start the piex daemon.
-    ./piex-cli --help  # for a list of command-line options.
-    ./piex-cli help    # When the daemon is running, to get a list of RPC commands
+    ./sendd -daemon # to start the send daemon.
+    ./send-cli --help  # for a list of command-line options.
+    ./send-cli help    # When the daemon is running, to get a list of RPC commands

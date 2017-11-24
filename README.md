@@ -1,32 +1,32 @@
-PIEX Core integration/staging repository
+SEND Core integration/staging repository
 =====================================
 
-[![Build Status](https://travis-ci.org/PIEX-Project/PIEX.svg?branch=master)](https://travis-ci.org/PIEX-Project/PIEX) [![GitHub version](https://badge.fury.io/gh/PIEX-Project%2FPIEX.svg)](https://badge.fury.io/gh/PIEX-Project%2FPIEX)
+[![Build Status](https://travis-ci.org/SEND-Project/SEND.svg?branch=master)](https://travis-ci.org/SEND-Project/SEND) [![GitHub version](https://badge.fury.io/gh/SEND-Project%2FSEND.svg)](https://badge.fury.io/gh/SEND-Project%2FSEND)
 
-PIEX is a cutting edge cryptocurrency, with many features not available in most other cryptocurrencies.
+SEND is a cutting edge cryptocurrency, with many features not available in most other cryptocurrencies.
 - Anonymized transactions using coin mixing technology, we call it _Coin Mixing_.
 - Fast transactions featuring guaranteed zero confirmation transactions, we call it _FastSend_.
 - Decentralized blockchain voting providing for consensus based advancement of the current Masternode
   technology used to secure the network and provide the above features, each Masternode is secured
-  with collateral of 25K PIEX
+  with collateral of 25K SEND
 
-More information at [piex.io](http://www.piex.io)
+More information at [send.io](http://www.send.io)
 
 ### Coin Specs
 <table>
-<tr><td>Ticker Symbol</td><td>PieX</td></tr>
+<tr><td>Ticker Symbol</td><td>Send</td></tr>
 <tr><td>Algorithm</td><td>Quark</td></tr>
 <tr><td>Type</td><td>PoW - PoS Hybrid*</td></tr>
 <tr><td>Block Time</td><td>60 Seconds</td></tr>
 <tr><td>Difficulty Retargeting</td><td>Every Block</td></tr>
-<tr><td>Max Coin Supply (PoS)</td><td>94.5Mil PIEX</td></tr>
-<tr><td>Premine/Initial Supply</td><td>78Mil PIEX*</td></tr>
-<tr><td>PieX Created Per block</td><td>60 PIEX*</td></tr>
+<tr><td>Max Coin Supply (PoS)</td><td>94.5Mil SEND</td></tr>
+<tr><td>Premine/Initial Supply</td><td>78Mil SEND*</td></tr>
+<tr><td>Send Created Per block</td><td>60 SEND*</td></tr>
 </table>
 
 *First 1000 Blocks PoW. 1001 - Infinite Blocks PoS only.
 
-**78Mil PieX initial coins Premined to Swap over prior PIE Block Chain.
+**78Mil Send initial coins Premined to Swap over prior SEND Block Chain.
 
 ### PoS/PoW Block Details
 <table>
@@ -36,14 +36,14 @@ More information at [piex.io](http://www.piex.io)
 
 ### Staking Methods
 <table>
-<tr><td>Masternodes</td><td>Yes - 25k PieX Required</td></tr>
-<tr><td>Wallet Staking</td><td>Yes - 1 to infinite PieX</td></tr>
+<tr><td>Masternodes</td><td>Yes - 25k Send Required</td></tr>
+<tr><td>Wallet Staking</td><td>Yes - 1 to infinite Send</td></tr>
 </table>
 
 ### Staking Reward Details
 <table>
-<tr><td>PieX Produced</td><td>60 PieX Per Block</td></tr>
-<tr><td>Amount Designated for Rewards</td><td>100% of PieX produced goes to Staking Rewards</td></tr>
+<tr><td>Send Produced</td><td>60 Send Per Block</td></tr>
+<tr><td>Amount Designated for Rewards</td><td>100% of Send produced goes to Staking Rewards</td></tr>
 <tr><td>Rewards Algorithm</td><td>Teeter Totter Based Targeting System</td></tr>
 <tr><td>Amount of Rewards Per Block</td><td>2 Rewards, 1 for Masternodes, 1 for Wallet Staking</td></tr>
 <tr><td>Coin Maturity to Stake</td><td>150 Blocks</td></tr>
@@ -60,7 +60,7 @@ Block 1000 to 172000:
 48/12 When Master nodes have dominance over network.**
 
 
-*50 Piex to Masternodes that win block, 10 Piex to Wallet Stakers that win block.
+*50 Send to Masternodes that win block, 10 Send to Wallet Stakers that win block.
 
-**48 Piex to Wallet Staker that win block, 12 Piex to Masternodes that win block.
+**48 Send to Wallet Staker that win block, 12 Send to Masternodes that win block.
 

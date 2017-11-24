@@ -9,8 +9,8 @@
 #include <vector>
 
 /**
- * CBaseChainParams defines the base parameters (shared between piex-cli and piexd)
- * of a given instance of the Piex system.
+ * CBaseChainParams defines the base parameters (shared between send-cli and sendd)
+ * of a given instance of the Send system.
  */
 class CBaseChainParams
 {

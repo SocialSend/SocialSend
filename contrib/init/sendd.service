@@ -1,0 +1,26 @@
+[Unit]
+Description=SEND's distributed currency daemon
+After=network.target
+
+[Service]
+User=send
+Group=send
+
+Type=forking
+PIDFile=/var/lib/sendd/sendd.pid
+
+ExecStart=/usr/bin/sendd -daemon -pid=/var/lib/sendd/sendd.pid \
+          -conf=/etc/send/send.conf -datadir=/var/lib/sendd
+
+ExecStop=-/usr/bin/send-cli -conf=/etc/send/send.conf \
+         -datadir=/var/lib/sendd stop
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

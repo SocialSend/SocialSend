@@ -3,7 +3,7 @@ dnl Output: If qt version is auto, set bitcoin_enable_qt to false. Else, exit.
 AC_DEFUN([BITCOIN_QT_FAIL],[
   if test "x$bitcoin_qt_want_version" = "xauto" && test x$bitcoin_qt_force != xyes; then
     if test x$bitcoin_enable_qt != xno; then
-      AC_MSG_WARN([$1; piex-qt frontend will not be built])
+      AC_MSG_WARN([$1; send-qt frontend will not be built])
     fi
     bitcoin_enable_qt=no
     bitcoin_enable_qt_test=no
@@ -50,7 +50,7 @@ AC_DEFUN([BITCOIN_QT_INIT],[
   dnl enable qt support
   AC_ARG_WITH([gui],
     [AS_HELP_STRING([--with-gui@<:@=no|qt4|qt5|auto@:>@],
-    [build piex-qt GUI (default=auto, qt5 tried first)])],
+    [build send-qt GUI (default=auto, qt5 tried first)])],
     [
      bitcoin_qt_want_version=$withval
      if test x$bitcoin_qt_want_version = xyes; then
@@ -163,19 +163,19 @@ AC_DEFUN([BITCOIN_QT_CONFIGURE],[
 
   if test x$use_hardening != xno; then
     BITCOIN_QT_CHECK([
-    AC_MSG_CHECKING(whether -fPIE can be used with this Qt config)
+    AC_MSG_CHECKING(whether -fSEND can be used with this Qt config)
     TEMP_CPPFLAGS=$CPPFLAGS
     TEMP_CXXFLAGS=$CXXFLAGS
     CPPFLAGS="$QT_INCLUDES $CPPFLAGS"
-    CXXFLAGS="$PIE_FLAGS $CXXFLAGS"
+    CXXFLAGS="$SEND_FLAGS $CXXFLAGS"
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <QtCore/qconfig.h>]],
       [[
           #if defined(QT_REDUCE_RELOCATIONS)
               choke;
           #endif
       ]])],
-      [ AC_MSG_RESULT(yes); QT_PIE_FLAGS=$PIE_FLAGS ],
-      [ AC_MSG_RESULT(no); QT_PIE_FLAGS=$PIC_FLAGS]
+      [ AC_MSG_RESULT(yes); QT_SEND_FLAGS=$SEND_FLAGS ],
+      [ AC_MSG_RESULT(no); QT_SEND_FLAGS=$PIC_FLAGS]
     )
     CPPFLAGS=$TEMP_CPPFLAGS
     CXXFLAGS=$TEMP_CXXFLAGS
@@ -192,7 +192,7 @@ AC_DEFUN([BITCOIN_QT_CONFIGURE],[
           #endif
       ]])],
       [ AC_MSG_RESULT(no)],
-      [ AC_MSG_RESULT(yes); QT_PIE_FLAGS=$PIC_FLAGS]
+      [ AC_MSG_RESULT(yes); QT_SEND_FLAGS=$PIC_FLAGS]
     )
     CPPFLAGS=$TEMP_CPPFLAGS
     ])
@@ -243,7 +243,7 @@ AC_DEFUN([BITCOIN_QT_CONFIGURE],[
   ])
   AC_MSG_RESULT([$bitcoin_enable_qt (Qt${bitcoin_qt_got_major_vers})])
 
-  AC_SUBST(QT_PIE_FLAGS)
+  AC_SUBST(QT_SEND_FLAGS)
   AC_SUBST(QT_INCLUDES)
   AC_SUBST(QT_LIBS)
   AC_SUBST(QT_LDFLAGS)

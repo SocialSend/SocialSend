@@ -1615,59 +1615,53 @@ int64_t GetBlockValue(int nHeight)
     int64_t nSubsidy = 0;
 
     //if (Params().NetworkID() == CBaseChainParams::TESTNET) {
-        if (nHeight < 1000 && nHeight > 0)
-            return 28000 * COIN;
+        if (nHeight < 1001 && nHeight > 0)
+            return 30000 * COIN;
     //}
 
     if (nHeight == 0) {
         nSubsidy = 1 * COIN;
-    } else if (nHeight < 1000 && nHeight > 0) {
-        nSubsidy = 0 * COIN;
-    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 998) {
-        nSubsidy = 0 * COIN;
-    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 999) {
-        nSubsidy = 0 * COIN;
-    } else if (nHeight <= 2880 && nHeight > Params().LAST_POW_BLOCK()) {
-        nSubsidy = 0 * COIN;
-    } else if (nHeight <= 11520 && nHeight >= 2881) {
-        nSubsidy = 5 * COIN;
-    } else if (nHeight <= 17280 && nHeight >= 11521) {
-        nSubsidy = 7 * COIN;
-    } else if (nHeight <= 20160 && nHeight >= 17281) {
-        nSubsidy = 8 * COIN;
-    } else if (nHeight <= 40320 && nHeight >= 20161) {
-        nSubsidy = 11 * COIN;
-    } else if (nHeight <= 60480 && nHeight >= 40321) {
-        nSubsidy = 10.5 * COIN;
-    } else if (nHeight <= 80640 && nHeight >= 60481) {
-        nSubsidy = 10.3 * COIN;
-    } else if (nHeight <= 161280 && nHeight >= 80641) {
-        nSubsidy = 10.2 * COIN;
-    } else if (nHeight <= 247680 && nHeight >= 161281) {
-        nSubsidy = 10 * COIN;
-	} else if (nHeight <= 518400 && nHeight >= 247681) {
-        nSubsidy = 9.8 * COIN;
-	} else if (nHeight <= 691200 && nHeight >= 518401) {
-        nSubsidy = 9.5 * COIN;
-	} else if (nHeight <= 777600 && nHeight >= 691201) {
-        nSubsidy = 9.3 * COIN;
-	} else if (nHeight <= 864000 && nHeight >= 777601) {
-        nSubsidy = 9.2 * COIN;	
-	} else if (nHeight <= 950400 && nHeight >= 864001) {
-        nSubsidy = 9 * COIN;
-	} else if (nHeight <= 986800 && nHeight >= 950401) {
-        nSubsidy = 8.7 * COIN;
-	} else if (nHeight <= 1246000 && nHeight >= 986801) {
-        nSubsidy = 8.5 * COIN;	
-	} else if (nHeight <= 1505200 && nHeight >= 1246001) {
-        nSubsidy = 8.2 * COIN;	
-	} else if (nHeight <= 1764400 && nHeight >= 1505201) {
-        nSubsidy = 8.1 * COIN;	
-    } else if (nHeight >= 1764401) {
-        nSubsidy = 8 * COIN;
-    } else {
-        nSubsidy = 0 * COIN;
-    }
+
+	} else if (nHeight <= 11520 && nHeight >= 1000) {
+	        nSubsidy = 5 * COIN;
+	    } else if (nHeight <= 17280 && nHeight >= 11521) {
+	        nSubsidy = 7 * COIN;
+	    } else if (nHeight <= 20160 && nHeight >= 17281) {
+	        nSubsidy = 8 * COIN;
+	    } else if (nHeight <= 40320 && nHeight >= 20161) {
+	        nSubsidy = 11 * COIN;
+	    } else if (nHeight <= 60480 && nHeight >= 40321) {
+	        nSubsidy = 10.5 * COIN;
+	    } else if (nHeight <= 80640 && nHeight >= 60481) {
+	        nSubsidy = 10.3 * COIN;
+	    } else if (nHeight <= 161280 && nHeight >= 80641) {
+	        nSubsidy = 10.2 * COIN;
+	    } else if (nHeight <= 247680 && nHeight >= 161281) {
+	        nSubsidy = 10 * COIN;
+	    } else if (nHeight <= 518400 && nHeight >= 247681) {
+	        nSubsidy = 9.8 * COIN;
+	    } else if (nHeight <= 691200 && nHeight >= 518401) {
+	        nSubsidy = 9.5 * COIN;
+	    } else if (nHeight <= 777600 && nHeight >= 691201) {
+	        nSubsidy = 9.3 * COIN;
+	    } else if (nHeight <= 864000 && nHeight >= 777601) {
+	        nSubsidy = 9.2 * COIN;	
+	    } else if (nHeight <= 950400 && nHeight >= 864001) {
+	        nSubsidy = 9 * COIN;
+	    } else if (nHeight <= 986800 && nHeight >= 950401) {
+	        nSubsidy = 8.7 * COIN;
+	    } else if (nHeight <= 1246000 && nHeight >= 986801) {
+	        nSubsidy = 8.5 * COIN;	
+	    } else if (nHeight <= 1505200 && nHeight >= 1246001) {
+	        nSubsidy = 8.2 * COIN;	
+	    } else if (nHeight <= 1764400 && nHeight >= 1505201) {
+	        nSubsidy = 8.1 * COIN;	
+	    } else if (nHeight >= 1764401) {
+	        nSubsidy = 8 * COIN;
+	    } else {
+	        nSubsidy = 0 * COIN;
+		}
+
     return nSubsidy;
 }
 
@@ -1680,37 +1674,21 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
             return 0;
     }
 
-    if (nHeight <= 20160) {
+    if (nHeight <= 43200) {
         ret = blockValue / 5;
-    } else if (nHeight < 40320 && nHeight > 20161) {
-        ret = blockValue / (100 / 25);
-	} else if (nHeight < 60480 && nHeight > 40321) {
-        ret = blockValue / (100 / 26);
-	} else if (nHeight < 80640 && nHeight > 60481) {
-        ret = blockValue / (100 / 28);
-	} else if (nHeight < 161280 && nHeight > 80641) {
+    } else if (nHeight < 86400 && nHeight > 43200) {
         ret = blockValue / (100 / 30);
-	} else if (nHeight < 247680 && nHeight > 161281) {
-        ret = blockValue / (100 / 35);
-	} else if (nHeight < 518400 && nHeight > 247681) {
-        ret = blockValue / (100 / 37);
-	} else if (nHeight < 691200 && nHeight > 518401) {
-        ret = blockValue / (100 / 40);
-	} else if (nHeight < 777600 && nHeight > 691201) {
-        ret = blockValue / (100 / 43);
-	} else if (nHeight < 864000 && nHeight > 777601) {
-        ret = blockValue / (100 / 45);	
-    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 864001) {
-        ret = 5 * COIN;
-    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 998) {
+    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 86400) {
+        ret = 50 * COIN;
+    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 151200) {
         ret = blockValue / 2;
     } else if (nHeight > Params().LAST_POW_BLOCK()) {
         int64_t nMoneySupply = chainActive.Tip()->nMoneySupply;
-        int64_t mNodeCoins = mnodeman.size() * 6250 * COIN;
+        int64_t mNodeCoins = mnodeman.size() * 25000 * COIN;
 
         //if a mn count is inserted into the function we are looking for a specific result for a masternode count
         if(nMasternodeCount)
-            mNodeCoins = nMasternodeCount * 6250 * COIN;
+            mNodeCoins = nMasternodeCount * 25000 * COIN;
 
         // Use this log to compare the masternode count for different clients
         LogPrintf("Adjusting seesaw at height %d with %d masternodes (without drift: %d) at %ld\n", nHeight, nMasternodeCount, nMasternodeCount - Params().MasternodeCountDrift(), GetTime());
@@ -2140,20 +2118,20 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
         }
 
         if (!tx.IsCoinStake()) {
-            if (nValueIn < tx.GetValueOut())
-                return state.DoS(100, error("CheckInputs() : %s value in (%s) < value out (%s)",
-                                          tx.GetHash().ToString(), FormatMoney(nValueIn), FormatMoney(tx.GetValueOut())),
-                    REJECT_INVALID, "bad-txns-in-belowout");
+            /////////////if (nValueIn < tx.GetValueOut())
+                ///////////return state.DoS(100, error("CheckInputs() : %s value in (%s) < value out (%s)",
+                           //////////               tx.GetHash().ToString(), FormatMoney(nValueIn), FormatMoney(tx.GetValueOut())),
+                 ///////   REJECT_INVALID, "bad-txns-in-belowout");
 
             // Tally transaction fees
             CAmount nTxFee = nValueIn - tx.GetValueOut();
-            if (nTxFee < 0)
-                return state.DoS(100, error("CheckInputs() : %s nTxFee < 0", tx.GetHash().ToString()),
-                    REJECT_INVALID, "bad-txns-fee-negative");
+           ///// if (nTxFee < 0)
+                /////return state.DoS(100, error("CheckInputs() : %s nTxFee < 0", tx.GetHash().ToString()),
+                    /////REJECT_INVALID, "bad-txns-fee-negative");
             nFees += nTxFee;
-            if (!MoneyRange(nFees))
-                return state.DoS(100, error("CheckInputs() : nFees out of range"),
-                    REJECT_INVALID, "bad-txns-fee-outofrange");
+            ////if (!MoneyRange(nFees))
+               //// return state.DoS(100, error("CheckInputs() : nFees out of range"),
+                   //// REJECT_INVALID, "bad-txns-fee-outofrange");
         }
         // The first loop above does all the inexpensive checks.
         // Only if ALL inputs pass do we perform expensive ECDSA signature checks.

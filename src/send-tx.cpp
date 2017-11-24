@@ -46,7 +46,7 @@ static bool AppInitRawTx(int argc, char* argv[])
 
     if (argc < 2 || mapArgs.count("-?") || mapArgs.count("-help")) {
         // First part of help message is specific to this utility
-        std::string strUsage = _("send Core send-tx utility version") + " " + FormatFullVersion() + "\n\n" +
+        std::string strUsage = _("Send Core send-tx utility version") + " " + FormatFullVersion() + "\n\n" +
                                _("Usage:") + "\n" +
                                "  send-tx [options] <hex-tx> [commands]  " + _("Update hex-encoded send transaction") + "\n" +
                                "  send-tx [options] -create [commands]   " + _("Create hex-encoded send transaction") + "\n" +

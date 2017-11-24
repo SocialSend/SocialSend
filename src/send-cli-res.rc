@@ -22,8 +22,8 @@ BEGIN
             VALUE "InternalName",       "send-cli"
             VALUE "LegalCopyright",     COPYRIGHT_STR
             VALUE "LegalTrademarks1",   "Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php."
-            VALUE "OriginalFilename",   “Send-cli.exe"
-            VALUE "ProductName",        “Send-cli"
+            VALUE "OriginalFilename",   "send-cli.exe"
+            VALUE "ProductName",        "Send-cli"
             VALUE "ProductVersion",     VER_PRODUCTVERSION_STR
         END
     END

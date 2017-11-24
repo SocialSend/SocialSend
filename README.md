@@ -8,7 +8,7 @@ SEND is a cutting edge cryptocurrency, with many features not available in most 
 - Fast transactions featuring guaranteed zero confirmation transactions, we call it _FastSend_.
 - Decentralized blockchain voting providing for consensus based advancement of the current Masternode
   technology used to secure the network and provide the above features, each Masternode is secured
-  with collateral of 25K SEND
+  with collateral of 6250 SEND
 
 More information at [send.io](http://www.send.io)
 
@@ -36,7 +36,7 @@ More information at [send.io](http://www.send.io)
 
 ### Staking Methods
 <table>
-<tr><td>Masternodes</td><td>Yes - 25k Send Required</td></tr>
+<tr><td>Masternodes</td><td>Yes - 6250 Send Required</td></tr>
 <tr><td>Wallet Staking</td><td>Yes - 1 to infinite Send</td></tr>
 </table>
 

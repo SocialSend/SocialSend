@@ -3,7 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include "config/piex-config.h"
+#include "config/send-config.h"
 #endif
 
 #include <cstddef>

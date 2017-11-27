@@ -1674,17 +1674,27 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
             return 0;
     }
 
-    if (nHeight <= 43200) {
+    if (nHeight <= 20160) {
         ret = blockValue / 5;
-    } else if (nHeight < 86400 && nHeight > 43200) {
+    } else if (nHeight < 40320 && nHeight > 20161) {
+        ret = blockValue / (100 / 25);
+	} else if (nHeight < 60480 && nHeight > 40321) {
+        ret = blockValue / (100 / 26);
+	} else if (nHeight < 80640 && nHeight > 60481) {
+        ret = blockValue / (100 / 28);
+	} else if (nHeight < 161280 && nHeight > 80641) {
         ret = blockValue / (100 / 30);
-    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 86400) {
-        ret = 50 * COIN;
-    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 151200) {
+	} else if (nHeight < 247680 && nHeight > 161281) {
+        ret = blockValue / (100 / 35);
+	} else if (nHeight < 518400 && nHeight > 247681) {
+        ret = blockValue / (100 / 40);
+    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 518401) {
+        ret = blockValue / (100 / 50);
+    } else if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 998) {
         ret = blockValue / 2;
     } else if (nHeight > Params().LAST_POW_BLOCK()) {
         int64_t nMoneySupply = chainActive.Tip()->nMoneySupply;
-        int64_t mNodeCoins = mnodeman.size() * 25000 * COIN;
+        int64_t mNodeCoins = mnodeman.size() * 6250 * COIN;
 
         //if a mn count is inserted into the function we are looking for a specific result for a masternode count
         if(nMasternodeCount)

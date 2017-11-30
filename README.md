@@ -7,7 +7,7 @@ SEND is a cutting edge cryptocurrency, with many features not available in most 
 - Decentralized blockchain voting providing for consensus based advancement of the current Masternode technology used to secure the network and provide the above features, each Masternode is secured
 with collateral of 6250 SEND
 
-More information at [http://send.io](http://www.send.io)
+More information at [http://socialsend.io](http://socialsend.io)
 
 ### Coin Specs
 <table>

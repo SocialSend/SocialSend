@@ -138,3 +138,27 @@ Other commands:
     ./sendd -daemon # to start the send daemon.
     ./send-cli --help  # for a list of command-line options.
     ./send-cli help    # When the daemon is running, to get a list of RPC commands
+    
+Troubleshooting:<a name="trouble"></a>
+---------
+* brew install not working? Try replacing libzmq with zeromq in the brew install command
+                
+* libprotobuf not found during ./configure? Make sure you have installed protobuf with `brew install protobuf` and then run `export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig` and try again
+                
+* Database errors have been seen in builds on High Sierra. One solution is to build Berkeley DB from source.
+        
+        cd ~
+        wget 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz'
+        tar -xzvf db-4.8.30.NC.tar.gz
+        cd db-4.8.30.NC/build_unix/
+        ../dist/configure --enable-cxx
+        make
+        sudo make install
+
+        Then configure Phore with this build of BerkeleyDB,
+        ./configure --with-gui=qt5  LDFLAGS="-L/usr/local/BerkeleyDB.4.8/lib/" CPPFLAGS="-I/usr/local/BerkeleyDB.4.8/include/"
+                
+        
+* In the case you see: `configure: error: OpenSSL ec header missing`, run the following commands:
+
+        export LDFLAGS=-L/usr/local/opt/openssl/lib

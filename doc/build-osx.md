@@ -50,7 +50,15 @@ Instructions: Homebrew
 2.  Build sendd:
 
         ./autogen.sh
+Pre 10.12:
+
         ./configure --with-gui=qt5
+Post 10.13:
+
+        ./configure LDFLAGS='-L/usr/local/opt/openssl/lib' CPPFLAGS='-I/usr/local/opt/openssl/include' PKG_CONFIG_PATH='/usr/local/opt/openssl/lib/pkgconfig' --with-gui=qt5
+ 
+ Both:
+ 
         make
 
 3.  It is also a good idea to build and run the unit tests:

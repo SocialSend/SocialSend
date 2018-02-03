@@ -457,7 +457,7 @@ const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
         assert(hashGenesisBlock == uint256("0xb06b542aa656ba613882269e38a7f487a9a04cc129a85d3f7c6463aa6a5dabc9"));
         //assert(genesis.hashMerkleRoot == uint256("0x1b2ef6e2f28be914103a277377ae7729dcd125dfeb8bf97bd5964ba72b6dc39b"));
 
-        //vSeeds.push_back(CDNSSeedData("45.32.177.107", "45.76.139.192"));     // Primary DNS Seeder from Remapper
+        vSeeds.push_back(CDNSSeedData("send.goldlineit.org", "seeds.send.goldlineit.org"));     // Primary DNS Seeder
         //vSeeds.push_back(CDNSSeedData("45.63.98.108", "45.32.183.239"));    // Secondary DNS Seeder from Remapper
         //vSeeds.push_back(CDNSSeedData("45.32.182.161", "45.76.133.159"));         // Single node address
         //vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.77.224.241")); // Single node address

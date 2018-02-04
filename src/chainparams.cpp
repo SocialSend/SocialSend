@@ -461,8 +461,8 @@ const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
         //vSeeds.push_back(CDNSSeedData("45.63.98.108", "45.32.183.239"));    // Secondary DNS Seeder from Remapper
         //vSeeds.push_back(CDNSSeedData("45.32.182.161", "45.76.133.159"));         // Single node address
         //vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.77.224.241")); // Single node address
-        vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.76.33.246"));           // Single node address
-	    vSeeds.push_back(CDNSSeedData("107.191.44.102", "107.191.44.102"));           // Single node address
+        //vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.76.33.246"));           // Single node address
+	//vSeeds.push_back(CDNSSeedData("107.191.44.102", "107.191.44.102"));           // Single node address
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 63);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 13);

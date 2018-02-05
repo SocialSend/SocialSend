@@ -1393,7 +1393,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Obfuscation</string>
+          <string>Coin Mixing</string>
          </property>
          <property name="checked">
           <bool>false</bool>
@@ -1412,7 +1412,7 @@
           </size>
          </property>
          <property name="text">
-          <string>SwiftTX</string>
+          <string>FastSend</string>
          </property>
         </widget>
        </item>

@@ -1,5 +1,5 @@
 ---
-name: "send-osx-2.3"
+name: "send-osx-1.0.0.8"
 enable_cache: true
 suites:
 - "trusty"

@@ -457,12 +457,12 @@ const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
         assert(hashGenesisBlock == uint256("0xb06b542aa656ba613882269e38a7f487a9a04cc129a85d3f7c6463aa6a5dabc9"));
         //assert(genesis.hashMerkleRoot == uint256("0x1b2ef6e2f28be914103a277377ae7729dcd125dfeb8bf97bd5964ba72b6dc39b"));
 
-        //vSeeds.push_back(CDNSSeedData("45.32.177.107", "45.76.139.192"));     // Primary DNS Seeder from Remapper
+        vSeeds.push_back(CDNSSeedData("send.goldlineit.org", "seeds.send.goldlineit.org"));     // Primary DNS Seeder
         //vSeeds.push_back(CDNSSeedData("45.63.98.108", "45.32.183.239"));    // Secondary DNS Seeder from Remapper
         //vSeeds.push_back(CDNSSeedData("45.32.182.161", "45.76.133.159"));         // Single node address
         //vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.77.224.241")); // Single node address
-        vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.76.33.246"));           // Single node address
-	    vSeeds.push_back(CDNSSeedData("107.191.44.102", "107.191.44.102"));           // Single node address
+        //vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.76.33.246"));           // Single node address
+	//vSeeds.push_back(CDNSSeedData("107.191.44.102", "107.191.44.102"));           // Single node address
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 63);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 13);
@@ -536,10 +536,10 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "send-testnet.seed.fuzzbawls.pw"));
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "send-testnet.seed2.fuzzbawls.pw"));
-        vSeeds.push_back(CDNSSeedData("s3v3nh4cks.ddns.net", "s3v3nh4cks.ddns.net"));
-        vSeeds.push_back(CDNSSeedData("88.198.192.110", "88.198.192.110"));
+        vSeeds.push_back(CDNSSeedData(NULL, NULL));
+        //vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "send-testnet.seed2.fuzzbawls.pw"));
+        //vSeeds.push_back(CDNSSeedData("s3v3nh4cks.ddns.net", "s3v3nh4cks.ddns.net"));
+        //vSeeds.push_back(CDNSSeedData("88.198.192.110", "88.198.192.110"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet send addresses start with 'x' or 'y'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet send script addresses start with '8' or '9'

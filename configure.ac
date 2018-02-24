@@ -1,4 +1,4 @@
-nl require autoconf 2.60 (AS_ECHO/AS_ECHO_N)
+dnl require autoconf 2.60 (AS_ECHO/AS_ECHO_N)
 AC_PREREQ([2.60])
 define(_CLIENT_VERSION_MAJOR, 1)
 define(_CLIENT_VERSION_MINOR, 1)

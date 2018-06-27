@@ -16,6 +16,7 @@
 
 #define MASTERNODES_DUMP_SECONDS (15 * 60)
 #define MASTERNODES_DSEG_SECONDS (3 * 60 * 60)
+#define TIME_INTERVAL_BETWEEN_NETCHECK_SECONDS 3600
 
 using namespace std;
 
@@ -74,6 +75,7 @@ public:
 
     // keep track of dsq count to prevent masternodes from gaming obfuscation queue
     int64_t nDsqCount;
+    int64_t lastTimeThreadRun=0;
 
     ADD_SERIALIZE_METHODS;
 
@@ -105,6 +107,9 @@ public:
 
     /// Check all Masternodes and remove inactive
     void CheckAndRemove(bool forceExpiredRemoval = false);
+
+    //Check all masternode Net Reachable
+    void CheckReachable();
 
     /// Clear Masternode vector
     void Clear();

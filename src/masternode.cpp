@@ -78,6 +78,7 @@ CMasternode::CMasternode()
     nScanningErrorCount = 0;
     nLastScanningErrorBlockHeight = 0;
     lastTimeChecked = 0;
+    lastTimeNetChecked = 0;
     nLastDsee = 0;  // temporary, do not save. Remove after migration to v12
     nLastDseep = 0; // temporary, do not save. Remove after migration to v12
 }
@@ -103,6 +104,7 @@ CMasternode::CMasternode(const CMasternode& other)
     nScanningErrorCount = other.nScanningErrorCount;
     nLastScanningErrorBlockHeight = other.nLastScanningErrorBlockHeight;
     lastTimeChecked = 0;
+    lastTimeNetChecked = 0;
     nLastDsee = other.nLastDsee;   // temporary, do not save. Remove after migration to v12
     nLastDseep = other.nLastDseep; // temporary, do not save. Remove after migration to v12
 }
@@ -128,6 +130,8 @@ CMasternode::CMasternode(const CMasternodeBroadcast& mnb)
     nScanningErrorCount = 0;
     nLastScanningErrorBlockHeight = 0;
     lastTimeChecked = 0;
+   lastTimeNetChecked = 0;
+
     nLastDsee = 0;  // temporary, do not save. Remove after migration to v12
     nLastDseep = 0; // temporary, do not save. Remove after migration to v12
 }
@@ -145,6 +149,7 @@ bool CMasternode::UpdateFromNewBroadcast(CMasternodeBroadcast& mnb)
         protocolVersion = mnb.protocolVersion;
         addr = mnb.addr;
         lastTimeChecked = 0;
+        lastTimeNetChecked = 0;
         int nDoS = 0;
         if (mnb.lastPing == CMasternodePing() || (mnb.lastPing != CMasternodePing() && mnb.lastPing.CheckAndUpdate(nDoS, false))) {
             lastPing = mnb.lastPing;
@@ -186,6 +191,26 @@ uint256 CMasternode::CalculateScore(int mod, int64_t nBlockHeight)
     return r;
 }
 
+void CMasternode::netCheckMasternode(){
+	if (GetTime() - lastTimeNetChecked > MASTERNODE_NETCHECK_SECONDS) {
+        lastTimeNetChecked = GetTime();
+
+        if (!IsValidNetAddr()) { //masternode.cpp line 320
+            activeState = MASTERNODE_UNREACHABLE; 
+            LogPrintf("Checking NetMasternode %s [UNREACHABLE] take %i segs\n", addr.ToStringIPPort(), GetTime() - lastTimeNetChecked);
+            return;
+        } else {
+            LogPrintf("Checking NetMasternode %s [OK] take %i segs\n", addr.ToStringIPPort(), GetTime() - lastTimeNetChecked);
+            if (activeState == MASTERNODE_UNREACHABLE) {
+		    	//If masternode were UNREACHABLE make it ENABLED again
+		        activeState = MASTERNODE_ENABLED;
+		    }
+		}
+	}
+}
+
+
+
 void CMasternode::Check(bool forceCheck)
 {
     if (ShutdownRequested()) return;
@@ -197,6 +222,7 @@ void CMasternode::Check(bool forceCheck)
     //once spent, stop doing the checks
     if (activeState == MASTERNODE_VIN_SPENT) return;
 
+    if (activeState == MASTERNODE_UNREACHABLE) return;
 
     if (!IsPingedWithin(MASTERNODE_REMOVAL_SECONDS)) {
         activeState = MASTERNODE_REMOVE;
@@ -312,6 +338,8 @@ std::string CMasternode::GetStatus()
         return "WATCHDOG_EXPIRED";
     case CMasternode::MASTERNODE_POSE_BAN:
         return "POSE_BAN";
+    case CMasternode::MASTERNODE_UNREACHABLE: 
+	return "UNREACHABLE";
     default:
         return "UNKNOWN";
     }

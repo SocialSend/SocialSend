@@ -2456,8 +2456,8 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
     //PoW phase redistributed fees to miner. PoS stage destroys fees.
     CAmount nExpectedMint = GetBlockValue(pindex->pprev->nHeight);
-    if (block.IsProofOfWork())
-        nExpectedMint += nFees;
+    //if (block.IsProofOfWork())
+        nExpectedMint += nFees; //include fee on all blocks
 	
 	if (pindex->nHeight>57000)
     if (!IsBlockValueValid(block, nExpectedMint, pindex->nMint)) {
@@ -4978,7 +4978,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             if (addr.nTime <= 100000000 || addr.nTime > nNow + 10 * 60)
                 addr.nTime = nNow - 5 * 24 * 60 * 60;
             pfrom->AddAddressKnown(addr);
-            bool fReachable = IsReachable(addr);
+            bool fReachable = IsReachable(addr.GetNetwork());
             if (addr.nTime > nSince && !pfrom->fGetAddr && vAddr.size() <= 10 && addr.IsRoutable()) {
                 // Relay to a limited number of other nodes
                 {

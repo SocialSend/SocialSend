@@ -12,6 +12,7 @@
 #include "util.h"
 #include <boost/filesystem.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/thread.hpp>
 
 /** Masternode manager */
 CMasternodeMan mnodeman;

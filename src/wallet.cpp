@@ -2454,7 +2454,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     nCredit += nReward;
 
     int64_t nMinFee = 0;
-    while (true) {
+   /* while (true) {
         // Set output amount
         if (txNew.vout.size() == 3) {
             txNew.vout[1].nValue = ((nCredit - nMinFee) / 2 / CENT) * CENT;
@@ -2478,17 +2478,38 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
                 LogPrintf("CreateCoinStake : fee for coinstake %s\n", FormatMoney(nMinFee).c_str());
             break;
         }
-    }
+    }*/
+
+
+	//New code to remove fee on coinstake transaction
+	if (txNew.vout.size() == 3) {
+		txNew.vout[1].nValue = nCredit / 2;
+		txNew.vout[2].nValue = nCredit - txNew.vout[1].nValue;
+	} else
+		txNew.vout[1].nValue = nCredit;
+
+	// Limit size
+	unsigned int nBytes = ::GetSerializeSize(txNew, SER_NETWORK, PROTOCOL_VERSION);
+	if (nBytes >= DEFAULT_BLOCK_MAX_SIZE / 5)
+		return error("CreateCoinStake : exceeded coinstake size limit");
+
+	//end of new code
 
     //Masternode payment
     FillBlockPayee(txNew, nMinFee, true);
 
+	
+    //Here we remove signature, so we can sign transaction after adding user's transactions fees
+	/* 
     // Sign
     int nIn = 0;
     BOOST_FOREACH (const CWalletTx* pcoin, vwtxPrev) {
         if (!SignSignature(*this, *pcoin, txNew, nIn++))
             return error("CreateCoinStake : failed to sign coinstake");
     }
+	*/
+
+
 
     // Successfully generated coinstake
     nLastStakeSetUpdate = 0; //this will trigger stake set to repopulate next round

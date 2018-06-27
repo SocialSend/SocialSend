@@ -238,6 +238,30 @@ void CMasternodeMan::Check()
     }
 }
 
+//This method will be called on the Masternode Dumper Thread
+void CMasternodeMan::CheckReachable() {
+    while (true) {
+		//This is to interrupt thread when stop signal is received
+		boost::this_thread::interruption_point();     
+		if (GetTime() - lastTimeThreadRun < TIME_INTERVAL_BETWEEN_NETCHECK_SECONDS) {
+            MilliSleep(2000);
+            continue;
+        }
+        lastTimeThreadRun = GetTime();
+
+        if (!IsSporkActive(SPORK_17_MN_NETCHECK)) {
+            LogPrintf("CMasternodeMan::CheckReachable() Network check enforcement is disabled, skip masternode network check.\n");
+            continue;
+        }
+        BOOST_FOREACH (CMasternode& mn, vMasternodes) {
+            mn.netCheckMasternode(); //Check each masternode on vector
+			//This is to interrupt thread when stop signal is received
+            boost::this_thread::interruption_point();     
+		}
+    }    
+}
+
+
 void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
 {
     Check();

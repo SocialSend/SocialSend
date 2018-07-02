@@ -1232,11 +1232,15 @@
            </widget>
           </item>
           <item>
-           <widget class="QWebView" name="webView">
-            <property name="url">
-             <url>
-              <string>about:blank</string>
-             </url>
+           <widget class="QLabel" name="newsImage">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
             </property>
            </widget>
           </item>
@@ -1249,13 +1253,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QWebView</class>
-   <extends>QWidget</extends>
-   <header>QtWebKitWidgets/QWebView</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

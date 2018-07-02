@@ -8,6 +8,10 @@
 #include "amount.h"
 
 #include <QWidget>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QUrl>
 
 class ClientModel;
 class TransactionFilterProxy;
@@ -62,6 +66,7 @@ private:
     TransactionFilterProxy* filter;
 
 private slots:
+    void replyFinished (QNetworkReply *reply);
     void toggleObfuscation();
     void obfuscationAuto();
     void obfuscationReset();

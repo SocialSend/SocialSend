@@ -24,6 +24,8 @@
 #include <QSettings>
 #include <QTimer>
 
+
+
 #define DECORATION_SIZE 48
 #define ICON_OFFSET 16
 #define NUM_ITEMS 5
@@ -99,6 +101,36 @@ public:
 
     int unit;
 };
+
+void OverviewPage::replyFinished (QNetworkReply *reply)
+{
+    if(reply->error())
+    {
+        qDebug() << "ERROR!";
+        qDebug() << reply->errorString();
+        QMessageBox Msgbox;
+	Msgbox.setText(reply->errorString());
+    	Msgbox.exec();
+    }
+    else
+    {
+	QMessageBox Msgbox;
+	Msgbox.setText("Todo salio bien");
+    	Msgbox.exec();
+        QByteArray jpegData = reply->readAll();
+        QPixmap pixmap;
+        pixmap.loadFromData(jpegData);
+        if (!pixmap.isNull())
+        {
+            ui->newsImage->clear();
+            ui->newsImage->setPixmap(pixmap);
+	    ui->newsImage->setScaledContents( true );
+        }
+    }
+
+    reply->deleteLater();
+}
+
 #include "overviewpage.moc"
 
 OverviewPage::OverviewPage(QWidget* parent) : QWidget(parent),
@@ -117,9 +149,13 @@ OverviewPage::OverviewPage(QWidget* parent) : QWidget(parent),
     nDisplayUnit = 0; // just make sure it's not unitialized
     ui->setupUi(this);
 
-    //QWebWidget
-    ui->webView->setContextMenuPolicy(Qt::NoContextMenu);
-    ui->webView->load(QUrl("http://socialsend.info/getLastFeed.php"));
+    //Load Image
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
+
+    manager->get(QNetworkRequest(QUrl("http://socialsend.info/img/linda.jpg")));
+
+
     // Recent transactions
     ui->listTransactions->setItemDelegate(txdelegate);
     ui->listTransactions->setIconSize(QSize(DECORATION_SIZE, DECORATION_SIZE));

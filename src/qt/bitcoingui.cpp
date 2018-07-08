@@ -341,6 +341,18 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
         connect(masternodeAction, SIGNAL(triggered()), this, SLOT(gotoMasternodePage()));
     }
 
+    annAction = new QAction(QIcon(":/icons/notepad"), tr("Announcement"), this);
+    annAction->setStatusTip(tr("Last announcement"));
+    annAction->setToolTip(annAction->statusTip());
+    annAction->setCheckable(true);
+#ifdef Q_OS_MAC
+    annAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_6));
+#else
+    annAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+#endif
+    tabGroup->addAction(annAction);
+
+
     // These showNormalIfMinimized are needed because Send Coins and Receive Coins
     // can be triggered from the tray menu, and need to show the GUI to be useful.
     connect(overviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
@@ -351,6 +363,8 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     connect(receiveCoinsAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
+    connect(annAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(annAction, SIGNAL(triggered()), this, SLOT(gotoAnnView()));
 #endif // ENABLE_WALLET
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
@@ -518,6 +532,7 @@ void BitcoinGUI::createToolBars()
         if (settings.value("fShowMasternodesTab").toBool()) {
             toolbar->addAction(masternodeAction);
         }
+	toolbar->addAction(annAction);
         toolbar->setMovable(false); // remove unused icon in upper left corner
         overviewAction->setChecked(true);
 
@@ -722,6 +737,12 @@ void BitcoinGUI::openClicked()
     if (dlg.exec()) {
         emit receivedURI(dlg.getURI());
     }
+}
+
+void BitcoinGUI::gotoAnnView()
+{
+    annAction->setChecked(true);
+    if (walletFrame) walletFrame->gotoAnnView();
 }
 
 void BitcoinGUI::gotoOverviewPage()

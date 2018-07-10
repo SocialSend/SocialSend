@@ -95,6 +95,9 @@ public:
     int64_t StartMasternodePayments() const { return nStartMasternodePayments; }
     int64_t Budget_Fee_Confirmations() const { return nBudget_Fee_Confirmations; }
     CBaseChainParams::Network NetworkID() const { return networkID; }
+    int NewMasternodeReward_StartBlock() const { return nNewMasternodeReward_StartBlock; }
+    int NewMasternodeReward_Collateral() const { return nNewMasternodeReward_Collateral; }
+    float NewMasternodeReward_MNPercent() const { return nNewMasternodeReward_MNPercent; }
 
 protected:
     CChainParams() {}
@@ -138,6 +141,9 @@ protected:
     std::string strObfuscationPoolDummyAddress;
     int64_t nStartMasternodePayments;
     int64_t nBudget_Fee_Confirmations;
+    int nNewMasternodeReward_StartBlock;
+    int nNewMasternodeReward_Collateral;
+    float nNewMasternodeReward_MNPercent;
 };
 
 /** 

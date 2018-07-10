@@ -2112,7 +2112,7 @@ bool CObfuScationSigner::IsVinAssociatedWithPubkey(CTxIn& vin, CPubKey& pubkey)
     if (GetTransaction(vin.prevout.hash, txVin, hash, true)) {
         BOOST_FOREACH (CTxOut out, txVin.vout) {
             if (nHeight >= Params().NewMasternodeReward_StartBlock()) {
-                if (out.nValue == Params().NewMasternodeReward_Collateral * COIN) {
+                if (out.nValue == Params().NewMasternodeReward_Collateral() * COIN) {
                     if (out.scriptPubKey == payee2) return true;
                 }
 			} else {

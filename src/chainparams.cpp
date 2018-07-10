@@ -389,7 +389,9 @@ public:
         nMasternodeCountDrift = 20;
         nModifierUpdateBlock = 615800;
         nMaxMoneyOut = 30000000 * COIN;
-
+        nNewMasternodeReward_StartBlock = 360000;
+        nNewMasternodeReward_Collateral = 12500;
+        nNewMasternodeReward_MNPercent = 75/100;
         /**
          * Build the genesis block. Note that the output of the genesis coinbase cannot
          * be spent as it did not originally exist in the database.

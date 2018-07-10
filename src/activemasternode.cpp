@@ -465,14 +465,19 @@ vector<COutput> CActiveMasternode::SelectCoinsMasternode()
         BOOST_FOREACH (COutPoint outpoint, confLockedCoins)
             pwalletMain->LockCoin(outpoint);
     }
-
+    int nHeight = chainActive.Height();
     // Filter
     BOOST_FOREACH (const COutput& out, vCoins) {
 	
-       if (out.tx->vout[out.i].nValue == MASTER_NODE_AMOUNT * COIN) { //exactly
-
-            filteredCoins.push_back(out);
-        }
+		if (nHeight >= Params().NewMasternodeReward_StartBlock()) {
+            if (out.tx->vout[out.i].nValue == Params().NewMasternodeReward_Collateral() * COIN) { //exactly
+				filteredCoins.push_back(out);
+            }
+        } else {
+			if (out.tx->vout[out.i].nValue == MASTER_NODE_AMOUNT * COIN) { //exactly
+				filteredCoins.push_back(out);
+			}
+		}
     }
     return filteredCoins;
 }

@@ -2104,14 +2104,22 @@ bool CObfuScationSigner::IsVinAssociatedWithPubkey(CTxIn& vin, CPubKey& pubkey)
 {
     CScript payee2;
     payee2 = GetScriptForDestination(pubkey.GetID());
-
+	
     CTransaction txVin;
     uint256 hash;
+    int nHeight = chainActive.Height();
+
     if (GetTransaction(vin.prevout.hash, txVin, hash, true)) {
         BOOST_FOREACH (CTxOut out, txVin.vout) {
-            if (out.nValue == MASTER_NODE_AMOUNT * COIN) {
-                if (out.scriptPubKey == payee2) return true;
-            }
+            if (nHeight >= Params().NewMasternodeReward_StartBlock()) {
+                if (out.nValue == Params().NewMasternodeReward_Collateral * COIN) {
+                    if (out.scriptPubKey == payee2) return true;
+                }
+			} else {
+				if (out.nValue == MASTER_NODE_AMOUNT * COIN) {
+					if (out.scriptPubKey == payee2) return true;
+				}
+			}
         }
     }
 

@@ -254,10 +254,13 @@ void CMasternodeMan::CheckReachable() {
             LogPrintf("CMasternodeMan::CheckReachable() Network check enforcement is disabled, skip masternode network check.\n");
             continue;
         }
-        BOOST_FOREACH (CMasternode& mn, vMasternodes) {
-            mn.netCheckMasternode(); //Check each masternode on vector
+
+        vector<CMasternode>::iterator it = vMasternodes.begin();
+        while (it != vMasternodes.end()) {
+            (*it).netCheckMasternode(); //Check each masternode on vector
 			//This is to interrupt thread when stop signal is received
-            boost::this_thread::interruption_point();     
+            boost::this_thread::interruption_point(); 
+			++it;
 		}
     }    
 }

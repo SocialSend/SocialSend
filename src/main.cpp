@@ -1643,7 +1643,7 @@ int64_t GetBlockValue(int nHeight)
 	    } else if (nHeight < Params().NewMasternodeReward_StartBlock() && nHeight >= 247681) {
 	        nSubsidy = 9.8 * COIN;
         } else if (nHeight <= 885600 && nHeight >= Params().NewMasternodeReward_StartBlock()) {
-	        nSubsidy = 22 * COIN;
+	        nSubsidy = 25 * COIN;
 	    } else if (nHeight <= 1411200 && nHeight >= 885601) {
 	        nSubsidy = 12 * COIN;
 	    } else if (nHeight <= 1936800 && nHeight >= 1411201) {
@@ -1651,7 +1651,7 @@ int64_t GetBlockValue(int nHeight)
 	    } else if (nHeight <= 2462400 && nHeight >= 1936801) {
 	        nSubsidy = 3 * COIN;
 	    } else if (nHeight <= 2988000 && nHeight >= 2462401) {
-	        nSubsidy = 1.5 * COIN;
+	        nSubsidy = 2 * COIN;
 	    } else if (nHeight <= 3513600 && nHeight >= 2988001) {
 	        nSubsidy = 1.5 * COIN;	
 	    } else if (nHeight <= 4039200 && nHeight >= 3513601) {
@@ -1660,15 +1660,9 @@ int64_t GetBlockValue(int nHeight)
 	        nSubsidy = 1.5 * COIN;	
 		} else if (nHeight <= 5090400 && nHeight >= 4564801) {
             nSubsidy = 1.5 * COIN;
-        } else if (nHeight <= 5616000 && nHeight >= 5090401) {
-            nSubsidy = 1.5 * COIN;
-        } else if (nHeight <= 6141600 && nHeight >= 5616001) {
-            nSubsidy = 1.5 * COIN;
-        } else if (nHeight <= 6667200 && nHeight >= 6141601) {
-            nSubsidy = 1.5 * COIN;
-        } else if (nHeight <= 6959200 && nHeight >= 6667201) {
-            nSubsidy = 1.5 * COIN;
-        } else if (nHeight >= 6959201) {
+        } else if (nHeight <= 5492052 && nHeight >= 5090401) {  //Last block May 1st 2028 13:45:07 
+            nSubsidy = 1.5 * COIN;								//Max Supply 65000000 SENDs
+        } else if (nHeight > 5492052) {
             nSubsidy = 0 * COIN;
 	    } else {
 	        nSubsidy = 0 * COIN;

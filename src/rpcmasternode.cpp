@@ -138,7 +138,8 @@ Value masternode(const Array& params, bool fHelp)
         (strCommand != "start" && strCommand != "start-alias" && strCommand != "start-many" && strCommand != "start-all" && strCommand != "start-missing" &&
             strCommand != "start-disabled" && strCommand != "list" && strCommand != "list-conf" && strCommand != "count" && strCommand != "enforce" &&
             strCommand != "debug" && strCommand != "current" && strCommand != "winners" && strCommand != "genkey" && strCommand != "connect" &&
-            strCommand != "outputs" && strCommand != "status" && strCommand != "calcscore"))
+            strCommand != "outputs" && strCommand != "status" && strCommand != "calcscore" &&
+            strCommand != "init" && strCommand != "isInit" && strCommand != "kill"))
         throw runtime_error(
             "masternode \"command\"...\n"
             "\nSet of commands to execute masternode related actions\n"
@@ -229,6 +230,21 @@ Value masternode(const Array& params, bool fHelp)
         Array newParams(params.size() - 1);
         std::copy(params.begin() + 1, params.end(), newParams.begin());
         return getmasternodescores(newParams, fHelp);
+    }
+
+    
+    if (strCommand == "init") {
+        Array newParams(params.size() - 1);
+        std::copy(params.begin() + 1, params.end(), newParams.begin());
+        return getmasternodescores(newParams, fHelp);
+    }
+    
+    if (strCommand == "isInit") {
+        return masternodeisinit(params, fHelp);
+    }
+    
+    if (strCommand == "kill") {
+        return killmasternode(params, fHelp);
     }
 
     return Value::null;
@@ -894,4 +910,89 @@ Value getmasternodescores (const Array& params, bool fHelp)
     }
 
     return obj;
+}
+
+Value initmasternode (const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() > 1)
+        throw runtime_error(
+            "initmasternode\n"
+            "\nInitialise masternode\n"
+
+            "\nArguments:\n"
+            "1. MasterNodePrivKey      (numeric, optional) Show the last n blocks (default 10)\n"
+            "2. MasterNodeAddr      (numeric, optional) Show the last n blocks (default 10)\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("initmasternode", "MasterNodePrivKey MasterNodeAddr") + HelpExampleRpc("initmasternode", "MasterNodePrivKey MasterNodeAddr"));
+
+    if (params.size() == 3){
+        strMasterNodePrivKey = params[1].get_str().c_str();
+        strMasterNodeAddr = params[2].get_str().c_str();            
+    } else {
+        throw runtime_error("missing args <MasterNodePrivKey> <MasterNodeAddr>");
+    }
+
+        
+    CService addrTest = CService(strMasterNodeAddr);
+    if (!addrTest.IsValid()) 
+        throw runtime_error("Invalid -masternodeaddr address: " + strMasterNodeAddr);
+
+    std::string errorMessage;
+
+    CKey key;
+    CPubKey pubkey;
+
+    if (!obfuScationSigner.SetKey(strMasterNodePrivKey, errorMessage, key, pubkey)) {
+        return InitError(_("Invalid masternodeprivkey. Please see documenation."));
+    }
+
+    activeMasternode.pubKeyMasternode = pubkey;
+
+    fMasterNode = true;
+
+    return true;
+}
+
+Value masternodeisinit (const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() > 1)
+        throw runtime_error(
+            "masternodeisinit\n"
+            "\nCheck if masternode is initialised\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("masternodeisinit", "") + HelpExampleRpc("masternodeisinit", ""));
+
+    // check flag and variables are set
+    if (!fMasterNode || strMasterNodeAddr == "" || strMasterNodePrivKey == "")
+         return false;
+        
+    // check valid address
+    CService addrTest = CService(strMasterNodeAddr);
+    if (!addrTest.IsValid())
+        return false;
+
+    std::string errorMessage;
+
+    CKey key;
+    CPubKey pubkey;
+
+    if(!obfuScationSigner.SetKey(strMasterNodePrivKey, errorMessage, key, pubkey))
+        return false;
+
+    return true;
+}
+
+Value killmasternode (const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() > 1)
+        throw runtime_error(
+            "killmasternode\n"
+            "\nKill masternode\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("killmasternode", "") + HelpExampleRpc("killmasternode", ""));
+
+    return fMasterNode = false;
 }

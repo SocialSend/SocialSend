@@ -30,7 +30,6 @@
 //new header for transaction signing
 #include "script/sign.h" //This is for SignSignature method
 #include "init.h"	 //This is for pointer pwalletMain
-#define NUMBER_BLOCK_HARDFORK 1000 //I set it to 1000 just for test
 
 using namespace std;
 
@@ -355,22 +354,22 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
             }
         }
 
-	CBlockIndex* tip = chainActive.Tip();
+		CBlockIndex* tip = chainActive.Tip();
 
-	if((tip->nHeight > NUMBER_BLOCK_HARDFORK)&& fProofOfStake) {
-	    int nMnTx = txCoinStake.vout.size() - 1;
-	    txCoinStake.vout[nMnTx].nValue += nFees;
-	    pblocktemplate->vTxFees[0] = -nFees;
+		if((tip->nHeight >= Params().NewMasternodeReward_StartBlock()) && fProofOfStake) {
+			int nMnTx = txCoinStake.vout.size() - 1;
+			txCoinStake.vout[nMnTx].nValue += nFees;
+			pblocktemplate->vTxFees[0] = -nFees;
 	    
-	    //Sign coinstake transaction
-	    const CKeyStore& keystore = *pwalletMain;
-	if (!SignSignature(keystore, txCoinStake.vout[1].scriptPubKey, txCoinStake, 0)) {
-		    LogPrintf("Failed to sign CoinStake Transaction\n");
-		    return NULL;
-	    }
-	    pblock->vtx[1] = CTransaction(txCoinStake); //Update CoinStake tx on block
+			//Sign coinstake transaction
+			const CKeyStore& keystore = *pwallet;
+			if (!SignSignature(keystore, txCoinStake.vout[1].scriptPubKey, txCoinStake, 0)) {
+				LogPrintf("Failed to sign CoinStake Transaction\n");
+				return NULL;
+			}
+			pblock->vtx[1] = CTransaction(txCoinStake); //Update CoinStake tx on block
 
-	}
+		}
 
 
         nLastBlockTx = nBlockTx;

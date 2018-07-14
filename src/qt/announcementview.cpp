@@ -56,10 +56,25 @@ void AnnouncementView::replyFinished(QNetworkReply *reply)
             reply->deleteLater();
             return;
         }
-        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-        connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinishedImage(QNetworkReply*)));
+        int time = response["time"].toInt();
+        if(time > lastUpdate){
 
-        manager->get(QNetworkRequest(QUrl(annList[0].imageURL)));
+            lastUpdate = time;
+
+            QLayoutItem *child;
+            while ((child = ui->verticalLayout->takeAt(0)) != 0) {
+                delete child->widget();
+                delete child;
+            }
+
+            QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+            connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinishedImage(QNetworkReply*)));
+
+            manager->get(QNetworkRequest(QUrl(annList[0].imageURL)));
+        }else{
+             ui->pushButton->setEnabled(true);
+        }
+
 
     }
     reply->deleteLater();
@@ -108,6 +123,8 @@ void AnnouncementView::replyFinishedImage(QNetworkReply *reply)
                 connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinishedImage(QNetworkReply*)));
 
                 manager->get(QNetworkRequest(QUrl(annList[annNumber].imageURL)));
+            }else{
+                ui->pushButton->setEnabled(true);
             }
         }
 
@@ -121,7 +138,8 @@ AnnouncementView::AnnouncementView(QWidget *parent) :   QWidget(parent),
                                                         ui(new Ui::AnnouncementView)
 {
     ui->setupUi(this);
-
+    ui->verticalLayout_3->setAlignment(Qt::AlignTop);
+    lastUpdate = 0;
     //Load Announcement data
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
@@ -162,3 +180,16 @@ void AnnouncementView::on_annList_currentItemChanged(QListWidgetItem *current, Q
     }
 }
 */
+
+void AnnouncementView::on_pushButton_clicked()
+{
+    annList.clear();
+    annNumber=0;
+
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
+
+    manager->get(QNetworkRequest(QUrl("http://socialsend.info/feed/annjson.php")));
+    ui->pushButton->setEnabled(false);
+}

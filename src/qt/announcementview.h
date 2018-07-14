@@ -33,13 +33,16 @@ public:
     ~AnnouncementView();
 
 private:
+    int lastUpdate=0;
     Ui::AnnouncementView *ui;
     QList<AnnData> annList;
     int annNumber = 0;
 private slots:
     void replyFinished (QNetworkReply *reply);
     void replyFinishedImage (QNetworkReply *reply);
+
 //    void on_annList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+    void on_pushButton_clicked();
 };
 
 #endif // ANNOUNCEMENTVIEW_H

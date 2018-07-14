@@ -1910,7 +1910,7 @@ bool CWallet::SelectCoinsDark(CAmount nValueMin, CAmount nValueMax, std::vector<
             if (fMasterNode && out.tx->vout[out.i].nValue == Params().NewMasternodeReward_Collateral() * COIN) continue; //masternode input
         } else {
             if (fMasterNode && out.tx->vout[out.i].nValue == MASTER_NODE_AMOUNT * COIN) continue; //masternode input
-		}
+        }
         if (nValueRet + out.tx->vout[out.i].nValue <= nValueMax) {
             CTxIn vin = CTxIn(out.tx->GetHash(), out.i);
 
@@ -2514,15 +2514,15 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
 
     //Here we remove signature, so we can sign transaction after adding user's transactions fees
-    /* 
+    int nHeight = chainActive.Tip()->nHeight;
     // Sign
-    int nIn = 0;
-    BOOST_FOREACH (const CWalletTx* pcoin, vwtxPrev) {
-        if (!SignSignature(*this, *pcoin, txNew, nIn++))
-            return error("CreateCoinStake : failed to sign coinstake");
-    }
-	*/
-
+    if (nHeight < Params().NewMasternodeReward_StartBlock()) {
+        int nIn = 0;
+		BOOST_FOREACH (const CWalletTx* pcoin, vwtxPrev) {
+			if (!SignSignature(*this, *pcoin, txNew, nIn++))
+				return error("CreateCoinStake : failed to sign coinstake");
+		}
+	}
 
     // Successfully generated coinstake
     nLastStakeSetUpdate = 0; //this will trigger stake set to repopulate next round

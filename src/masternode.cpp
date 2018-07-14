@@ -237,7 +237,16 @@ void CMasternode::Check(bool forceCheck)
     if (!unitTest) {
         CValidationState state;
         CMutableTransaction tx = CMutableTransaction();
-        CTxOut vout = CTxOut(9999.99 * COIN, obfuScationPool.collateralPubKey);
+
+        CAmount txTest;
+        int nHeight = chainActive.Tip()->nHeight;
+        if (nHeight >= Params().NewMasternodeReward_StartBlock())
+            txTest = 12499.99 * COIN;
+        else
+            txTest = 6249.99 * COIN;
+
+        CTxOut vout = CTxOut(txTest, obfuScationPool.collateralPubKey);
+
         tx.vin.push_back(vin);
         tx.vout.push_back(vout);
 
@@ -245,7 +254,11 @@ void CMasternode::Check(bool forceCheck)
             TRY_LOCK(cs_main, lockMain);
             if (!lockMain) return;
 
-            if (!AcceptableInputs(mempool, state, CTransaction(tx), false, NULL)) {
+            //Set flag LimitFree true.. this way we force to check tx fee.
+            //with this flag in false if input has less amount than test tx this method accept the tx
+            //because the way it calculate the fee is txInAmount - txOutAmount so, if txOUtAmount > txInAmount => fee should be negative
+            //if we don't set this flag true, the method doesn't check the fee and accept an invalid tx with negative fee
+            if (!AcceptableInputs(mempool, state, CTransaction(tx), true, NULL)) {
                 activeState = MASTERNODE_VIN_SPENT;
                 return;
             }
@@ -597,10 +610,19 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
         else
             mnodeman.Remove(pmn->vin);
     }
-
+    
     CValidationState state;
     CMutableTransaction tx = CMutableTransaction();
-    CTxOut vout = CTxOut(9999.99 * COIN, obfuScationPool.collateralPubKey);
+    CAmount txTest;
+    int nHeight = chainActive.Tip()->nHeight;
+    if (nHeight >= Params().NewMasternodeReward_StartBlock())
+        txTest = 12499.99 * COIN;
+    else
+        txTest = 6249.99 * COIN;
+
+    CTxOut vout = CTxOut(txTest, obfuScationPool.collateralPubKey);
+
+
     tx.vin.push_back(vin);
     tx.vout.push_back(vout);
 
@@ -612,8 +634,11 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
             masternodeSync.mapSeenSyncMNB.erase(GetHash());
             return false;
         }
-
-        if (!AcceptableInputs(mempool, state, CTransaction(tx), false, NULL)) {
+		//Set flag LimitFree true.. this way we force to check tx fee.
+		//with this flag in false if input has less amount than test tx this method accept the tx
+		//because the way it calculate the fee is txInAmount - txOutAmount so, if txOUtAmount > txInAmount => fee should be negative
+		//if we don't set this flag true, the method doesn't check the fee and accept an invalid tx with negative fee
+        if (!AcceptableInputs(mempool, state, CTransaction(tx), true, NULL)) {
             //set nDos
             state.IsInvalid(nDoS);
             return false;

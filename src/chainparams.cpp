@@ -538,10 +538,14 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        vSeeds.push_back(CDNSSeedData("0.0.0.0", "0.0.0.0"));
-        //vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "send-testnet.seed2.fuzzbawls.pw"));
-        //vSeeds.push_back(CDNSSeedData("s3v3nh4cks.ddns.net", "s3v3nh4cks.ddns.net"));
-        //vSeeds.push_back(CDNSSeedData("88.198.192.110", "88.198.192.110"));
+		//TESTNET NODES
+        vSeeds.push_back(CDNSSeedData("35.224.177.163", "35.224.177.163"));
+        vSeeds.push_back(CDNSSeedData("35.193.118.249", "35.193.118.249"));
+        vSeeds.push_back(CDNSSeedData("35.193.60.209", "35.193.60.209"));
+        vSeeds.push_back(CDNSSeedData("35.192.34.152", "35.192.34.152"));
+        vSeeds.push_back(CDNSSeedData("35.193.108.4", "35.193.108.4"));
+        vSeeds.push_back(CDNSSeedData("35.226.165.157", "35.226.165.157"));
+        vSeeds.push_back(CDNSSeedData("130.211.162.170", "130.211.162.170")); 
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet send addresses start with 'x' or 'y'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet send script addresses start with '8' or '9'

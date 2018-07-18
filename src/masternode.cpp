@@ -351,8 +351,10 @@ std::string CMasternode::GetStatus()
         return "WATCHDOG_EXPIRED";
     case CMasternode::MASTERNODE_POSE_BAN:
         return "POSE_BAN";
+    case CMasternode::MASTERNODE_VIN_SPENT:
+        return "VIN_SPENT";
     case CMasternode::MASTERNODE_UNREACHABLE: 
-	return "UNREACHABLE";
+		return "UNREACHABLE";
     default:
         return "UNKNOWN";
     }
@@ -605,6 +607,7 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
 
     if (pmn != NULL) {
         // nothing to do here if we already know about this masternode and it's enabled
+        pmn->Check(true);
         if (pmn->IsEnabled()) return true;
         // if it's not enabled, remove old MN first and continue
         else

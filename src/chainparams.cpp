@@ -391,7 +391,7 @@ public:
         nMaxMoneyOut = 30000000 * COIN;
         nNewMasternodeReward_StartBlock = 360000;
         nNewMasternodeReward_Collateral = 12500;
-        nNewMasternodeReward_MNPercent = 75/100;
+        nNewMasternodeReward_MNPercent = 75.0 / 100.0;
         /**
          * Build the genesis block. Note that the output of the genesis coinbase cannot
          * be spent as it did not originally exist in the database.
@@ -567,6 +567,10 @@ public:
         strSporkKey = "047cb1d068ef01a90200652ee3b350d660b7829d761417496716e41c9722d3b38bf099546a56f6e71c98b58e5616296172726377c6b2082c60c7bc4a1d54159c6b";
         strObfuscationPoolDummyAddress = "y57cqfGRkekRyDRNeJiLtYVEbvhXrNbmox";
         nStartMasternodePayments = 1420837558; //Fri, 09 Jan 2015 21:05:58 GMT
+
+		nNewMasternodeReward_StartBlock = 62000;
+        nNewMasternodeReward_Collateral = 12500;
+        nNewMasternodeReward_MNPercent = 75.0 / 100.0;
     }
     const Checkpoints::CCheckpointData& Checkpoints() const
     {

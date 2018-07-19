@@ -236,7 +236,7 @@ Value masternode(const Array& params, bool fHelp)
     if (strCommand == "init") {
         Array newParams(params.size() - 1);
         std::copy(params.begin() + 1, params.end(), newParams.begin());
-        return getmasternodescores(newParams, fHelp);
+        return initmasternode(newParams, fHelp);
     }
     
     if (strCommand == "isInit") {
@@ -758,6 +758,7 @@ Value getmasternodestatus (const Array& params, bool fHelp)
         mnObj.push_back(Pair("addr", CBitcoinAddress(pmn->pubKeyCollateralAddress.GetID()).ToString()));
         mnObj.push_back(Pair("status", activeMasternode.status));
         mnObj.push_back(Pair("message", activeMasternode.GetStatus()));
+        mnObj.push_back(Pair("lastTimeSeen", pmn->sigTime));        
         return mnObj;
     }
     throw runtime_error("Masternode not found in the list of available masternodes. Current status: "
@@ -914,7 +915,8 @@ Value getmasternodescores (const Array& params, bool fHelp)
 
 Value initmasternode (const Array& params, bool fHelp)
 {
-    if (fHelp || params.size() > 1)
+    
+    if (fHelp || params.size() > 2)
         throw runtime_error(
             "initmasternode\n"
             "\nInitialise masternode\n"
@@ -926,15 +928,15 @@ Value initmasternode (const Array& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("initmasternode", "MasterNodePrivKey MasterNodeAddr") + HelpExampleRpc("initmasternode", "MasterNodePrivKey MasterNodeAddr"));
 
-    if (params.size() == 3){
-        strMasterNodePrivKey = params[1].get_str().c_str();
-        strMasterNodeAddr = params[2].get_str().c_str();            
+    if (params.size() == 2){
+        strMasterNodePrivKey = params[0].get_str();
+        strMasterNodeAddr = params[1].get_str();            
     } else {
         throw runtime_error("missing args <MasterNodePrivKey> <MasterNodeAddr>");
     }
-
-        
+    
     CService addrTest = CService(strMasterNodeAddr);
+    
     if (!addrTest.IsValid()) 
         throw runtime_error("Invalid -masternodeaddr address: " + strMasterNodeAddr);
 
@@ -944,7 +946,7 @@ Value initmasternode (const Array& params, bool fHelp)
     CPubKey pubkey;
 
     if (!obfuScationSigner.SetKey(strMasterNodePrivKey, errorMessage, key, pubkey)) {
-        return InitError(_("Invalid masternodeprivkey. Please see documenation."));
+        throw runtime_error("Invalid masternodeprivkey. Please see documenation.");
     }
 
     activeMasternode.pubKeyMasternode = pubkey;
@@ -956,7 +958,7 @@ Value initmasternode (const Array& params, bool fHelp)
 
 Value masternodeisinit (const Array& params, bool fHelp)
 {
-    if (fHelp || params.size() > 1)
+    if (fHelp)
         throw runtime_error(
             "masternodeisinit\n"
             "\nCheck if masternode is initialised\n"
@@ -986,7 +988,7 @@ Value masternodeisinit (const Array& params, bool fHelp)
 
 Value killmasternode (const Array& params, bool fHelp)
 {
-    if (fHelp || params.size() > 1)
+    if (fHelp)
         throw runtime_error(
             "killmasternode\n"
             "\nKill masternode\n"

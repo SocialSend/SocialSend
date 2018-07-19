@@ -1050,7 +1050,7 @@ Value ListReceived(const Array& params, bool fByAccounts)
         const CBitcoinAddress& address = item.first;
         const string& strAccount = "(change)";
 
-        map<CTxDestination, string>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
+        map<CTxDestination, CAddressBookData>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
         if (mi == pwalletMain->mapAddressBook.end()) {
         
             if (!IsMine(*pwalletMain, address.Get()))

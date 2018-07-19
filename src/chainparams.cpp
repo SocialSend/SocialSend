@@ -572,7 +572,7 @@ public:
         strObfuscationPoolDummyAddress = "y57cqfGRkekRyDRNeJiLtYVEbvhXrNbmox";
         nStartMasternodePayments = 1420837558; //Fri, 09 Jan 2015 21:05:58 GMT
 
-		nNewMasternodeReward_StartBlock = 62000;
+		nNewMasternodeReward_StartBlock = 65000;
         nNewMasternodeReward_Collateral = 12500;
         nNewMasternodeReward_MNPercent = 75.0 / 100.0;
     }

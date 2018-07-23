@@ -758,7 +758,8 @@ Value getmasternodestatus (const Array& params, bool fHelp)
         mnObj.push_back(Pair("addr", CBitcoinAddress(pmn->pubKeyCollateralAddress.GetID()).ToString()));
         mnObj.push_back(Pair("status", activeMasternode.status));
         mnObj.push_back(Pair("message", activeMasternode.GetStatus()));
-        mnObj.push_back(Pair("lastTimeSeen", pmn->sigTime));        
+        mnObj.push_back(Pair("signatureTime", pmn->sigTime));   
+        mnObj.push_back(Pair("lastPingTime", pmn->lastPing.sigTime));          
         return mnObj;
     }
     throw runtime_error("Masternode not found in the list of available masternodes. Current status: "

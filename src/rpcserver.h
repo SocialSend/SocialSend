@@ -253,6 +253,9 @@ extern json_spirit::Value listmasternodeconf(const json_spirit::Array& params, b
 extern json_spirit::Value getmasternodestatus(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value getmasternodewinners(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value getmasternodescores(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value initmasternode(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value masternodeisinit(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value killmasternode(const json_spirit::Array& params, bool fHelp);
 
 extern json_spirit::Value mnbudget(const json_spirit::Array& params, bool fHelp); // in rpcmasternode-budget.cpp
 extern json_spirit::Value preparebudget(const json_spirit::Array& params, bool fHelp);

@@ -476,8 +476,29 @@ const boost::filesystem::path& GetDataDir(bool fNetSpecific)
 
     return path;
 }
+string randomStrGen(int length)
+{
+    static string charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    string result;
+    result.resize(length);
+    for (int32_t i = 0; i < length; i++) 
+		result[i] = charset[rand() % charset.length()];
+    return result;
+    
+}
 
-void ClearDatadirCache()
+void createConf() //Automatic send.conf generation
+{
+    srand(time(NULL));
+    ofstream pConf;
+    pConf.open(GetConfigFile().generic_string().c_str());
+    const char* nodes = "\nrpcport=50051\nrpcallowip=127.0.0.1\ndaemon=1\nserver=1\nlistenonion=0";
+    pConf << std::string("rpcuser=") + randomStrGen(5) + std::string("\nrpcpassword=") + randomStrGen(15) + std::string(nodes);
+    pConf.close();
+    
+}
+
+    void ClearDatadirCache()
 {
     pathCached = boost::filesystem::path();
     pathCachedNetSpecific = boost::filesystem::path();
@@ -504,11 +525,9 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 {
     boost::filesystem::ifstream streamConfig(GetConfigFile());
     if (!streamConfig.good()) {
-        // Create empty send.conf if it does not exist
-        FILE* configFile = fopen(GetConfigFile().string().c_str(), "a");
-        if (configFile != NULL)
-            fclose(configFile);
-        return; // Nothing to read, so just return
+        createConf();
+        new (&streamConfig) boost::filesystem::ifstream(GetConfigFile());
+        if (!streamConfig.good()) return;
     }
 
     set<string> setOptions;

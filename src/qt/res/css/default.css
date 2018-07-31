@@ -925,6 +925,18 @@ font-size:12px;
 margin-left:16px;
 }
 
+QWidget .QPushButton#prevButton{
+    background-color:#4a4a4a;
+    border-top-right-radius:0px;
+    border-bottom-right-radius:0px;
+}
+
+QWidget .QPushButton#nextButton{
+    background-color:#4a4a4a;
+    border-top-left-radius:0px;
+    border-bottom-left-radius:0px;
+}
+
 /**************************** OBFUSCATION WIDGET ****************************************/
 
 
@@ -1151,7 +1163,7 @@ min-height:16px;
 QWidget .QFrame#frame_2 QListView { /* Transaction List */
 font-weight:normal;
 font-size:12px;
-max-width:369px;
+//max-width:369px;
 margin-top:12px;
 margin-left:0px; /* CSS Voodoo - set to -66px to hide default transaction icons */
 }

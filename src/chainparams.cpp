@@ -388,8 +388,8 @@ public:
         nMaturity = 10;
         nMasternodeCountDrift = 20;
         nModifierUpdateBlock = 615800;
-        nMaxMoneyOut = 30000000 * COIN;
-        nNewMasternodeReward_StartBlock = 360000;
+        nMaxMoneyOut = 65000000 * COIN;
+        nNewMasternodeReward_StartBlock = 385000;
         nNewMasternodeReward_Collateral = 12500;
         nNewMasternodeReward_MNPercent = 75.0 / 100.0;
         /**
@@ -460,11 +460,11 @@ const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
         //assert(genesis.hashMerkleRoot == uint256("0x1b2ef6e2f28be914103a277377ae7729dcd125dfeb8bf97bd5964ba72b6dc39b"));
 
         vSeeds.push_back(CDNSSeedData("dns.socialsend.io", "seed.dns.socialsend.io"));     // Primary DNS Seeder
-        vSeeds.push_back(CDNSSeedData("send.goldlineit.org", "seed.send.goldlineit.org"));    // Secondary DNS Seeder from Remapper
+        //vSeeds.push_back(CDNSSeedData("send.goldlineit.org", "seed.send.goldlineit.org"));    // Secondary DNS Seeder from Remapper
         //vSeeds.push_back(CDNSSeedData("45.32.182.161", "45.76.133.159"));         // Single node address
         //vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.77.224.241")); // Single node address
         //vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.76.33.246"));           // Single node address
-	//vSeeds.push_back(CDNSSeedData("107.191.44.102", "107.191.44.102"));           // Single node address
+		//vSeeds.push_back(CDNSSeedData("107.191.44.102", "107.191.44.102"));           // Single node address
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 63);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 13);

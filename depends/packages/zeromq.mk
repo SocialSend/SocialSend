@@ -6,7 +6,7 @@ $(package)_sha256_hash=5b23f4ca9ef545d5bd3af55d305765e3ee06b986263b31967435d285a
 $(package)_patches=0001-fix-build-with-older-mingw64.patch
 
 define $(package)_set_vars
-  $(package)_config_opts=--without-docs --disable-shared --without-libsodium --disable-curve --disable-curve-keygen --disable-perf
+  $(package)_config_opts=--without-docs --without-libsodium --disable-curve --disable-curve-keygen --disable-perf
   $(package)_config_opts_linux=--with-pic
   $(package)_cxxflags=-std=c++11
 endef

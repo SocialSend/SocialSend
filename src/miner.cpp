@@ -356,7 +356,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
 
 		CBlockIndex* tip = chainActive.Tip();
 
-		if((tip->nHeight >= Params().NewMasternodeReward_StartBlock()) && fProofOfStake) {
+		/*if((tip->nHeight >= Params().NewMasternodeReward_StartBlock()) && fProofOfStake) {
 			int nMnTx = txCoinStake.vout.size() - 1;
 			txCoinStake.vout[nMnTx].nValue += nFees;
 			pblocktemplate->vTxFees[0] = -nFees;
@@ -369,7 +369,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
 			}
 			pblock->vtx[1] = CTransaction(txCoinStake); //Update CoinStake tx on block
 
-		}
+		}*/
 
 
         nLastBlockTx = nBlockTx;

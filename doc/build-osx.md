@@ -38,7 +38,7 @@ Instructions: Homebrew
 
 #### Install dependencies using Homebrew
 
-        brew install autoconf automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf qt5
+        brew install autoconf automake berkeley-db4 libtool boost@1.60 miniupnpc openssl@1.0 pkg-config protobuf qt5
 
 ### Building `sendd`
 
@@ -52,7 +52,7 @@ Instructions: Homebrew
         ./autogen.sh
 Pre 10.12:
 
-        ./configure --with-gui=qt5
+        ./configure LDFLAGS='-L/usr/local/opt/openssl@1.0/lib -L/usr/local/opt/boost@1.60/lib' CPPFLAGS='-I/usr/local/opt/openssl@1.0/include -I/usr/local/opt/boost@1.60/include' PKG_CONFIG_PATH='/usr/local/opt/openssl@1.0/lib/pkgconfig' --with-gui=qt5
 Post 10.13:
 
         ./configure LDFLAGS='-L/usr/local/opt/openssl/lib' CPPFLAGS='-I/usr/local/opt/openssl/include' PKG_CONFIG_PATH='/usr/local/opt/openssl/lib/pkgconfig' --with-gui=qt5

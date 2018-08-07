@@ -618,6 +618,10 @@
         <translation>Nodos &amp;Maestros</translation>
     </message>
     <message>
+        <source>Announcement</source>
+        <translation>Anuncios</translation>
+    </message>
+    <message>
         <source>Browse masternodes</source>
         <translation>Explorar nodos maestros</translation>
     </message>

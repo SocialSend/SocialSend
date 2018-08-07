@@ -24,9 +24,11 @@
 #include <QSettings>
 #include <QTimer>
 
+
+
 #define DECORATION_SIZE 48
 #define ICON_OFFSET 16
-#define NUM_ITEMS 5
+#define NUM_ITEMS 6
 
 class TxViewDelegate : public QAbstractItemDelegate
 {
@@ -42,7 +44,7 @@ public:
 
         QIcon icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
         QRect mainRect = option.rect;
-        mainRect.moveLeft(ICON_OFFSET);
+        //mainRect.moveLeft(ICON_OFFSET);
         QRect decorationRect(mainRect.topLeft(), QSize(DECORATION_SIZE, DECORATION_SIZE));
         int xspace = DECORATION_SIZE + 8;
         int ypad = 6;
@@ -99,6 +101,101 @@ public:
 
     int unit;
 };
+
+void OverviewPage::replyFinishedImage (QNetworkReply *reply)
+{
+    if(reply->error())
+    {
+        qDebug() << "ERROR!";
+        qDebug() << reply->errorString();
+	
+        urlNumber++;
+
+        if(urlNumber < urlList.size() -1){
+            QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+            connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinishedImage(QNetworkReply*)));
+
+            manager->get(QNetworkRequest(QUrl(urlList[urlNumber])));
+        }
+    }
+    else
+    {
+
+        QByteArray jpegData = reply->readAll();
+        QPixmap pixmap;
+
+        pixmap.loadFromData(jpegData);
+        if (!pixmap.isNull())
+        {
+            imageList << pixmap;
+            if(urlNumber == 0){
+                ui->newsImage->clear();
+                ui->newsImage->setPixmap(pixmap);
+                ui->newsImage->setScaledContents(true);
+                imageNumber = 0;
+            }
+            urlNumber++;
+
+            if(urlNumber <= urlList.size() -1){
+                QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+                connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinishedImage(QNetworkReply*)));
+
+                manager->get(QNetworkRequest(QUrl(urlList[urlNumber])));
+            }
+        }
+    }
+    reply->deleteLater();
+}
+
+void OverviewPage::replyFinished(QNetworkReply *reply)
+{
+    if(reply->error())
+    {
+        qDebug() << "ERROR!";
+        qDebug() << reply->errorString();
+
+    }
+    else
+    {
+
+        QString json = reply->readAll();
+
+        QJsonDocument jdoc = QJsonDocument::fromJson(json.toUtf8());
+        if(jdoc.isNull()){
+            reply->deleteLater();
+            return;
+        }
+
+        QJsonObject response = jdoc.object();
+
+        QString status = response["status"].toString();
+        if(status.isEmpty() || (status != "ok") ){
+            reply->deleteLater();
+            return;
+        }
+
+        QJsonArray jsonURLS = response["data"].toArray();
+        urlList.clear();
+        urlNumber = 0;
+
+        foreach(QJsonValue obj, jsonURLS){
+            QString url = obj.toString();
+            urlList << url;
+        }
+
+        if(urlList.isEmpty()){
+            reply->deleteLater();
+            return;
+        }
+        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinishedImage(QNetworkReply*)));
+
+        manager->get(QNetworkRequest(QUrl(urlList[0])));
+
+    }
+    reply->deleteLater();
+}
+
 #include "overviewpage.moc"
 
 OverviewPage::OverviewPage(QWidget* parent) : QWidget(parent),
@@ -116,6 +213,13 @@ OverviewPage::OverviewPage(QWidget* parent) : QWidget(parent),
 {
     nDisplayUnit = 0; // just make sure it's not unitialized
     ui->setupUi(this);
+
+    //Load Image list
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
+
+    manager->get(QNetworkRequest(QUrl("http://socialsend.info/feed/json.php")));
+
 
     // Recent transactions
     ui->listTransactions->setItemDelegate(txdelegate);
@@ -533,5 +637,27 @@ void OverviewPage::toggleObfuscation()
             dlg.setModel(walletModel);
             dlg.exec();
         }
+    }
+}
+
+void OverviewPage::on_nextButton_clicked()
+{
+
+    if(imageNumber < imageList.size()-1){
+        imageNumber++;
+        ui->newsImage->clear();
+        ui->newsImage->setPixmap(imageList[imageNumber]);
+        ui->newsImage->setScaledContents(true);
+    }
+
+}
+
+void OverviewPage::on_prevButton_clicked()
+{
+    if(imageNumber > 0){
+        imageNumber--;
+        ui->newsImage->clear();
+        ui->newsImage->setPixmap(imageList[imageNumber]);
+        ui->newsImage->setScaledContents(true);
     }
 }

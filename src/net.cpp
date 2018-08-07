@@ -325,10 +325,30 @@ bool IsReachable(enum Network net)
 }
 
 /** check whether a given address is in a network we can probably connect to */
-bool IsReachable(const CNetAddr& addr)
+bool IsReachable(const CService& addr)
 {
-    enum Network net = addr.GetNetwork();
-    return IsReachable(net);
+    //enum Network net = addr.GetNetwork();
+    //return IsReachable(net);
+
+	//Skip IPv6 address
+	if (addr.IsIPv6())
+		return true;
+
+	SOCKET hSocket;
+	bool proxyConnectionFailed = false;
+
+	if(ConnectSocket(addr, hSocket, nConnectTimeout, &proxyConnectionFailed)){
+		if (!IsSelectableSocket(hSocket)) {
+			CloseSocket(hSocket);
+			//LogPrintf("HOST %s Connected but not Selectable\n", addr.ToStringIPPort());
+			return false;
+		}
+		CloseSocket(hSocket);
+		return true;
+	}
+	//LogPrintf("HOST %s UNREACHABLE\n", addr.ToStringIPPort());
+        
+	return false;
 }
 
 void AddressCurrentlyConnected(const CService& addr)
@@ -1427,6 +1447,24 @@ void static ThreadStakeMinter()
     LogPrintf("ThreadStakeMinter exiting,\n");
 }
 
+void static ThreadMasternodeNetCheck()
+{
+    boost::this_thread::interruption_point();
+    LogPrintf("ThreadMasternodeNetCheck started\n");
+
+    try {
+        mnodeman.CheckReachable();
+        boost::this_thread::interruption_point();
+    } catch (std::exception& e) {
+        LogPrintf("ThreadMasternodeNetCheck() exception \n");
+    } catch (...) {
+        LogPrintf("ThreadMasternodeNetCheck() error \n");
+    }
+    LogPrintf("ThreadMasternodeNetCheck exiting,\n");
+}
+
+
+
 bool BindListenPort(const CService& addrBind, string& strError, bool fWhitelisted)
 {
     strError = "";
@@ -1613,6 +1651,10 @@ void StartNode(boost::thread_group& threadGroup)
     // ppcoin:mint proof-of-stake blocks in the background
     /////if (GetBoolArg("-staking", true))
         threadGroup.create_thread(boost::bind(&TraceThread<void (*)()>, "stakemint", &ThreadStakeMinter));
+
+	//Create thread for check masternode net reachable
+	threadGroup.create_thread(boost::bind(&TraceThread<void (*)()>, "netCheckAdrrMN", &ThreadMasternodeNetCheck));
+
 }
 
 bool StopNode()

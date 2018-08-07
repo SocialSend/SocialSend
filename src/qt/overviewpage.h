@@ -8,6 +8,15 @@
 #include "amount.h"
 
 #include <QWidget>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QUrl>
+#include <QList>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QJsonObject>
 
 class ClientModel;
 class TransactionFilterProxy;
@@ -38,13 +47,20 @@ public:
     void updateObfuscationProgress();
 
 public slots:
+
     void obfuScationStatus();
     void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, const CAmount& anonymizedBalance, const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
 
 signals:
     void transactionClicked(const QModelIndex& index);
 
+
 private:
+
+    QList<QPixmap> imageList;
+    QList<QString> urlList;
+    int urlNumber = 0;
+    int imageNumber = 0;
     QTimer* timer;
     Ui::OverviewPage* ui;
     ClientModel* clientModel;
@@ -62,6 +78,8 @@ private:
     TransactionFilterProxy* filter;
 
 private slots:
+    void replyFinished (QNetworkReply *reply);
+    void replyFinishedImage (QNetworkReply *reply);
     void toggleObfuscation();
     void obfuscationAuto();
     void obfuscationReset();
@@ -69,6 +87,8 @@ private slots:
     void handleTransactionClicked(const QModelIndex& index);
     void updateAlerts(const QString& warnings);
     void updateWatchOnlyLabels(bool showWatchOnly);
+    void on_nextButton_clicked();
+    void on_prevButton_clicked();
 };
 
 #endif // BITCOIN_QT_OVERVIEWPAGE_H

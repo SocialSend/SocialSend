@@ -84,6 +84,8 @@ Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool txDe
     CBlockIndex* pnext = chainActive.Next(blockindex);
     if (pnext)
         result.push_back(Pair("nextblockhash", pnext->GetBlockHash().GetHex()));
+		result.push_back(Pair("flags", strprintf("%s", blockindex->IsProofOfStake() ? "proof-of-stake" : "proof-of-work")));
+		result.push_back(Pair("nflags:", strprintf("%i", blockindex->nFlags)));
     return result;
 }
 

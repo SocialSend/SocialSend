@@ -19,6 +19,7 @@ class SendCoinsRecipient;
 class TransactionView;
 class WalletModel;
 class BlockExplorer;
+class AnnouncementView;
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -56,6 +57,7 @@ public:
     void showOutOfSyncWarning(bool fShow);
 
 private:
+    AnnouncementView* annView;
     ClientModel* clientModel;
     WalletModel* walletModel;
 
@@ -72,6 +74,8 @@ private:
     QLabel* transactionSum;
 
 public slots:
+    /** Switch to annoucement page */
+    void gotoAnnView();
     /** Switch to overview (home) page */
     void gotoOverviewPage();
     /** Switch to history (transactions) page */

@@ -219,7 +219,7 @@ bool CWallet::Unlock(const SecureString& strWalletPassphrase, bool anonymizeOnly
     }
 
     strWalletPassphraseFinal = strWalletPassphrase;
-    
+
 
     CCrypter crypter;
     CKeyingMaterial vMasterKey;
@@ -244,7 +244,7 @@ bool CWallet::ChangeWalletPassphrase(const SecureString& strOldWalletPassphrase,
 {
     bool fWasLocked = IsLocked();
     SecureString strOldWalletPassphraseFinal = strOldWalletPassphrase;
-    
+
     {
         LOCK(cs_wallet);
         Lock();
@@ -572,8 +572,7 @@ bool CWallet::EncryptWallet(const SecureString& strWalletPassphrase)
         // Need to completely rewrite the wallet file; if we don't, bdb might keep
         // bits of the unencrypted private key in slack space in the database file.
         CDB::Rewrite(strWalletFile);
-
-     }
+    }
     NotifyStatusChanged(this);
 
     return true;
@@ -1426,7 +1425,7 @@ CAmount CWallet::GetImmatureWatchOnlyBalance() const
 void CWallet::AvailableCoins(vector<COutput>& vCoins, bool fOnlyConfirmed, const CCoinControl* coinControl, bool fIncludeZeroValue, AvailableCoinsType nCoinType, bool fUseIX) const
 {
     vCoins.clear();
-
+    int nHeight = chainActive.Height();
     {
         LOCK2(cs_main, cs_wallet);
         for (map<uint256, CWalletTx>::const_iterator it = mapWallet.begin(); it != mapWallet.end(); ++it) {
@@ -1457,13 +1456,25 @@ void CWallet::AvailableCoins(vector<COutput>& vCoins, bool fOnlyConfirmed, const
                 if (nCoinType == ONLY_DENOMINATED) {
                     found = IsDenominatedAmount(pcoin->vout[i].nValue);
                 } else if (nCoinType == ONLY_NOT10000IFMN) {
-                    found = !(fMasterNode && pcoin->vout[i].nValue == MASTER_NODE_AMOUNT * COIN);
+                    if (nHeight >= Params().NewMasternodeReward_StartBlock()) {
+                        found = !(fMasterNode && pcoin->vout[i].nValue == Params().NewMasternodeReward_Collateral() * COIN);
+                    } else {
+                        found = !(fMasterNode && pcoin->vout[i].nValue == MASTER_NODE_AMOUNT * COIN);
+                    }
                 } else if (nCoinType == ONLY_NONDENOMINATED_NOT10000IFMN) {
                     if (IsCollateralAmount(pcoin->vout[i].nValue)) continue; // do not use collateral amounts
                     found = !IsDenominatedAmount(pcoin->vout[i].nValue);
-                    if (found && fMasterNode) found = pcoin->vout[i].nValue != MASTER_NODE_AMOUNT * COIN; // do not use Hot MN funds
+                    if (nHeight >= Params().NewMasternodeReward_StartBlock()) {
+                        if (found && fMasterNode) found = pcoin->vout[i].nValue != Params().NewMasternodeReward_Collateral() * COIN; // do not use Hot MN funds
+                    } else {
+                        if (found && fMasterNode) found = pcoin->vout[i].nValue != MASTER_NODE_AMOUNT * COIN; // do not use Hot MN funds
+                    }
                 } else if (nCoinType == ONLY_10000) {
-                    found = pcoin->vout[i].nValue == MASTER_NODE_AMOUNT * COIN;
+                    if (nHeight >= Params().NewMasternodeReward_StartBlock()) {
+                        found = pcoin->vout[i].nValue == Params().NewMasternodeReward_Collateral() * COIN;
+                    } else {
+                        found = pcoin->vout[i].nValue == MASTER_NODE_AMOUNT * COIN;
+                    }
                 } else {
                     found = true;
                 }
@@ -1744,7 +1755,7 @@ bool CWallet::SelectCoins(const CAmount& nTargetValue, set<pair<const CWalletTx*
             BOOST_FOREACH (const COutput& out, vCoins) {
                 if (out.tx->vout[out.i].nValue == v                                               //make sure it's the denom we're looking for
                     && nValueRet + out.tx->vout[out.i].nValue < nTargetValue + (0.1 * COIN) + 100 //round the amount up to .1 SEND over
-                    ) {
+                ) {
                     CTxIn vin = CTxIn(out.tx->GetHash(), out.i);
                     int rounds = GetInputObfuscationRounds(vin);
                     // make sure it's actually anonymized
@@ -1889,14 +1900,17 @@ bool CWallet::SelectCoinsDark(CAmount nValueMin, CAmount nValueMax, std::vector<
 
     //order the array so largest nondenom are first, then denominations, then very small inputs.
     sort(vCoins.rbegin(), vCoins.rend(), CompareByPriority());
-
+    int nHeight = chainActive.Height();
     BOOST_FOREACH (const COutput& out, vCoins) {
         //do not allow inputs less than 1 CENT
         if (out.tx->vout[out.i].nValue < CENT) continue;
         //do not allow collaterals to be selected
         if (IsCollateralAmount(out.tx->vout[out.i].nValue)) continue;
-        if (fMasterNode && out.tx->vout[out.i].nValue == MASTER_NODE_AMOUNT * COIN) continue; //masternode input
-
+        if (nHeight >= Params().NewMasternodeReward_StartBlock()) {
+            if (fMasterNode && out.tx->vout[out.i].nValue == Params().NewMasternodeReward_Collateral() * COIN) continue; //masternode input
+        } else {
+            if (fMasterNode && out.tx->vout[out.i].nValue == MASTER_NODE_AMOUNT * COIN) continue; //masternode input
+        }
         if (nValueRet + out.tx->vout[out.i].nValue <= nValueMax) {
             CTxIn vin = CTxIn(out.tx->GetHash(), out.i);
 
@@ -2454,7 +2468,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     nCredit += nReward;
 
     int64_t nMinFee = 0;
-    while (true) {
+    /* while (true) {
         // Set output amount
         if (txNew.vout.size() == 3) {
             txNew.vout[1].nValue = ((nCredit - nMinFee) / 2 / CENT) * CENT;
@@ -2478,17 +2492,37 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
                 LogPrintf("CreateCoinStake : fee for coinstake %s\n", FormatMoney(nMinFee).c_str());
             break;
         }
-    }
+    }*/
+
+
+    //New code to remove fee on coinstake transaction
+    if (txNew.vout.size() == 3) {
+        txNew.vout[1].nValue = nCredit / 2;
+        txNew.vout[2].nValue = nCredit - txNew.vout[1].nValue;
+    } else
+        txNew.vout[1].nValue = nCredit;
+
+    // Limit size
+    unsigned int nBytes = ::GetSerializeSize(txNew, SER_NETWORK, PROTOCOL_VERSION);
+    if (nBytes >= DEFAULT_BLOCK_MAX_SIZE / 5)
+        return error("CreateCoinStake : exceeded coinstake size limit");
+
+    //end of new code
 
     //Masternode payment
     FillBlockPayee(txNew, nMinFee, true);
 
+
+    //Here we remove signature, so we can sign transaction after adding user's transactions fees
+    int nHeight = chainActive.Tip()->nHeight;
     // Sign
-    int nIn = 0;
-    BOOST_FOREACH (const CWalletTx* pcoin, vwtxPrev) {
-        if (!SignSignature(*this, *pcoin, txNew, nIn++))
-            return error("CreateCoinStake : failed to sign coinstake");
-    }
+    //if (nHeight < Params().NewMasternodeReward_StartBlock()) {
+        int nIn = 0;
+		BOOST_FOREACH (const CWalletTx* pcoin, vwtxPrev) {
+			if (!SignSignature(*this, *pcoin, txNew, nIn++))
+				return error("CreateCoinStake : failed to sign coinstake");
+		}
+	//}
 
     // Successfully generated coinstake
     nLastStakeSetUpdate = 0; //this will trigger stake set to repopulate next round

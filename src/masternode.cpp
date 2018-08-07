@@ -78,6 +78,7 @@ CMasternode::CMasternode()
     nScanningErrorCount = 0;
     nLastScanningErrorBlockHeight = 0;
     lastTimeChecked = 0;
+    lastTimeNetChecked = 0;
     nLastDsee = 0;  // temporary, do not save. Remove after migration to v12
     nLastDseep = 0; // temporary, do not save. Remove after migration to v12
 }
@@ -103,6 +104,7 @@ CMasternode::CMasternode(const CMasternode& other)
     nScanningErrorCount = other.nScanningErrorCount;
     nLastScanningErrorBlockHeight = other.nLastScanningErrorBlockHeight;
     lastTimeChecked = 0;
+    lastTimeNetChecked = 0;
     nLastDsee = other.nLastDsee;   // temporary, do not save. Remove after migration to v12
     nLastDseep = other.nLastDseep; // temporary, do not save. Remove after migration to v12
 }
@@ -128,6 +130,8 @@ CMasternode::CMasternode(const CMasternodeBroadcast& mnb)
     nScanningErrorCount = 0;
     nLastScanningErrorBlockHeight = 0;
     lastTimeChecked = 0;
+   lastTimeNetChecked = 0;
+
     nLastDsee = 0;  // temporary, do not save. Remove after migration to v12
     nLastDseep = 0; // temporary, do not save. Remove after migration to v12
 }
@@ -145,6 +149,7 @@ bool CMasternode::UpdateFromNewBroadcast(CMasternodeBroadcast& mnb)
         protocolVersion = mnb.protocolVersion;
         addr = mnb.addr;
         lastTimeChecked = 0;
+        lastTimeNetChecked = 0;
         int nDoS = 0;
         if (mnb.lastPing == CMasternodePing() || (mnb.lastPing != CMasternodePing() && mnb.lastPing.CheckAndUpdate(nDoS, false))) {
             lastPing = mnb.lastPing;
@@ -186,6 +191,26 @@ uint256 CMasternode::CalculateScore(int mod, int64_t nBlockHeight)
     return r;
 }
 
+void CMasternode::netCheckMasternode(){
+	if (GetTime() - lastTimeNetChecked > MASTERNODE_NETCHECK_SECONDS) {
+        lastTimeNetChecked = GetTime();
+
+        if (!IsValidNetAddr()) { //masternode.cpp line 320
+            activeState = MASTERNODE_UNREACHABLE; 
+            LogPrintf("Checking NetMasternode %s [UNREACHABLE] take %i segs\n", addr.ToStringIPPort(), GetTime() - lastTimeNetChecked);
+            return;
+        } else {
+            LogPrintf("Checking NetMasternode %s [OK] take %i segs\n", addr.ToStringIPPort(), GetTime() - lastTimeNetChecked);
+            if (activeState == MASTERNODE_UNREACHABLE) {
+		    	//If masternode were UNREACHABLE make it ENABLED again
+		        activeState = MASTERNODE_ENABLED;
+		    }
+		}
+	}
+}
+
+
+
 void CMasternode::Check(bool forceCheck)
 {
     if (ShutdownRequested()) return;
@@ -197,6 +222,7 @@ void CMasternode::Check(bool forceCheck)
     //once spent, stop doing the checks
     if (activeState == MASTERNODE_VIN_SPENT) return;
 
+    if (activeState == MASTERNODE_UNREACHABLE) return;
 
     if (!IsPingedWithin(MASTERNODE_REMOVAL_SECONDS)) {
         activeState = MASTERNODE_REMOVE;
@@ -211,7 +237,16 @@ void CMasternode::Check(bool forceCheck)
     if (!unitTest) {
         CValidationState state;
         CMutableTransaction tx = CMutableTransaction();
-        CTxOut vout = CTxOut(9999.99 * COIN, obfuScationPool.collateralPubKey);
+
+        CAmount txTest;
+        int nHeight = chainActive.Tip()->nHeight;
+        if (nHeight >= Params().NewMasternodeReward_StartBlock())
+            txTest = 12499.99 * COIN;
+        else
+            txTest = 6249.99 * COIN;
+
+        CTxOut vout = CTxOut(txTest, obfuScationPool.collateralPubKey);
+
         tx.vin.push_back(vin);
         tx.vout.push_back(vout);
 
@@ -219,7 +254,11 @@ void CMasternode::Check(bool forceCheck)
             TRY_LOCK(cs_main, lockMain);
             if (!lockMain) return;
 
-            if (!AcceptableInputs(mempool, state, CTransaction(tx), false, NULL)) {
+            //Set flag LimitFree true.. this way we force to check tx fee.
+            //with this flag in false if input has less amount than test tx this method accept the tx
+            //because the way it calculate the fee is txInAmount - txOutAmount so, if txOUtAmount > txInAmount => fee should be negative
+            //if we don't set this flag true, the method doesn't check the fee and accept an invalid tx with negative fee
+            if (!AcceptableInputs(mempool, state, CTransaction(tx), true, NULL)) {
                 activeState = MASTERNODE_VIN_SPENT;
                 return;
             }
@@ -312,6 +351,10 @@ std::string CMasternode::GetStatus()
         return "WATCHDOG_EXPIRED";
     case CMasternode::MASTERNODE_POSE_BAN:
         return "POSE_BAN";
+    case CMasternode::MASTERNODE_VIN_SPENT:
+        return "VIN_SPENT";
+    case CMasternode::MASTERNODE_UNREACHABLE: 
+		return "UNREACHABLE";
     default:
         return "UNKNOWN";
     }
@@ -564,15 +607,25 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
 
     if (pmn != NULL) {
         // nothing to do here if we already know about this masternode and it's enabled
+        pmn->Check(true);
         if (pmn->IsEnabled()) return true;
         // if it's not enabled, remove old MN first and continue
         else
             mnodeman.Remove(pmn->vin);
     }
-
+    
     CValidationState state;
     CMutableTransaction tx = CMutableTransaction();
-    CTxOut vout = CTxOut(9999.99 * COIN, obfuScationPool.collateralPubKey);
+    CAmount txTest;
+    int nHeight = chainActive.Tip()->nHeight;
+    if (nHeight >= Params().NewMasternodeReward_StartBlock())
+        txTest = 12499.99 * COIN;
+    else
+        txTest = 6249.99 * COIN;
+
+    CTxOut vout = CTxOut(txTest, obfuScationPool.collateralPubKey);
+
+
     tx.vin.push_back(vin);
     tx.vout.push_back(vout);
 
@@ -584,8 +637,11 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
             masternodeSync.mapSeenSyncMNB.erase(GetHash());
             return false;
         }
-
-        if (!AcceptableInputs(mempool, state, CTransaction(tx), false, NULL)) {
+		//Set flag LimitFree true.. this way we force to check tx fee.
+		//with this flag in false if input has less amount than test tx this method accept the tx
+		//because the way it calculate the fee is txInAmount - txOutAmount so, if txOUtAmount > txInAmount => fee should be negative
+		//if we don't set this flag true, the method doesn't check the fee and accept an invalid tx with negative fee
+        if (!AcceptableInputs(mempool, state, CTransaction(tx), true, NULL)) {
             //set nDos
             state.IsInvalid(nDoS);
             return false;

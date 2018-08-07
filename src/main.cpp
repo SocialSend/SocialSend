@@ -187,7 +187,7 @@ struct CMainSignals {
     /** Notifies listeners of updated transaction data (transaction, and optionally the block it is found in. */
     boost::signals2::signal<void(const CTransaction&, const CBlock*)> SyncTransaction;
     /** Notifies listeners of an erased transaction (currently disabled, requires transaction replacement). */
-// XX42    boost::signals2::signal<void(const uint256&)> EraseTransaction;
+    // XX42    boost::signals2::signal<void(const uint256&)> EraseTransaction;
     /** Notifies listeners of an updated transaction without new data (for now: a coinbase potentially becoming visible). */
     boost::signals2::signal<void(const uint256&)> UpdatedTransaction;
     /** Notifies listeners of a new active block chain. */
@@ -205,7 +205,7 @@ struct CMainSignals {
 void RegisterValidationInterface(CValidationInterface* pwalletIn)
 {
     g_signals.SyncTransaction.connect(boost::bind(&CValidationInterface::SyncTransaction, pwalletIn, _1, _2));
-// XX42 g_signals.EraseTransaction.connect(boost::bind(&CValidationInterface::EraseFromWallet, pwalletIn, _1));
+    // XX42 g_signals.EraseTransaction.connect(boost::bind(&CValidationInterface::EraseFromWallet, pwalletIn, _1));
     g_signals.UpdatedTransaction.connect(boost::bind(&CValidationInterface::UpdatedTransaction, pwalletIn, _1));
     g_signals.SetBestChain.connect(boost::bind(&CValidationInterface::SetBestChain, pwalletIn, _1));
     g_signals.Inventory.connect(boost::bind(&CValidationInterface::Inventory, pwalletIn, _1));
@@ -220,7 +220,7 @@ void UnregisterValidationInterface(CValidationInterface* pwalletIn)
     g_signals.Inventory.disconnect(boost::bind(&CValidationInterface::Inventory, pwalletIn, _1));
     g_signals.SetBestChain.disconnect(boost::bind(&CValidationInterface::SetBestChain, pwalletIn, _1));
     g_signals.UpdatedTransaction.disconnect(boost::bind(&CValidationInterface::UpdatedTransaction, pwalletIn, _1));
-// XX42    g_signals.EraseTransaction.disconnect(boost::bind(&CValidationInterface::EraseFromWallet, pwalletIn, _1));
+    // XX42    g_signals.EraseTransaction.disconnect(boost::bind(&CValidationInterface::EraseFromWallet, pwalletIn, _1));
     g_signals.SyncTransaction.disconnect(boost::bind(&CValidationInterface::SyncTransaction, pwalletIn, _1, _2));
 }
 
@@ -231,7 +231,7 @@ void UnregisterAllValidationInterfaces()
     g_signals.Inventory.disconnect_all_slots();
     g_signals.SetBestChain.disconnect_all_slots();
     g_signals.UpdatedTransaction.disconnect_all_slots();
-// XX42    g_signals.EraseTransaction.disconnect_all_slots();
+    // XX42    g_signals.EraseTransaction.disconnect_all_slots();
     g_signals.SyncTransaction.disconnect_all_slots();
 }
 
@@ -1208,8 +1208,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         } else if (!ignoreFees) {
             CAmount txMinFee = GetMinRelayFee(tx, nSize, true);
             if (fLimitFree && nFees < txMinFee)
-                return state.DoS(0, error("AcceptToMemoryPool : not enough fees %s, %d < %d",
-                                        hash.ToString(), nFees, txMinFee),
+                return state.DoS(0, error("AcceptToMemoryPool : not enough fees %s, %d < %d", hash.ToString(), nFees, txMinFee),
                     REJECT_INSUFFICIENTFEE, "insufficient fee");
 
             // Require that free transactions have sufficient priority to be mined in the next block.
@@ -1397,8 +1396,7 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
         } else { // same as !ignoreFees for AcceptToMemoryPool
             CAmount txMinFee = GetMinRelayFee(tx, nSize, true);
             if (fLimitFree && nFees < txMinFee)
-                return state.DoS(0, error("AcceptableInputs : not enough fees %s, %d < %d",
-                                        hash.ToString(), nFees, txMinFee),
+                return state.DoS(0, error("AcceptableInputs : not enough fees %s, %d < %d", hash.ToString(), nFees, txMinFee),
                     REJECT_INSUFFICIENTFEE, "insufficient fee");
 
             // Require that free transactions have sufficient priority to be mined in the next block.
@@ -1615,54 +1613,85 @@ int64_t GetBlockValue(int nHeight)
     int64_t nSubsidy = 0;
 
     //if (Params().NetworkID() == CBaseChainParams::TESTNET) {
-        if (nHeight < 1001 && nHeight > 0)
-            return 30000 * COIN;
+    if (nHeight < 1001 && nHeight > 0)
+        return 30000 * COIN;
     //}
+
+    if (Params().NetworkID() == CBaseChainParams::TESTNET) {
+        if (nHeight == 0) {
+            nSubsidy = 1 * COIN;
+        } else if (nHeight <= 1000 && nHeight >= 1) {
+            nSubsidy = 30000 * COIN;
+        } else if (nHeight <= 11520 && nHeight >= 1001) {
+            nSubsidy = 5 * COIN;
+        } else if (nHeight <= 17280 && nHeight >= 11521) {
+            nSubsidy = 7 * COIN;
+        } else if (nHeight <= 20160 && nHeight >= 17281) {
+            nSubsidy = 8 * COIN;
+        } else if (nHeight <= 34559 && nHeight >= 20161) {
+            nSubsidy = 11 * COIN;
+        } else if (nHeight <= 40320 && nHeight >= 34560) {
+            nSubsidy = 12 * COIN;
+        } else if (nHeight <= 60480 && nHeight >= 40321) {
+            nSubsidy = 10.8 * COIN;
+        } else if (nHeight < Params().NewMasternodeReward_StartBlock() && nHeight >= 60481) {
+            nSubsidy = 10.5 * COIN;
+        } else if (nHeight >= Params().NewMasternodeReward_StartBlock()) {
+            nSubsidy = 25 * COIN;
+        } else {
+            nSubsidy = 0 * COIN;
+        }
+        return nSubsidy;
+    }
 
     if (nHeight == 0) {
         nSubsidy = 1 * COIN;
 
-	} else if (nHeight <= 11520 && nHeight >= 1000) {
-	        nSubsidy = 5 * COIN;
-	    } else if (nHeight <= 17280 && nHeight >= 11521) {
-	        nSubsidy = 7 * COIN;
-	    } else if (nHeight <= 20160 && nHeight >= 17281) {
-	        nSubsidy = 8 * COIN;
-	    } else if (nHeight <= 34559 && nHeight >= 20161) {
-	        nSubsidy = 11 * COIN;
-	    } else if (nHeight <= 40320 && nHeight >= 34560) {
-	        nSubsidy = 12 * COIN;			
-	    } else if (nHeight <= 60480 && nHeight >= 40321) {
-	        nSubsidy = 10.8 * COIN;
-	    } else if (nHeight <= 80640 && nHeight >= 60481) {
-	        nSubsidy = 10.5 * COIN;
-	    } else if (nHeight <= 161280 && nHeight >= 80641) {
-	        nSubsidy = 10.2 * COIN;
-	    } else if (nHeight <= 247680 && nHeight >= 161281) {
-	        nSubsidy = 10 * COIN;
-	    } else if (nHeight <= 518400 && nHeight >= 247681) {
-	        nSubsidy = 9.8 * COIN;
-	    } else if (nHeight <= 691200 && nHeight >= 518401) {
-	        nSubsidy = 9.5 * COIN;
-	    } else if (nHeight <= 777600 && nHeight >= 691201) {
-	        nSubsidy = 9.3 * COIN;
-	    } else if (nHeight <= 864000 && nHeight >= 777601) {
-	        nSubsidy = 9.2 * COIN;	
-	    } else if (nHeight <= 950400 && nHeight >= 864001) {
-	        nSubsidy = 9 * COIN;
-	    } else if (nHeight <= 986800 && nHeight >= 950401) {
-	        nSubsidy = 8.7 * COIN;
-	    } else if (nHeight <= 1246000 && nHeight >= 986801) {
-	        nSubsidy = 8.5 * COIN;	
-	    } else if (nHeight <= 1505200 && nHeight >= 1246001) {
-	        nSubsidy = 8.2 * COIN;	
-	    } else if (nHeight <= 1764400 && nHeight >= 1505201) {
-	        nSubsidy = 8.1 * COIN;	
-	    } else if (nHeight >= 1764401) {
-	        nSubsidy = 8 * COIN;
-	    } else {
-	        nSubsidy = 0 * COIN;
-		}
+    } else if (nHeight <= 11520 && nHeight >= 1000) {
+        nSubsidy = 5 * COIN;
+    } else if (nHeight <= 17280 && nHeight >= 11521) {
+        nSubsidy = 7 * COIN;
+    } else if (nHeight <= 20160 && nHeight >= 17281) {
+        nSubsidy = 8 * COIN;
+    } else if (nHeight <= 34559 && nHeight >= 20161) {
+        nSubsidy = 11 * COIN;
+    } else if (nHeight <= 40320 && nHeight >= 34560) {
+        nSubsidy = 12 * COIN;
+    } else if (nHeight <= 60480 && nHeight >= 40321) {
+        nSubsidy = 10.8 * COIN;
+    } else if (nHeight <= 80640 && nHeight >= 60481) {
+        nSubsidy = 10.5 * COIN;
+    } else if (nHeight <= 161280 && nHeight >= 80641) {
+        nSubsidy = 10.2 * COIN;
+    } else if (nHeight <= 247680 && nHeight >= 161281) {
+        nSubsidy = 10 * COIN;
+    } else if (nHeight < Params().NewMasternodeReward_StartBlock() && nHeight >= 247681) {
+        nSubsidy = 9.8 * COIN;
+    } else if (nHeight <= 885600 && nHeight >= Params().NewMasternodeReward_StartBlock()) {
+        nSubsidy = 25 * COIN;
+    } else if (nHeight <= 1411200 && nHeight >= 885601) {
+        nSubsidy = 12 * COIN;
+    } else if (nHeight <= 1936800 && nHeight >= 1411201) {
+        nSubsidy = 6 * COIN;
+    } else if (nHeight <= 2462400 && nHeight >= 1936801) {
+        nSubsidy = 3 * COIN;
+    } else if (nHeight <= 2988000 && nHeight >= 2462401) {
+        nSubsidy = 2 * COIN;
+    } else if (nHeight <= 3513600 && nHeight >= 2988001) {
+        nSubsidy = 1.5 * COIN;
+    } else if (nHeight <= 4039200 && nHeight >= 3513601) {
+        nSubsidy = 1.5 * COIN;
+    } else if (nHeight <= 4564800 && nHeight >= 4039201) {
+        nSubsidy = 1.5 * COIN;
+    } else if (nHeight <= 5090400 && nHeight >= 4564801) {
+        nSubsidy = 1.5 * COIN;
+    } else if (nHeight <= 5492052 && nHeight >= 5090401) { //Last block May 1st 2028 13:45:07
+        nSubsidy = 1.5 * COIN;                             //Max Supply 65000000 SENDs
+    } else if (nHeight > 5492052) {
+        nSubsidy = 0 * COIN;
+    } else {
+        nSubsidy = 0 * COIN;
+    }
 
     return nSubsidy;
 }
@@ -1676,19 +1705,25 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
             return 0;
     }
 
+    if (nHeight >= Params().NewMasternodeReward_StartBlock()) {
+        ret = blockValue * Params().NewMasternodeReward_MNPercent();
+        return ret;
+    }
+
+
     if (nHeight <= 20160) {
         ret = blockValue / 5;
     } else if (nHeight < 40320 && nHeight > 20161) {
         ret = blockValue / (100 / 25);
-	} else if (nHeight < 60480 && nHeight > 40321) {
+    } else if (nHeight < 60480 && nHeight > 40321) {
         ret = blockValue / (100 / 26);
-	} else if (nHeight < 80640 && nHeight > 60481) {
+    } else if (nHeight < 80640 && nHeight > 60481) {
         ret = blockValue / (100 / 28);
-	} else if (nHeight < 161280 && nHeight > 80641) {
+    } else if (nHeight < 161280 && nHeight > 80641) {
         ret = blockValue / (100 / 30);
-	} else if (nHeight < 247680 && nHeight > 161281) {
+    } else if (nHeight < 247680 && nHeight > 161281) {
         ret = blockValue / (100 / 35);
-	} else if (nHeight < 518400 && nHeight > 247681) {
+    } else if (nHeight < 518400 && nHeight > 247681) {
         ret = blockValue / (100 / 40);
     } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 518401) {
         ret = blockValue / (100 / 50);
@@ -1699,12 +1734,12 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
         int64_t mNodeCoins = mnodeman.size() * 6250 * COIN;
 
         //if a mn count is inserted into the function we are looking for a specific result for a masternode count
-        if(nMasternodeCount)
+        if (nMasternodeCount)
             mNodeCoins = nMasternodeCount * 6250 * COIN;
 
         // Use this log to compare the masternode count for different clients
         LogPrintf("Adjusting seesaw at height %d with %d masternodes (without drift: %d) at %ld\n", nHeight, nMasternodeCount, nMasternodeCount - Params().MasternodeCountDrift(), GetTime());
-        
+
         if (fDebug)
             LogPrintf("GetMasternodePayment(): moneysupply=%s, nodecoins=%s \n", FormatMoney(nMoneySupply).c_str(),
                 FormatMoney(mNodeCoins).c_str());
@@ -2039,8 +2074,7 @@ void static InvalidChainFound(CBlockIndex* pindexNew)
 
     LogPrintf("InvalidChainFound: invalid block=%s  height=%d  log2_work=%.8g  date=%s\n",
         pindexNew->GetBlockHash().ToString(), pindexNew->nHeight,
-        log(pindexNew->nChainWork.getdouble()) / log(2.0), DateTimeStrFormat("%Y-%m-%d %H:%M:%S",
-                                                               pindexNew->GetBlockTime()));
+        log(pindexNew->nChainWork.getdouble()) / log(2.0), DateTimeStrFormat("%Y-%m-%d %H:%M:%S", pindexNew->GetBlockTime()));
     LogPrintf("InvalidChainFound:  current best=%s  height=%d  log2_work=%.8g  date=%s\n",
         chainActive.Tip()->GetBlockHash().ToString(), chainActive.Height(), log(chainActive.Tip()->nChainWork.getdouble()) / log(2.0),
         DateTimeStrFormat("%Y-%m-%d %H:%M:%S", chainActive.Tip()->GetBlockTime()));
@@ -2131,19 +2165,19 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
 
         if (!tx.IsCoinStake()) {
             /////////////if (nValueIn < tx.GetValueOut())
-                ///////////return state.DoS(100, error("CheckInputs() : %s value in (%s) < value out (%s)",
-                           //////////               tx.GetHash().ToString(), FormatMoney(nValueIn), FormatMoney(tx.GetValueOut())),
-                 ///////   REJECT_INVALID, "bad-txns-in-belowout");
+            ///////////return state.DoS(100, error("CheckInputs() : %s value in (%s) < value out (%s)",
+            //////////               tx.GetHash().ToString(), FormatMoney(nValueIn), FormatMoney(tx.GetValueOut())),
+            ///////   REJECT_INVALID, "bad-txns-in-belowout");
 
             // Tally transaction fees
             CAmount nTxFee = nValueIn - tx.GetValueOut();
-           ///// if (nTxFee < 0)
-                /////return state.DoS(100, error("CheckInputs() : %s nTxFee < 0", tx.GetHash().ToString()),
-                    /////REJECT_INVALID, "bad-txns-fee-negative");
+            ///// if (nTxFee < 0)
+            /////return state.DoS(100, error("CheckInputs() : %s nTxFee < 0", tx.GetHash().ToString()),
+            /////REJECT_INVALID, "bad-txns-fee-negative");
             nFees += nTxFee;
             ////if (!MoneyRange(nFees))
-               //// return state.DoS(100, error("CheckInputs() : nFees out of range"),
-                   //// REJECT_INVALID, "bad-txns-fee-outofrange");
+            //// return state.DoS(100, error("CheckInputs() : nFees out of range"),
+            //// REJECT_INVALID, "bad-txns-fee-outofrange");
         }
         // The first loop above does all the inexpensive checks.
         // Only if ALL inputs pass do we perform expensive ECDSA signature checks.
@@ -2456,16 +2490,16 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
     //PoW phase redistributed fees to miner. PoS stage destroys fees.
     CAmount nExpectedMint = GetBlockValue(pindex->pprev->nHeight);
-    if (block.IsProofOfWork())
-        nExpectedMint += nFees;
-	
-	if (pindex->nHeight>57000)
-    if (!IsBlockValueValid(block, nExpectedMint, pindex->nMint)) {
-        return state.DoS(100,
-            error("ConnectBlock() : reward pays too much (actual=%s vs limit=%s)",
-                FormatMoney(pindex->nMint), FormatMoney(nExpectedMint)),
-            REJECT_INVALID, "bad-cb-amount");
-    }
+    //if (block.IsProofOfWork())
+    nExpectedMint += nFees; //include fee on all blocks
+
+    if (pindex->nHeight > 57000)
+        if (!IsBlockValueValid(block, nExpectedMint, pindex->nMint)) {
+            return state.DoS(100,
+                error("ConnectBlock() : reward pays too much (actual=%s vs limit=%s)",
+                    FormatMoney(pindex->nMint), FormatMoney(nExpectedMint)),
+                REJECT_INVALID, "bad-cb-amount");
+        }
 
     if (!control.Wait())
         return state.DoS(100, false);
@@ -3414,7 +3448,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
             if (!IsBlockPayeeValid(block, nHeight)) {
                 mapRejectedBlocks.insert(make_pair(block.GetHash(), GetTime()));
                 return state.DoS(0, error("CheckBlock() : Couldn't find masternode/budget payment"),
-                        REJECT_INVALID, "bad-cb-payee");
+                    REJECT_INVALID, "bad-cb-payee");
             }
         } else {
             if (fDebug)
@@ -3464,11 +3498,11 @@ bool CheckWork(const CBlock block, CBlockIndex* const pindexPrev)
         uint256 hashProofOfStake;
         uint256 hash = block.GetHash();
 
-        if(!CheckProofOfStake(block, hashProofOfStake)) {
+        if (!CheckProofOfStake(block, hashProofOfStake)) {
             LogPrintf("WARNING: ProcessBlock(): check proof-of-stake failed for block %s\n", hash.ToString().c_str());
             return false;
         }
-        if(!mapProofOfStake.count(hash)) // add to mapProofOfStake
+        if (!mapProofOfStake.count(hash)) // add to mapProofOfStake
             mapProofOfStake.insert(make_pair(hash, hashProofOfStake));
     }
 
@@ -3996,10 +4030,9 @@ bool static LoadBlockIndexDB()
 
         //fix Assertion `hashPrevBlock == view.GetBestBlock()' failed. By adjusting height to the last recorded by coinsview
         CBlockIndex* pindexCoinsView = mapBlockIndex[pcoinsTip->GetBestBlock()];
-        for(unsigned int i = vinfoBlockFile[nLastBlockFile].nHeightLast + 1; i < vSortedByHeight.size(); i++)
-        {
+        for (unsigned int i = vinfoBlockFile[nLastBlockFile].nHeightLast + 1; i < vSortedByHeight.size(); i++) {
             pindexLastMeta = vSortedByHeight[i].second;
-            if(pindexLastMeta->nHeight > pindexCoinsView->nHeight)
+            if (pindexLastMeta->nHeight > pindexCoinsView->nHeight)
                 break;
         }
 
@@ -4027,14 +4060,15 @@ bool static LoadBlockIndexDB()
 
         //properly account for all of the blocks that were not in the meta data. If this is not done the file
         //positioning will be wrong and blocks will be overwritten and later cause serialization errors
-        CBlockIndex *pindexLast = vSortedByHeight[vSortedByHeight.size() - 1].second;
+        CBlockIndex* pindexLast = vSortedByHeight[vSortedByHeight.size() - 1].second;
         CBlock lastBlock;
         if (!ReadBlockFromDisk(lastBlock, pindexLast)) {
             isFixed = false;
             strError = strprintf("failed to read block %d from disk", pindexLast->nHeight);
         }
         vinfoBlockFile[nLastBlockFile].nHeightLast = pindexLast->nHeight;
-        vinfoBlockFile[nLastBlockFile].nSize = pindexLast->GetBlockPos().nPos + ::GetSerializeSize(lastBlock, SER_DISK, CLIENT_VERSION);;
+        vinfoBlockFile[nLastBlockFile].nSize = pindexLast->GetBlockPos().nPos + ::GetSerializeSize(lastBlock, SER_DISK, CLIENT_VERSION);
+        ;
         setDirtyFileInfo.insert(nLastBlockFile);
         FlushStateToDisk(state, FLUSH_STATE_ALWAYS);
 
@@ -4484,7 +4518,7 @@ string GetWarnings(string strFor)
 
 
     /////if (!CLIENT_VERSION_IS_RELEASE)
-        ///////strStatusBar = _("This is a pre-release test build - use at your own risk - do not use for staking or merchant applications!");
+    ///////strStatusBar = _("This is a pre-release test build - use at your own risk - do not use for staking or merchant applications!");
 
     if (GetBoolArg("-testsafemode", false))
         strStatusBar = strRPC = "testsafemode enabled";
@@ -4978,7 +5012,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             if (addr.nTime <= 100000000 || addr.nTime > nNow + 10 * 60)
                 addr.nTime = nNow - 5 * 24 * 60 * 60;
             pfrom->AddAddressKnown(addr);
-            bool fReachable = IsReachable(addr);
+            bool fReachable = IsReachable(addr.GetNetwork());
             if (addr.nTime > nSince && !pfrom->fGetAddr && vAddr.size() <= 10 && addr.IsRoutable()) {
                 // Relay to a limited number of other nodes
                 {
@@ -5632,15 +5666,14 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
 }
 
 // Note: whenever a protocol update is needed toggle between both implementations (comment out the formerly active one)
-//       so we can leave the existing clients untouched (old SPORK will stay on so they don't see even older clients). 
+//       so we can leave the existing clients untouched (old SPORK will stay on so they don't see even older clients).
 //       Those old clients won't react to the changes of the other (new) SPORK because at the time of their implementation
 //       it was the one which was commented out
 int ActiveProtocol()
 {
-
     // SPORK_14 was used for 70710. Leave it 'ON' so they don't see < 70710 nodes. They won't react to SPORK_15
     // messages because it's not in their code
-/*
+    /*
     if (IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT)) {
         if (chainActive.Tip()->nHeight >= Params().ModifierUpgradeBlock())
             return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
@@ -5650,11 +5683,11 @@ int ActiveProtocol()
 */
 
 
-    // SPORK_15 is used for 70910. Nodes < 70910 don't see it and still get their protocol version via SPORK_14 and their 
+    // SPORK_15 is used for 70910. Nodes < 70910 don't see it and still get their protocol version via SPORK_14 and their
     // own ModifierUpgradeBlock()
- 
+
     if (IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
-            return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
+        return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
 
     return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
 }

@@ -12,6 +12,7 @@
 #include "util.h"
 #include <boost/filesystem.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/thread.hpp>
 
 /** Masternode manager */
 CMasternodeMan mnodeman;
@@ -237,6 +238,33 @@ void CMasternodeMan::Check()
         mn.Check();
     }
 }
+
+//This method will be called on the Masternode Dumper Thread
+void CMasternodeMan::CheckReachable() {
+    while (true) {
+		//This is to interrupt thread when stop signal is received
+		boost::this_thread::interruption_point();     
+		if (GetTime() - lastTimeThreadRun < TIME_INTERVAL_BETWEEN_NETCHECK_SECONDS) {
+            MilliSleep(2000);
+            continue;
+        }
+        lastTimeThreadRun = GetTime();
+
+        if (!IsSporkActive(SPORK_17_MN_NETCHECK)) {
+            LogPrintf("CMasternodeMan::CheckReachable() Network check enforcement is disabled, skip masternode network check.\n");
+            continue;
+        }
+
+        vector<CMasternode>::iterator it = vMasternodes.begin();
+        while (it != vMasternodes.end()) {
+            (*it).netCheckMasternode(); //Check each masternode on vector
+			//This is to interrupt thread when stop signal is received
+            boost::this_thread::interruption_point(); 
+			++it;
+		}
+    }    
+}
+
 
 void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
 {
@@ -959,7 +987,14 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
 
         CValidationState state;
         CMutableTransaction tx = CMutableTransaction();
-        CTxOut vout = CTxOut(9999.99 * COIN, obfuScationPool.collateralPubKey);
+        CAmount txTest;
+        int nHeight = chainActive.Tip()->nHeight;
+        if (nHeight >= Params().NewMasternodeReward_StartBlock())
+            txTest = 12499.99 * COIN;
+        else
+            txTest = 6249.99 * COIN;
+
+        CTxOut vout = CTxOut(txTest, obfuScationPool.collateralPubKey);
         tx.vin.push_back(vin);
         tx.vout.push_back(vout);
 
@@ -967,7 +1002,11 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         {
             TRY_LOCK(cs_main, lockMain);
             if (!lockMain) return;
-            fAcceptable = AcceptableInputs(mempool, state, CTransaction(tx), false, NULL);
+            //Set flag LimitFree true.. this way we force to check tx fee.
+            //with this flag in false if input has less amount than test tx this method accept the tx
+            //because the way it calculate the fee is txInAmount - txOutAmount so, if txOUtAmount > txInAmount => fee should be negative
+            //if we don't set this flag true, the method doesn't check the fee and accept an invalid tx with negative fee
+            fAcceptable = AcceptableInputs(mempool, state, CTransaction(tx), true, NULL);
         }
 
         if (fAcceptable) {

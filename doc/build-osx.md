@@ -69,6 +69,10 @@ Post 10.13:
 
         make install
 
+5.  (Optional) You can create .dmg file with command:
+
+        make deploy
+
 Use Qt Creator as IDE
 ------------------------
 You can use Qt Creator as IDE, for debugging and for manipulating forms, etc.

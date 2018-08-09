@@ -51,8 +51,8 @@ More information at [http://socialsend.io](http://socialsend.io)
 ### Staking Methods
 <table>
 	<tr>
-		<td>Masternodes</td><td>Yes - 6250 SENDs Required</td>
-		<td>Masternodes</td><td>Yes - 12500 SENDs Required from Block Height 385000</td>
+		<td>Masternodes (old)</td><td> - 6250 SENDs Required</td>
+		<td>Masternodes (new)</td><td> - 12500 SENDs Required from Block Height 385000</td>
 	</tr>
 	<tr>
 		<td>Wallet Staking</td><td>Yes - 1 to infinite Send</td>

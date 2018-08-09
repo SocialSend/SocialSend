@@ -30,34 +30,41 @@ available via Homebrew.
 You will also need to install [Homebrew](http://brew.sh) in order to install library
 dependencies.
 
+### Homebrew Installation:
+```
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+
 The installation of the actual dependencies is covered in the Instructions
 sections below.
 
 Instructions: Homebrew
 ----------------------
 
-#### Install dependencies using Homebrew
+### Install dependencies using Homebrew
 
-        brew install autoconf automake berkeley-db4 libtool boost@1.60 miniupnpc openssl@1.0 pkg-config protobuf qt5
+        brew install git zip zmq librsvg qrencode autoconf automake berkeley-db4 libtool boost@1.60 miniupnpc openssl@1.0 pkg-config protobuf qt5
+        brew link --overwrite --force boost@1.60
 
-### Building `sendd`
+### Building Executables
 
 1. Clone the github tree to get the source code and go into the directory.
 
         git clone https://github.com/SocialSend/SocialSend.git
-        cd SEND
+        cd SocialSend
 
-2.  Build sendd:
+2.  Build sendd y send-qt:
 
         ./autogen.sh
-Pre 10.12:
+    Pre 10.12:
 
         ./configure LDFLAGS='-L/usr/local/opt/openssl@1.0/lib -L/usr/local/opt/boost@1.60/lib' CPPFLAGS='-I/usr/local/opt/openssl@1.0/include -I/usr/local/opt/boost@1.60/include' PKG_CONFIG_PATH='/usr/local/opt/openssl@1.0/lib/pkgconfig' --with-gui=qt5
-Post 10.13:
+    Post 10.13:
 
         ./configure LDFLAGS='-L/usr/local/opt/openssl/lib' CPPFLAGS='-I/usr/local/opt/openssl/include' PKG_CONFIG_PATH='/usr/local/opt/openssl/lib/pkgconfig' --with-gui=qt5
  
- Both:
+    Both:
  
         make
 

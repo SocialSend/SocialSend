@@ -53,6 +53,10 @@ double GetDifficulty(const CBlockIndex* blockindex)
 Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool txDetails = false)
 {
     Object result;
+    
+    int64_t MNPayment = GetMasternodePayment(blockindex->nHeight, GetBlockValue(blockindex->nHeight));
+    int64_t StakerPayment = blockindex->nMint - MNPayment;
+    
     result.push_back(Pair("hash", block.GetHash().GetHex()));
     int confirmations = -1;
     // Only report confirmations if the block is on the main chain
@@ -84,6 +88,14 @@ Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool txDe
     CBlockIndex* pnext = chainActive.Next(blockindex);
     if (pnext)
         result.push_back(Pair("nextblockhash", pnext->GetBlockHash().GetHex()));
+        
+        result.push_back(Pair("mint", ValueFromAmount(GetBlockValue(blockindex->nHeight))));
+    result.push_back(Pair("knReward", ValueFromAmount(MNPayment)));
+    result.push_back(Pair("knRewardPercent", MNRewardPercent));
+    result.push_back(Pair("stakerPayment", ValueFromAmount(StakerPayment)));
+
+    result.push_back(Pair("modifier", strprintf("%16x", blockindex->nStakeModifier)));
+    result.push_ba
     return result;
 }
 

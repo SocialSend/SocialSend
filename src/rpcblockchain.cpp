@@ -10,6 +10,9 @@
 #include "rpcserver.h"
 #include "sync.h"
 #include "util.h"
+#include "kernel.h"
+
+#include "masternodeman.h"
 
 #include <stdint.h>
 

@@ -27,7 +27,7 @@ More information at [http://socialsend.io](http://socialsend.io)
 		<td>Difficulty Retargeting</td><td>Every Block</td>
 	</tr>
 	<tr>
-		<td>Max Coin Supply (PoS)</td><td>150 Mil SEND</td>
+		<td>Max Coin Supply (PoS)</td><td>65 Mil SEND</td>
 	</tr>
 	<tr>
 		<td>Premine/Initial Supply</td><td>30 Mil SEND*</td>
@@ -36,7 +36,7 @@ More information at [http://socialsend.io](http://socialsend.io)
 
 *First 1000 Blocks PoW. 1001 - Infinite Blocks PoS only.
 
-**30Mil SEND Premined for Swap of existing PIE Chain 28 Million + Pre-Sale. 
+**30Mil SEND Premined for Swap of existing PIE Chain 28 Million + Pre-Sale for Cryptopia Listing. 
 
 ### PoS/PoW Block Details
 <table>
@@ -51,7 +51,8 @@ More information at [http://socialsend.io](http://socialsend.io)
 ### Staking Methods
 <table>
 	<tr>
-		<td>Masternodes</td><td>Yes - 6250 Send Required</td>
+		<td>Masternodes (old)</td><td> - 6250 SENDs Required</td>
+		<td>Masternodes (new)</td><td> - 12500 SENDs Required from Block Height 385000</td>
 	</tr>
 	<tr>
 		<td>Wallet Staking</td><td>Yes - 1 to infinite Send</td>

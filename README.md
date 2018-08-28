@@ -7,7 +7,7 @@ SEND is a cutting edge cryptocurrency, with many features not available in most 
 - Decentralized blockchain voting providing for consensus based advancement of the current Masternode technology used to secure the network and provide the above features, each Masternode is secured
 with collateral of 12,500 SEND
 
-More information at: http://socialsend.io
+More information at: http://socialsend.io <br />
 Social Send Platform at: https://socialsend.net
 
 ### Coin Specs
@@ -62,15 +62,15 @@ Social Send Platform at: https://socialsend.net
 ### Staking/Masternode Reward Details
 <table>
 	<tr>
-		<td>Send Produced</td><td>25 SENDs (25SENDs for 1st year & varies Per block for cming years)</td>
+		<td>Send Produced</td><td>25 SENDs (25SENDs for 1st year & varies Per block for coming years)</td>
 	</tr>
 	<tr>
 		<td>Amount Designated for Staking Rewards</td>
-		<td>25% of Send produced goes to Staking Rewards</td>
+		<td>25% of block reward goes to Staking</td>
 	</tr>
 	<tr>
 		<td>Amount Designated for Masternode Rewards</td>
-		<td>75% of Send produced goes to Masternode Rewards</td>
+		<td>75% of block reward goes to Masternode</td>
 	</tr>
 	<tr>
 		<td>Rewards Algorithm</td><td>Teeter Totter Based Targeting System</td>

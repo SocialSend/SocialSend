@@ -136,7 +136,7 @@ void CBudgetManager::SubmitFinalBudget(uint256 budgetHash)
 
     int nBlockStart = nCurrentHeight - nCurrentHeight % GetBudgetPaymentCycleBlocks() + GetBudgetPaymentCycleBlocks();
     if (nSubmittedHeight >= nBlockStart) {
-        LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - nSubmittedHeight(=%ld) < nBlockStart(=%ld) condition not fulfilled.\n", nSubmittedHeight, nBlockStart);
+        LogPrintf("CBudgetManager::SubmitFinalBudget - nSubmittedHeight(=%ld) < nBlockStart(=%ld) condition not fulfilled.\n", nSubmittedHeight, nBlockStart);
         return;
     }
     // Submit final budget during the last 2 days before payment for Mainnet, about 9 minutes for Testnet
@@ -144,8 +144,8 @@ void CBudgetManager::SubmitFinalBudget(uint256 budgetHash)
     int nOffsetToStart = nFinalizationStart - nCurrentHeight;
 
     if (nBlockStart - nCurrentHeight > ((GetBudgetPaymentCycleBlocks() / 30) * 2)) {
-        LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - Too early for finalization. Current block is %ld, next Superblock is %ld.\n", nCurrentHeight, nBlockStart);
-        LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - First possible block for finalization: %ld. Last possible block for finalization: %ld. You have to wait for %ld block(s) until Budget finalization will be possible\n", nFinalizationStart, nBlockStart, nOffsetToStart);
+        LogPrintf("CBudgetManager::SubmitFinalBudget - Too early for finalization. Current block is %ld, next Superblock is %ld.\n", nCurrentHeight, nBlockStart);
+        LogPrintf("CBudgetManager::SubmitFinalBudget - First possible block for finalization: %ld. Last possible block for finalization: %ld. You have to wait for %ld block(s) until Budget finalization will be possible\n", nFinalizationStart, nBlockStart, nOffsetToStart);
 
         return;
     }
@@ -167,7 +167,7 @@ void CBudgetManager::SubmitFinalBudget(uint256 budgetHash)
     }
 
     if (vecTxBudgetPayments.size() < 1) {
-        LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - Budget %s not found\n", budgetHash.ToString());
+        LogPrintf("CBudgetManager::SubmitFinalBudget - Budget %s not found\n", budgetHash.ToString());
         return;
     }
     LogPrintf("Budget found %s\n", strBudgetName);
@@ -981,8 +981,8 @@ void CBudgetManager::NewBlock()
         SubmitFinalBudget();
     } else if (strBudgetMode != "auto") {
         uint256 budgetHash(strBudgetMode);
+		LogPrintf("Checking budget %s - hash %s\n", strBudgetMode, budgetHash.ToString());
         SubmitFinalBudget(budgetHash);
-        LogPrintf("Checking budget %s - hash %s", strBudgetMode, budgetHash.ToString());
 	}
 
 

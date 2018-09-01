@@ -163,7 +163,7 @@ Value initmasternode(const Array& params, bool fHelp)
 
 Value masternodeisinit(const Array& params, bool fHelp)
 {
-    if (fHelp || params.size() > 1) 
+    if (fHelp) 
 		throw runtime_error(
 			"masternodeisinit\n"
 			"Check if masternode is initialised\n"
@@ -824,7 +824,8 @@ Value getmasternodestatus (const Array& params, bool fHelp)
         mnObj.push_back(Pair("addr", CBitcoinAddress(pmn->pubKeyCollateralAddress.GetID()).ToString()));
         mnObj.push_back(Pair("status", activeMasternode.status));
         mnObj.push_back(Pair("message", activeMasternode.GetStatus()));
-        mnObj.push_back(Pair("lastTimeSeen", pmn->sigTime));
+        mnObj.push_back(Pair("signatureTime", pmn->sigTime));
+        mnObj.push_back(Pair("lastPingTime", pmn->lastPing.sigTime));    
         return mnObj;
     }
     throw runtime_error("Masternode not found in the list of available masternodes. Current status: "

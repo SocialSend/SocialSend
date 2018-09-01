@@ -1004,7 +1004,7 @@ Value ListReceived(const Array& params, bool fByAccounts)
 		
 		// DS: fix listreceivedbyaddress returning sending addresses from address book
         if ((it == mapTally.end() && !fIncludeEmpty) || !IsMine(*pwalletMain, address.Get()))
-        
+            continue;
 		CAmount nAmount = 0;
         int nConf = std::numeric_limits<int>::max();
         int nBCConf = std::numeric_limits<int>::max();

@@ -354,7 +354,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
             }
         }
 
-		CBlockIndex* tip = chainActive.Tip();
+		//CBlockIndex* tip = chainActive.Tip();
 
 		/*if((tip->nHeight >= Params().NewMasternodeReward_StartBlock()) && fProofOfStake) {
 			int nMnTx = txCoinStake.vout.size() - 1;

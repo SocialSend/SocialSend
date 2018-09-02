@@ -122,6 +122,132 @@ void CBudgetManager::CheckOrphanVotes()
     LogPrint("masternode","CBudgetManager::CheckOrphanVotes - Done\n");
 }
 
+void CBudgetManager::SubmitFinalBudget(uint256 budgetHash)
+{
+    static int nSubmittedHeight = 0; // height at which final budget was submitted last time
+    int nCurrentHeight;
+
+    {
+        TRY_LOCK(cs_main, locked);
+        if (!locked) return;
+        if (!chainActive.Tip()) return;
+        nCurrentHeight = chainActive.Height();
+    }
+
+    int nBlockStart = nCurrentHeight - nCurrentHeight % GetBudgetPaymentCycleBlocks() + GetBudgetPaymentCycleBlocks();
+    if (nSubmittedHeight >= nBlockStart) {
+        LogPrintf("CBudgetManager::SubmitFinalBudget - nSubmittedHeight(=%ld) < nBlockStart(=%ld) condition not fulfilled.\n", nSubmittedHeight, nBlockStart);
+        return;
+    }
+    // Submit final budget during the last 2 days before payment for Mainnet, about 9 minutes for Testnet
+    int nFinalizationStart = nBlockStart - ((GetBudgetPaymentCycleBlocks() / 30) * 2);
+    int nOffsetToStart = nFinalizationStart - nCurrentHeight;
+
+    if (nBlockStart - nCurrentHeight > ((GetBudgetPaymentCycleBlocks() / 30) * 2)) {
+        LogPrintf("CBudgetManager::SubmitFinalBudget - Too early for finalization. Current block is %ld, next Superblock is %ld.\n", nCurrentHeight, nBlockStart);
+        LogPrintf("CBudgetManager::SubmitFinalBudget - First possible block for finalization: %ld. Last possible block for finalization: %ld. You have to wait for %ld block(s) until Budget finalization will be possible\n", nFinalizationStart, nBlockStart, nOffsetToStart);
+
+        return;
+    }
+    LogPrintf("Trying to finalize budget %s\n", budgetHash.ToString());
+
+    std::vector<CBudgetProposal*> vBudgetProposals = budget.GetBudget();
+    std::string strBudgetName = "main";
+    std::vector<CTxBudgetPayment> vecTxBudgetPayments;
+
+    for (unsigned int i = 0; i < vBudgetProposals.size(); i++) {
+        if (budgetHash == vBudgetProposals[i]->GetHash()) {
+        	CTxBudgetPayment txBudgetPayment;
+            strBudgetName = vBudgetProposals[i]->GetName();
+			txBudgetPayment.nProposalHash = vBudgetProposals[i]->GetHash();
+			txBudgetPayment.payee = vBudgetProposals[i]->GetPayee();
+			txBudgetPayment.nAmount = vBudgetProposals[i]->GetAllotted();
+			vecTxBudgetPayments.push_back(txBudgetPayment);
+		}
+    }
+
+    if (vecTxBudgetPayments.size() < 1) {
+        LogPrintf("CBudgetManager::SubmitFinalBudget - Budget %s not found\n", budgetHash.ToString());
+        return;
+    }
+    LogPrintf("Budget found %s\n", strBudgetName);
+
+    CFinalizedBudgetBroadcast tempBudget(strBudgetName, nBlockStart, vecTxBudgetPayments, 0);
+    if (mapSeenFinalizedBudgets.count(tempBudget.GetHash())) {
+        LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - Budget already exists - %s\n", tempBudget.GetHash().ToString());
+        nSubmittedHeight = nCurrentHeight;
+        return; //already exists
+    }
+
+    //create fee tx
+    CTransaction tx;
+    uint256 txidCollateral;
+
+    if (!mapCollateralTxids.count(tempBudget.GetHash())) {
+        CWalletTx wtx;
+        if (!pwalletMain->GetBudgetSystemCollateralTX(wtx, tempBudget.GetHash(), false)) {
+            LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - Can't make collateral transaction\n");
+            return;
+        }
+
+        // Get our change address
+        CReserveKey reservekey(pwalletMain);
+        // Send the tx to the network. Do NOT use SwiftTx, locking might need too much time to propagate, especially for testnet
+        pwalletMain->CommitTransaction(wtx, reservekey, "NO-ix");
+       
+        tx = (CTransaction)wtx;
+        txidCollateral = tx.GetHash();
+        mapCollateralTxids.insert(make_pair(tempBudget.GetHash(), txidCollateral));
+        LogPrintf("Fee tx sent.. txid: %s\n", txidCollateral.ToString());
+    } else {
+        txidCollateral = mapCollateralTxids[tempBudget.GetHash()];
+    }
+
+    int conf = GetIXConfirmations(txidCollateral);
+    CTransaction txCollateral;
+    uint256 nBlockHash;
+
+    if (!GetTransaction(txidCollateral, txCollateral, nBlockHash, true)) {
+        LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - Can't find collateral tx %s", txidCollateral.ToString());
+        return;
+    }
+
+    if (nBlockHash != uint256(0)) {
+        BlockMap::iterator mi = mapBlockIndex.find(nBlockHash);
+        if (mi != mapBlockIndex.end() && (*mi).second) {
+            CBlockIndex* pindex = (*mi).second;
+            if (chainActive.Contains(pindex)) {
+                conf += chainActive.Height() - pindex->nHeight + 1;
+            }
+        }
+    }
+
+    /*
+        Wait will we have 1 extra confirmation, otherwise some clients might reject this feeTX
+        -- This function is tied to NewBlock, so we will propagate this budget while the block is also propagating
+    */
+    if (conf < Params().Budget_Fee_Confirmations() + 1) {
+        LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - Collateral requires at least %d confirmations - %s - %d confirmations\n", Params().Budget_Fee_Confirmations() + 1, txidCollateral.ToString(), conf);
+        return;
+    }
+
+    //create the proposal incase we're the first to make it
+    CFinalizedBudgetBroadcast finalizedBudgetBroadcast(strBudgetName, nBlockStart, vecTxBudgetPayments, txidCollateral);
+
+    std::string strError = "";
+    if (!finalizedBudgetBroadcast.IsValid(strError)) {
+        LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - Invalid finalized budget - %s \n", strError);
+        return;
+    }
+    LogPrintf("Budget %s finalized.\n", budgetHash.ToString());
+    LOCK(cs);
+    mapSeenFinalizedBudgets.insert(make_pair(finalizedBudgetBroadcast.GetHash(), finalizedBudgetBroadcast));
+    finalizedBudgetBroadcast.Relay();
+    budget.AddFinalizedBudget(finalizedBudgetBroadcast);
+    nSubmittedHeight = nCurrentHeight;
+    LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - Done! %s\n", finalizedBudgetBroadcast.GetHash().ToString());
+}
+
 void CBudgetManager::SubmitFinalBudget()
 {
     static int nSubmittedHeight = 0; // height at which final budget was submitted last time
@@ -853,7 +979,12 @@ void CBudgetManager::NewBlock()
 
     if (strBudgetMode == "suggest") { //suggest the budget we see
         SubmitFinalBudget();
-    }
+    } else if (strBudgetMode != "auto") {
+        uint256 budgetHash(strBudgetMode);
+		LogPrintf("Checking budget %s - hash %s\n", strBudgetMode, budgetHash.ToString());
+        SubmitFinalBudget(budgetHash);
+	}
+
 
     //this function should be called 1/14 blocks, allowing up to 100 votes per day on all proposals
     if (chainActive.Height() % 14 != 0) return;

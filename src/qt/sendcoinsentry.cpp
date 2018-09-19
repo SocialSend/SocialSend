@@ -212,6 +212,12 @@ void SendCoinsEntry::setAddress(const QString& address)
     ui->payAmount->setFocus();
 }
 
+void SendCoinsEntry::setAmount(const CAmount nAmount)
+{
+    ui->payAmount->setValue(nAmount);
+    ui->payAmount->setFocus();
+}
+
 bool SendCoinsEntry::isClear()
 {
     return ui->payTo->text().isEmpty() && ui->payTo_is->text().isEmpty() && ui->payTo_s->text().isEmpty();

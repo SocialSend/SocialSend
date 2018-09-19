@@ -2773,6 +2773,10 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>Con Comisión:</translation>
     </message>
     <message>
+        <source>Use After Fee</source>
+        <translation>Usar con Comision</translation>
+    </message>
+    <message>
         <source>Change:</source>
         <translation>Cambio:</translation>
     </message>

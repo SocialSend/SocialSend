@@ -17,6 +17,9 @@
 #include <QJsonArray>
 #include <QJsonValue>
 #include <QJsonObject>
+#include <QLabel>
+#include <QPixmap>
+#include <QResizeEvent>
 
 class ClientModel;
 class TransactionFilterProxy;
@@ -31,6 +34,21 @@ class OverviewPage;
 QT_BEGIN_NAMESPACE
 class QModelIndex;
 QT_END_NAMESPACE
+
+class AspectRatioPixmapLabel : public QLabel
+{
+    Q_OBJECT
+public:
+    explicit AspectRatioPixmapLabel(QWidget *parent = 0);
+    virtual int heightForWidth( int width ) const;
+    virtual QSize sizeHint() const;
+    QPixmap scaledPixmap() const;
+public slots:
+    void setPixmap ( const QPixmap & );
+    void resizeEvent(QResizeEvent *);
+private:
+    QPixmap pix;
+};
 
 /** Overview ("home") page widget */
 class OverviewPage : public QWidget
@@ -56,7 +74,7 @@ signals:
 
 
 private:
-
+    AspectRatioPixmapLabel* newsImage;
     QList<QPixmap> imageList;
     QList<QString> urlList;
     int urlNumber = 0;

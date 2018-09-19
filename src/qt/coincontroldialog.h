@@ -44,6 +44,7 @@ public:
     static CCoinControl* coinControl;
     static int nSplitBlockDummy;
 
+
 private:
     Ui::CoinControlDialog* ui;
     WalletModel* model;

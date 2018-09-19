@@ -97,7 +97,7 @@ private slots:
     void updateMinFeeLabel();
     void updateSmartFeeLabel();
     void updateGlobalFeeVariables();
-
+    void on_pushButton_clicked();    
 signals:
     // Fired when a message should be reported to the user
     void message(const QString& title, const QString& message, unsigned int style);

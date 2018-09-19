@@ -102,6 +102,43 @@ public:
     int unit;
 };
 
+AspectRatioPixmapLabel::AspectRatioPixmapLabel(QWidget *parent) :
+    QLabel(parent)
+{
+    this->setMinimumSize(1,1);
+    this->setMaximumSize(700,175);
+    this->setStyleSheet("border:2px solid #4a4a4a;");
+    setScaledContents(false);
+}
+
+void AspectRatioPixmapLabel::setPixmap ( const QPixmap & p)
+{
+    pix = p;
+    QLabel::setPixmap(scaledPixmap());
+}
+
+int AspectRatioPixmapLabel::heightForWidth( int width ) const
+{
+    return pix.isNull() ? this->height() : ((qreal)pix.height()*width)/pix.width();
+}
+
+QSize AspectRatioPixmapLabel::sizeHint() const
+{
+    int w = this->width();
+    return QSize( w, heightForWidth(w) );
+}
+
+QPixmap AspectRatioPixmapLabel::scaledPixmap() const
+{
+    return pix.scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+}
+
+void AspectRatioPixmapLabel::resizeEvent(QResizeEvent * e)
+{
+    if(!pix.isNull())
+        QLabel::setPixmap(scaledPixmap());
+}
+
 void OverviewPage::replyFinishedImage (QNetworkReply *reply)
 {
     if(reply->error())
@@ -129,9 +166,11 @@ void OverviewPage::replyFinishedImage (QNetworkReply *reply)
         {
             imageList << pixmap;
             if(urlNumber == 0){
-                ui->newsImage->clear();
-                ui->newsImage->setPixmap(pixmap);
-                ui->newsImage->setScaledContents(true);
+                //ui->newsImage->clear();
+                //ui->newsImage->setPixmap(pixmap);
+                //ui->newsImage->setScaledContents(true);
+                newsImage->clear();
+                newsImage->setPixmap(pixmap);
                 imageNumber = 0;
             }
             urlNumber++;
@@ -220,7 +259,8 @@ OverviewPage::OverviewPage(QWidget* parent) : QWidget(parent),
 
     manager->get(QNetworkRequest(QUrl("http://socialsend.info/feed/json.php")));
 
-
+    newsImage = new AspectRatioPixmapLabel();
+    ui->imageContainer->addWidget(newsImage);
     // Recent transactions
     ui->listTransactions->setItemDelegate(txdelegate);
     ui->listTransactions->setIconSize(QSize(DECORATION_SIZE, DECORATION_SIZE));
@@ -645,9 +685,11 @@ void OverviewPage::on_nextButton_clicked()
 
     if(imageNumber < imageList.size()-1){
         imageNumber++;
-        ui->newsImage->clear();
-        ui->newsImage->setPixmap(imageList[imageNumber]);
-        ui->newsImage->setScaledContents(true);
+        //ui->newsImage->clear();
+        //ui->newsImage->setPixmap(imageList[imageNumber]);
+        //ui->newsImage->setScaledContents(true);
+        newsImage->clear();
+        newsImage->setPixmap(imageList[imageNumber]);
     }
 
 }
@@ -656,8 +698,10 @@ void OverviewPage::on_prevButton_clicked()
 {
     if(imageNumber > 0){
         imageNumber--;
-        ui->newsImage->clear();
-        ui->newsImage->setPixmap(imageList[imageNumber]);
-        ui->newsImage->setScaledContents(true);
+        //ui->newsImage->clear();
+        //ui->newsImage->setPixmap(imageList[imageNumber]);
+        //ui->newsImage->setScaledContents(true);
+        newsImage->clear();
+        newsImage->setPixmap(imageList[imageNumber]);
     }
 }

@@ -59,6 +59,8 @@ SendCoinsDialog::SendCoinsDialog(QWidget* parent) : QDialog(parent),
     connect(ui->splitBlockCheckBox, SIGNAL(stateChanged(int)), this, SLOT(splitBlockChecked(int)));
     connect(ui->splitBlockLineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(splitBlockLineEditChanged(const QString&)));
 
+    ui->pushButton->setText(tr("Use After Fee"));
+
     // SEND specific
     QSettings settings;
     if (!settings.contains("bUseObfuScation"))
@@ -957,5 +959,20 @@ void SendCoinsDialog::coinControlUpdateLabels()
         ui->labelCoinControlAutomaticallySelected->show();
         ui->widgetCoinControl->hide();
         ui->labelCoinControlInsuffFunds->hide();
+    }
+}
+
+void SendCoinsDialog::on_pushButton_clicked()
+{
+    //grab the amount in Coin Control AFter Fee field
+    QString qAfterFee = ui->labelCoinControlAfterFee->text().left(ui->labelCoinControlAfterFee->text().indexOf(" ")).replace("~", "").simplified().replace(" ", "");
+
+    //convert to CAmount
+    CAmount nAfterFee;
+    ParseMoney(qAfterFee.toStdString().c_str(), nAfterFee);
+
+    SendCoinsEntry* entry = qobject_cast<SendCoinsEntry*>(ui->entries->itemAt(0)->widget());
+    if (entry) {
+        entry->setAmount(nAfterFee);
     }
 }

@@ -352,6 +352,16 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 #endif
     tabGroup->addAction(annAction);
 
+    budgetAction = new QAction(QIcon(":/icons/tx_mined"), tr("Budget List"), this);
+    budgetAction->setStatusTip(tr("Active budget list"));
+    budgetAction->setToolTip(budgetAction->statusTip());
+    budgetAction->setCheckable(true);
+    #ifdef Q_OS_MAC
+        budgetAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_7));
+    #else
+        budgetAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_7));
+    #endif
+        tabGroup->addAction(budgetAction);
 
     // These showNormalIfMinimized are needed because Send Coins and Receive Coins
     // can be triggered from the tray menu, and need to show the GUI to be useful.
@@ -365,6 +375,8 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(annAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(annAction, SIGNAL(triggered()), this, SLOT(gotoAnnView()));
+    connect(budgetAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(budgetAction, SIGNAL(triggered()), this, SLOT(gotoBudgetView()));
 #endif // ENABLE_WALLET
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
@@ -533,6 +545,7 @@ void BitcoinGUI::createToolBars()
             toolbar->addAction(masternodeAction);
         }
 	toolbar->addAction(annAction);
+        toolbar->addAction(budgetAction);
         toolbar->setMovable(false); // remove unused icon in upper left corner
         overviewAction->setChecked(true);
 
@@ -737,6 +750,11 @@ void BitcoinGUI::openClicked()
     if (dlg.exec()) {
         emit receivedURI(dlg.getURI());
     }
+}
+void BitcoinGUI::gotoBudgetView()
+{
+    budgetAction->setChecked(true);
+    if (walletFrame) walletFrame->gotoBudgetView();
 }
 
 void BitcoinGUI::gotoAnnView()

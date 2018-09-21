@@ -91,6 +91,7 @@ private:
     QProgressDialog* progressDialog;
 
     QMenuBar* appMenuBar;
+    QAction* budgetAction;
     QAction* annAction;
     QAction* overviewAction;
     QAction* historyAction;
@@ -194,6 +195,8 @@ public slots:
 
 private slots:
 #ifdef ENABLE_WALLET
+    /** Switch to budget view */
+    void gotoBudgetView();
     /** Switch to announcement page */
     void gotoAnnView();
     /** Switch to overview (home) page */

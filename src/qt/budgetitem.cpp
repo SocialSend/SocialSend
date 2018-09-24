@@ -56,3 +56,8 @@ void BudgetItem::on_pushVoteAbstain_clicked()
     box.setText("On debug console:\nmnbudgetvote many " + hash + " abstain" );
     box.exec();
 }
+
+void BudgetItem::on_lblBudgetUrl_clicked()
+{
+    QDesktopServices::openUrl ( QUrl(  ui->lblBudgetUrl->text()) );
+}

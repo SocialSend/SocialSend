@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QMessageBox>
+#include <QDesktopServices>
+#include <QUrl>
 
 namespace Ui {
 class BudgetItem;
@@ -38,6 +40,8 @@ private slots:
     void on_pushVoteNo_clicked();
 
     void on_pushVoteAbstain_clicked();
+
+    void on_lblBudgetUrl_clicked();
 
 private:
     Ui::BudgetItem *ui;

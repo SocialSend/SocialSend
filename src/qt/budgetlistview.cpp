@@ -12,7 +12,7 @@ BudgetListView::BudgetListView(QWidget *parent) :
     ui->setupUi(this);
 
     list = new QVBoxLayout();
-
+    list->setAlignment(Qt::AlignTop);
     ui->scrollBudgets->setLayout(list);
     loadBudgets();
 }
@@ -25,15 +25,11 @@ void BudgetListView::loadBudgets(){
         delete child->widget();
         delete child;
     }
-    QFrame* line = new QFrame;
-    line->setFrameShape(QFrame::HLine);
-    line->setFixedHeight(2);
-    line->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    line->setStyleSheet(QString("background-color: #c0c0c0;"));
-    list->addWidget(line);
 
     std::vector<CBudgetProposal*> props = budget.GetAllProposals();
+    int count = props.size();
     BOOST_FOREACH (CBudgetProposal* pbudgetProposal, props) {
+
         CTxDestination address1;
         ExtractDestination(pbudgetProposal->GetPayee(), address1);
         CBitcoinAddress address2(address1);
@@ -55,13 +51,14 @@ void BudgetListView::loadBudgets(){
 
         bi->setData(data);
         list->addWidget(bi);
-
-        line = new QFrame;
-        line->setFrameShape(QFrame::HLine);
-        line->setFixedHeight(2);
-        line->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        line->setStyleSheet(QString("background-color: #c0c0c0;"));
-        list->addWidget(line);
+        if(--count != 0){
+            QFrame *line = new QFrame;
+            line->setFrameShape(QFrame::HLine);
+            line->setFixedHeight(2);
+            line->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            line->setStyleSheet(QString("background-color: #c0c0c0;"));
+            list->addWidget(line);
+        }
     }
     ui->textEdit->setText("Loaded " + QString::number(props.size()) + " budgets.");
 }

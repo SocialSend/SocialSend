@@ -193,6 +193,7 @@ void WalletView::processNewTransaction(const QModelIndex& parent, int start, int
     emit incomingTransaction(date, walletModel->getOptionsModel()->getDisplayUnit(), amount, type, address);
 }
 void WalletView::gotoBudgetView(){
+    budgetView->loadBudgets();
     setCurrentWidget(budgetView);
 }
 

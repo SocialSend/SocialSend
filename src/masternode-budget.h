@@ -41,6 +41,8 @@ extern std::vector<CFinalizedBudgetBroadcast> vecImmatureFinalizedBudgets;
 extern CBudgetManager budget;
 void DumpBudgets();
 
+
+
 // Define amount of blocks in budget payment cycle
 int GetBudgetPaymentCycleBlocks();
 
@@ -603,6 +605,5 @@ public:
         READWRITE(nFeeTXHash);
     }
 };
-
 
 #endif

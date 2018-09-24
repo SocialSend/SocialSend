@@ -46,6 +46,7 @@ QT_FORMS_UI = \
   qt/forms/annwidget.ui \
   qt/forms/announcementview.ui \
   qt/forms/budgetlistview.ui \
+  qt/forms/budgetitem.ui \
   qt/forms/receivecoinsdialog.ui \
   qt/forms/receiverequestdialog.ui \
   qt/forms/rpcconsole.ui \
@@ -84,6 +85,7 @@ QT_MOC_CPP = \
   qt/moc_annwidget.cpp \
   qt/moc_announcementview.cpp \
   qt/moc_budgetlistview.cpp \
+  qt/moc_budgetitem.cpp \
   qt/moc_peertablemodel.cpp \
   qt/moc_paymentserver.cpp \
   qt/moc_qvalidatedlineedit.cpp \
@@ -159,6 +161,7 @@ BITCOIN_QT_H = \
   qt/annwidget.h \
   qt/announcementview.h \
   qt/budgetlistview.h \
+  qt/budgetitem.h \
   qt/paymentrequestplus.h \
   qt/paymentserver.h \
   qt/peertablemodel.h \
@@ -289,6 +292,7 @@ BITCOIN_QT_CPP += \
   qt/annwidget.cpp \
   qt/announcementview.cpp \
   qt/budgetlistview.cpp \
+  qt/budgetitem.cpp \
   qt/paymentrequestplus.cpp \
   qt/paymentserver.cpp \
   qt/receivecoinsdialog.cpp \

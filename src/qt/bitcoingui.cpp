@@ -331,11 +331,11 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
         masternodeAction->setStatusTip(tr("Browse masternodes"));
         masternodeAction->setToolTip(masternodeAction->statusTip());
         masternodeAction->setCheckable(true);
-#ifdef Q_OS_MAC
-        masternodeAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_5));
-#else
-        masternodeAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
-#endif
+        #ifdef Q_OS_MAC
+            masternodeAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_5));
+        #else
+            masternodeAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
+        #endif
         tabGroup->addAction(masternodeAction);
         connect(masternodeAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
         connect(masternodeAction, SIGNAL(triggered()), this, SLOT(gotoMasternodePage()));
@@ -345,11 +345,11 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     annAction->setStatusTip(tr("Last announcement"));
     annAction->setToolTip(annAction->statusTip());
     annAction->setCheckable(true);
-#ifdef Q_OS_MAC
-    annAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_6));
-#else
-    annAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
-#endif
+    #ifdef Q_OS_MAC
+        annAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_6));
+    #else
+        annAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+    #endif
     tabGroup->addAction(annAction);
 
     budgetAction = new QAction(QIcon(":/icons/tx_mined"), tr("Budget List"), this);
@@ -361,7 +361,8 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     #else
         budgetAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_7));
     #endif
-        tabGroup->addAction(budgetAction);
+
+    tabGroup->addAction(budgetAction);
 
     // These showNormalIfMinimized are needed because Send Coins and Receive Coins
     // can be triggered from the tray menu, and need to show the GUI to be useful.

@@ -11,6 +11,7 @@
 #include "key.h"
 #include "main.h"
 #include "masternode.h"
+#include "masternodeconfig.h"
 #include "net.h"
 #include "sync.h"
 #include "util.h"
@@ -257,7 +258,8 @@ public:
     }
     void CheckAndRemove();
     std::string ToString() const;
-
+	//Vote one budget with all your masternodes
+    std::string voteManyBudget(uint256 nHash, int nVote);
 
     ADD_SERIALIZE_METHODS;
 

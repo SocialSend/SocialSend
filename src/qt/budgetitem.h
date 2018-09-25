@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QUrl>
-
+#include "masternode-budget.h"
 namespace Ui {
 class BudgetItem;
 class BudgetData;

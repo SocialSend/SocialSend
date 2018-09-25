@@ -2271,3 +2271,49 @@ std::string CBudgetManager::ToString() const
 
     return info.str();
 }
+
+std::string CBudgetManager::voteManyBudget(uint256 nHash, int nVote) {
+	
+	std::string output = "";
+
+	if ((nVote != VOTE_ABSTAIN) && (nVote != VOTE_YES) && (nVote != VOTE_NO))
+		return "Vote Error.";
+
+	BOOST_FOREACH (CMasternodeConfig::CMasternodeEntry mne, masternodeConfig.getEntries()) {
+        std::string errorMessage;
+        std::vector<unsigned char> vchMasterNodeSignature;
+        std::string strMasterNodeSignMessage;
+
+        CPubKey pubKeyCollateralAddress;
+        CKey keyCollateralAddress;
+        CPubKey pubKeyMasternode;
+        CKey keyMasternode;
+
+	    if (!obfuScationSigner.SetKey(mne.getPrivKey(), errorMessage, keyMasternode, pubKeyMasternode)) {
+			output += "Vote with " + mne.getAlias() + " failed\n";
+            continue;
+        }
+
+        CMasternode* pmn = mnodeman.Find(pubKeyMasternode);
+        if (pmn == NULL) {
+            output += "Vote with " + mne.getAlias() + " failed\n";
+            continue;
+        }
+
+        CBudgetVote vote(pmn->vin, nHash, nVote);
+        if (!vote.Sign(keyMasternode, pubKeyMasternode)) {
+            output += "Vote with " + mne.getAlias() + " failed\n";
+            continue;
+        }
+
+        std::string strError = "";
+        if (budget.UpdateProposal(vote, NULL, strError)) {
+            budget.mapSeenMasternodeBudgetVotes.insert(make_pair(vote.GetHash(), vote));
+            vote.Relay();
+            output += "Vote with " + mne.getAlias() + " success\n";
+        } else {
+            output += "Vote with " + mne.getAlias() + " failed\n";
+        }
+    }
+    return output;
+}

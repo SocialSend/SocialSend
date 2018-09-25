@@ -51,7 +51,8 @@ void BudgetListView::loadBudgets(){
 
         bi->setData(data);
         list->addWidget(bi);
-        if(--count != 0){
+        count--;
+        if(count > 0){
             QFrame *line = new QFrame;
             line->setFrameShape(QFrame::HLine);
             line->setFixedHeight(2);

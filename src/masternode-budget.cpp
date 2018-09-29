@@ -122,7 +122,7 @@ void CBudgetManager::CheckOrphanVotes()
     LogPrint("masternode","CBudgetManager::CheckOrphanVotes - Done\n");
 }
 
-void CBudgetManager::SubmitFinalBudget(uint256 budgetHash)
+void CBudgetManager::SubmitFinalBudget(std::vector<uint256> vBudgetHash)
 {
     static int nSubmittedHeight = 0; // height at which final budget was submitted last time
     int nCurrentHeight;
@@ -149,25 +149,27 @@ void CBudgetManager::SubmitFinalBudget(uint256 budgetHash)
 
         return;
     }
-    LogPrintf("Trying to finalize budget %s\n", budgetHash.ToString());
+    LogPrintf("Trying to finalize %ld budgets\n", vBudgetHash.size());
 
     std::vector<CBudgetProposal*> vBudgetProposals = budget.GetBudget();
     std::string strBudgetName = "main";
     std::vector<CTxBudgetPayment> vecTxBudgetPayments;
 
     for (unsigned int i = 0; i < vBudgetProposals.size(); i++) {
-        if (budgetHash == vBudgetProposals[i]->GetHash()) {
-        	CTxBudgetPayment txBudgetPayment;
-            strBudgetName = vBudgetProposals[i]->GetName();
-			txBudgetPayment.nProposalHash = vBudgetProposals[i]->GetHash();
-			txBudgetPayment.payee = vBudgetProposals[i]->GetPayee();
-			txBudgetPayment.nAmount = vBudgetProposals[i]->GetAllotted();
-			vecTxBudgetPayments.push_back(txBudgetPayment);
+        for (unsigned int j = 0; j < vBudgetHash.size(); j++) {
+			if (vBudgetHash[j] == vBudgetProposals[i]->GetHash()) {
+        		CTxBudgetPayment txBudgetPayment;
+				strBudgetName = vBudgetProposals[i]->GetName();
+				txBudgetPayment.nProposalHash = vBudgetProposals[i]->GetHash();
+				txBudgetPayment.payee = vBudgetProposals[i]->GetPayee();
+				txBudgetPayment.nAmount = vBudgetProposals[i]->GetAllotted();
+				vecTxBudgetPayments.push_back(txBudgetPayment);
+			}
 		}
     }
 
     if (vecTxBudgetPayments.size() < 1) {
-        LogPrintf("CBudgetManager::SubmitFinalBudget - Budget %s not found\n", budgetHash.ToString());
+        LogPrintf("CBudgetManager::SubmitFinalBudget - No budgets match with suggested hashs\n");
         return;
     }
     LogPrintf("Budget found %s\n", strBudgetName);
@@ -239,7 +241,6 @@ void CBudgetManager::SubmitFinalBudget(uint256 budgetHash)
         LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - Invalid finalized budget - %s \n", strError);
         return;
     }
-    LogPrintf("Budget %s finalized.\n", budgetHash.ToString());
     LOCK(cs);
     mapSeenFinalizedBudgets.insert(make_pair(finalizedBudgetBroadcast.GetHash(), finalizedBudgetBroadcast));
     finalizedBudgetBroadcast.Relay();
@@ -978,9 +979,26 @@ void CBudgetManager::NewBlock()
     if (strBudgetMode == "suggest") { //suggest the budget we see
         SubmitFinalBudget();
     } else if (strBudgetMode != "auto") {
-        uint256 budgetHash(strBudgetMode);
-		LogPrintf("Checking budget %s - hash %s\n", strBudgetMode, budgetHash.ToString());
-        SubmitFinalBudget(budgetHash);
+        std::vector<uint256> vBudgetHash;
+
+		int posInit = 0;
+        int posFound = 0;
+     
+		std::string substring;
+
+        while (posFound >= 0) {
+			posFound = strBudgetMode.find(",", posInit);
+            substring = strBudgetMode.substr(posInit, posFound - posInit);
+            posInit = posFound + 1;
+            uint256 budgetHash(substring);
+            vBudgetHash.push_back(budgetHash);
+        }        
+        LogPrintf("Checking %ld budgets...\n", vBudgetHash.size());
+        for (int i = 0; i < vBudgetHash.size(); i++)
+            LogPrintf("Budget Hash: %s\n", vBudgetHash[i].ToString());
+
+		LogPrintf("DONE");
+        SubmitFinalBudget(vBudgetHash);
 	}
 
 

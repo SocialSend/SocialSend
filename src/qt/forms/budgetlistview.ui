@@ -18,11 +18,16 @@
     <widget class="QLabel" name="label">
      <property name="font">
       <font>
-       <pointsize>14</pointsize>
-       <weight>75</weight>
+       <pointsize>-1</pointsize>
+       <weight>87</weight>
        <bold>true</bold>
        <underline>true</underline>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">text-decoration:underline;
+font-size:19px;
+font-weight:700;</string>
      </property>
      <property name="text">
       <string>Active Budget List.</string>

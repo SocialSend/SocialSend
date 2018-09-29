@@ -18,7 +18,7 @@
     <widget class="QLabel" name="label">
      <property name="font">
       <font>
-       <pointsize>12</pointsize>
+       <pointsize>14</pointsize>
        <weight>75</weight>
        <bold>true</bold>
        <underline>true</underline>
@@ -26,6 +26,9 @@
      </property>
      <property name="text">
       <string>Active Budget List.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -45,7 +48,7 @@
         <x>0</x>
         <y>0</y>
         <width>637</width>
-        <height>344</height>
+        <height>345</height>
        </rect>
       </property>
      </widget>
@@ -56,7 +59,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>30</height>
+       <height>25</height>
       </size>
      </property>
     </widget>

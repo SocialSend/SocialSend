@@ -17,8 +17,10 @@ void BudgetItem::setData(BudgetData data)
         data.url = "http://" + data.url;
     }
     ui->lblBudgetUrl->setText(data.url);
-    ui->lblBudgetHash->setText("Hash: " + data.hash);
-    ui->lblBudgetAddress->setText("Payment Address: " + data.address);
+    ui->lblBudgetHash->setText("Hash:");
+    ui->txtBudgetHash->setText(data.hash);
+    ui->lblBudgetAddress->setText("Payment Address:");
+    ui->txtBudgetAddress->setText(data.address);
 
     ui->lblVoteYes->setText("YES: " +  QString::number(data.yeas));
     ui->lblVoteNo->setText("NO: " +  QString::number(data.nays));

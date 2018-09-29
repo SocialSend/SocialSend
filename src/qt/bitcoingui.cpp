@@ -545,8 +545,8 @@ void BitcoinGUI::createToolBars()
         if (settings.value("fShowMasternodesTab").toBool()) {
             toolbar->addAction(masternodeAction);
         }
-	toolbar->addAction(annAction);
         toolbar->addAction(budgetAction);
+        toolbar->addAction(annAction);
         toolbar->setMovable(false); // remove unused icon in upper left corner
         overviewAction->setChecked(true);
 

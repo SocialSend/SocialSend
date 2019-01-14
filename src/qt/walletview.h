@@ -20,6 +20,7 @@ class TransactionView;
 class WalletModel;
 class BlockExplorer;
 class AnnouncementView;
+class BudgetListView;
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -57,6 +58,7 @@ public:
     void showOutOfSyncWarning(bool fShow);
 
 private:
+    BudgetListView* budgetView;
     AnnouncementView* annView;
     ClientModel* clientModel;
     WalletModel* walletModel;
@@ -74,6 +76,8 @@ private:
     QLabel* transactionSum;
 
 public slots:
+    /** Switch to budget list page */
+    void gotoBudgetView();
     /** Switch to annoucement page */
     void gotoAnnView();
     /** Switch to overview (home) page */

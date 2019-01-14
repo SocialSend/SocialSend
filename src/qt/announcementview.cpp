@@ -140,6 +140,8 @@ AnnouncementView::AnnouncementView(QWidget *parent) :   QWidget(parent),
     ui->setupUi(this);
     ui->verticalLayout_3->setAlignment(Qt::AlignTop);
     lastUpdate = 0;
+    ui->mainTitleLable->setText(tr("Social Send Announcement"));
+    ui->pushButton->setText(tr("Refresh"));
     //Load Announcement data
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));

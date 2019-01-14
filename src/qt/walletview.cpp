@@ -22,7 +22,7 @@
 #include "transactionview.h"
 #include "walletmodel.h"
 #include "announcementview.h"
-
+#include "budgetlistview.h"
 #include "ui_interface.h"
 
 #include <QAction>
@@ -40,6 +40,7 @@ WalletView::WalletView(QWidget* parent) : QStackedWidget(parent),
                                           walletModel(0)
 {
     // Create tabs
+    budgetView = new BudgetListView();
     annView = new AnnouncementView();
     overviewPage = new OverviewPage();
     explorerWindow = new BlockExplorer(this);
@@ -80,6 +81,7 @@ WalletView::WalletView(QWidget* parent) : QStackedWidget(parent),
     addWidget(sendCoinsPage);
     addWidget(explorerWindow);
     addWidget(annView);
+    addWidget(budgetView);
 
     QSettings settings;
     if (settings.value("fShowMasternodesTab").toBool()) {
@@ -190,6 +192,11 @@ void WalletView::processNewTransaction(const QModelIndex& parent, int start, int
 
     emit incomingTransaction(date, walletModel->getOptionsModel()->getDisplayUnit(), amount, type, address);
 }
+void WalletView::gotoBudgetView(){
+    budgetView->loadBudgets();
+    setCurrentWidget(budgetView);
+}
+
 void WalletView::gotoAnnView(){
     setCurrentWidget(annView);
 }

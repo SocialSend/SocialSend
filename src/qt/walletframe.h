@@ -50,6 +50,8 @@ private:
     WalletView* currentWalletView();
 
 public slots:
+    /** Swtich to budget list page */
+    void gotoBudgetView();
     /** Switch to announcement page */
     void gotoAnnView();
     /** Switch to overview (home) page */

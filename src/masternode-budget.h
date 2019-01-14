@@ -11,6 +11,7 @@
 #include "key.h"
 #include "main.h"
 #include "masternode.h"
+#include "masternodeconfig.h"
 #include "net.h"
 #include "sync.h"
 #include "util.h"
@@ -40,6 +41,8 @@ extern std::vector<CFinalizedBudgetBroadcast> vecImmatureFinalizedBudgets;
 
 extern CBudgetManager budget;
 void DumpBudgets();
+
+
 
 // Define amount of blocks in budget payment cycle
 int GetBudgetPaymentCycleBlocks();
@@ -178,6 +181,8 @@ private:
     map<uint256, uint256> mapCollateralTxids;
 
 public:
+    bool hasChanges;
+
     // critical section to protect the inner data structures
     mutable CCriticalSection cs;
 
@@ -196,6 +201,7 @@ public:
     {
         mapProposals.clear();
         mapFinalizedBudgets.clear();
+        hasChanges = false;
     }
 
     void ClearSeen()
@@ -229,7 +235,7 @@ public:
     bool AddProposal(CBudgetProposal& budgetProposal);
     bool AddFinalizedBudget(CFinalizedBudget& finalizedBudget);
     void SubmitFinalBudget();
-    void SubmitFinalBudget(uint256 budgetHash);
+    void SubmitFinalBudget(std::vector<uint256> vBudgetHash);
 
     bool UpdateProposal(CBudgetVote& vote, CNode* pfrom, std::string& strError);
     bool UpdateFinalizedBudget(CFinalizedBudgetVote& vote, CNode* pfrom, std::string& strError);
@@ -252,10 +258,12 @@ public:
         mapSeenFinalizedBudgetVotes.clear();
         mapOrphanMasternodeBudgetVotes.clear();
         mapOrphanFinalizedBudgetVotes.clear();
+        hasChanges = true;
     }
     void CheckAndRemove();
     std::string ToString() const;
-
+	//Vote one budget with all your masternodes
+    std::string voteManyBudget(uint256 nHash, int nVote);
 
     ADD_SERIALIZE_METHODS;
 
@@ -603,6 +611,5 @@ public:
         READWRITE(nFeeTXHash);
     }
 };
-
 
 #endif

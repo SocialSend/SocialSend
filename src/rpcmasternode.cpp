@@ -400,7 +400,7 @@ Value masternodeconnect(const Array& params, bool fHelp)
             "1. \"address\"     (string, required) IP or net address to connect to\n"
 
             "\nExamples:\n" +
-            HelpExampleCli("masternodeconnect", "\"192.168.0.6:51472\"") + HelpExampleRpc("masternodeconnect", "\"192.168.0.6:51472\""));
+            HelpExampleCli("masternodeconnect", "\"192.168.0.6:50050\"") + HelpExampleRpc("masternodeconnect", "\"192.168.0.6:50050\""));
 
     std::string strAddress = params[0].get_str();
 
@@ -408,8 +408,34 @@ Value masternodeconnect(const Array& params, bool fHelp)
 
     CNode* pnode = ConnectNode((CAddress)addr, NULL, false);
     if (pnode) {
+        Object obj;
+        pnode->PushVersion();
+        int timeout = 3000000;	//3000000 uS timeout (3 secs)
+        while (pnode->nPingUsecTime == 0) {
+            usleep(100000);
+            timeout -= 100000;
+            if (timeout < 0) {
+                if (pnode->nVersion != 0){
+					//Node connected but ping timeout
+					obj.push_back(Pair("version", pnode->strSubVer));
+					obj.push_back(Pair("ping", -1));
+					obj.push_back(Pair("blocks", pnode->nStartingHeight));
+					obj.push_back(Pair("protocol", pnode->nVersion));
+                    pnode->Release();
+                    return obj;
+				}else{
+					pnode->Release();
+					throw runtime_error("Connection timeout\n");
+				}
+			}
+		}
+        //node connected and valid ping
+        obj.push_back(Pair("version", pnode->strSubVer));
+        obj.push_back(Pair("ping", pnode->nPingUsecTime));
+        obj.push_back(Pair("blocks", pnode->nStartingHeight));
+        obj.push_back(Pair("protocol", pnode->nVersion));
         pnode->Release();
-        return Value::null;
+        return obj;
     } else {
         throw runtime_error("error connecting\n");
     }

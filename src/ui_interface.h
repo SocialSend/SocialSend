@@ -20,7 +20,8 @@ class uint256;
 enum ChangeType {
     CT_NEW,
     CT_UPDATED,
-    CT_DELETED
+    CT_DELETED,
+	CT_MESSAGE
 };
 
 /** Signals for UI communication. */

@@ -122,7 +122,7 @@ void CBudgetManager::CheckOrphanVotes()
     LogPrint("masternode","CBudgetManager::CheckOrphanVotes - Done\n");
 }
 
-void CBudgetManager::SubmitFinalBudget(uint256 budgetHash)
+void CBudgetManager::SubmitFinalBudget(std::vector<uint256> vBudgetHash)
 {
     static int nSubmittedHeight = 0; // height at which final budget was submitted last time
     int nCurrentHeight;
@@ -149,25 +149,27 @@ void CBudgetManager::SubmitFinalBudget(uint256 budgetHash)
 
         return;
     }
-    LogPrintf("Trying to finalize budget %s\n", budgetHash.ToString());
+    LogPrintf("Trying to finalize %ld budgets\n", vBudgetHash.size());
 
     std::vector<CBudgetProposal*> vBudgetProposals = budget.GetBudget();
     std::string strBudgetName = "main";
     std::vector<CTxBudgetPayment> vecTxBudgetPayments;
 
     for (unsigned int i = 0; i < vBudgetProposals.size(); i++) {
-        if (budgetHash == vBudgetProposals[i]->GetHash()) {
-        	CTxBudgetPayment txBudgetPayment;
-            strBudgetName = vBudgetProposals[i]->GetName();
-			txBudgetPayment.nProposalHash = vBudgetProposals[i]->GetHash();
-			txBudgetPayment.payee = vBudgetProposals[i]->GetPayee();
-			txBudgetPayment.nAmount = vBudgetProposals[i]->GetAllotted();
-			vecTxBudgetPayments.push_back(txBudgetPayment);
+        for (unsigned int j = 0; j < vBudgetHash.size(); j++) {
+			if (vBudgetHash[j] == vBudgetProposals[i]->GetHash()) {
+        		CTxBudgetPayment txBudgetPayment;
+				strBudgetName = vBudgetProposals[i]->GetName();
+				txBudgetPayment.nProposalHash = vBudgetProposals[i]->GetHash();
+				txBudgetPayment.payee = vBudgetProposals[i]->GetPayee();
+				txBudgetPayment.nAmount = vBudgetProposals[i]->GetAllotted();
+				vecTxBudgetPayments.push_back(txBudgetPayment);
+			}
 		}
     }
 
     if (vecTxBudgetPayments.size() < 1) {
-        LogPrintf("CBudgetManager::SubmitFinalBudget - Budget %s not found\n", budgetHash.ToString());
+        LogPrintf("CBudgetManager::SubmitFinalBudget - No budgets match with suggested hashs\n");
         return;
     }
     LogPrintf("Budget found %s\n", strBudgetName);
@@ -239,7 +241,6 @@ void CBudgetManager::SubmitFinalBudget(uint256 budgetHash)
         LogPrint("masternode", "CBudgetManager::SubmitFinalBudget - Invalid finalized budget - %s \n", strError);
         return;
     }
-    LogPrintf("Budget %s finalized.\n", budgetHash.ToString());
     LOCK(cs);
     mapSeenFinalizedBudgets.insert(make_pair(finalizedBudgetBroadcast.GetHash(), finalizedBudgetBroadcast));
     finalizedBudgetBroadcast.Relay();
@@ -557,8 +558,8 @@ void CBudgetManager::CheckAndRemove()
 {
     LogPrint("mnbudget", "CBudgetManager::CheckAndRemove\n");
 
-    // map<uint256, CFinalizedBudget> tmpMapFinalizedBudgets;
-    // map<uint256, CBudgetProposal> tmpMapProposals;
+    map<uint256, CFinalizedBudget> tmpMapFinalizedBudgets;
+    map<uint256, CBudgetProposal> tmpMapProposals;
 
     std::string strError = "";
 
@@ -578,7 +579,7 @@ void CBudgetManager::CheckAndRemove()
 
         if (pfinalizedBudget->fValid) {
             pfinalizedBudget->AutoCheck();
-            // tmpMapFinalizedBudgets.insert(make_pair(pfinalizedBudget->GetHash(), *pfinalizedBudget));
+            tmpMapFinalizedBudgets.insert(make_pair(pfinalizedBudget->GetHash(), *pfinalizedBudget));
         }
 
         ++it;
@@ -589,7 +590,8 @@ void CBudgetManager::CheckAndRemove()
     while (it2 != mapProposals.end()) {
         CBudgetProposal* pbudgetProposal = &((*it2).second);
         pbudgetProposal->fValid = pbudgetProposal->IsValid(strError);
-        if (!strError.empty ()) {
+       
+		if (!strError.empty ()) {
             LogPrint("masternode","CBudgetManager::CheckAndRemove - Invalid budget proposal - %s\n", strError);
             strError = "";
         }
@@ -598,17 +600,17 @@ void CBudgetManager::CheckAndRemove()
                       pbudgetProposal->strProposalName.c_str(), pbudgetProposal->nFeeTXHash.ToString().c_str());
         }
         if (pbudgetProposal->fValid) {
-            // tmpMapProposals.insert(make_pair(pbudgetProposal->GetHash(), *pbudgetProposal));
+            tmpMapProposals.insert(make_pair(pbudgetProposal->GetHash(), *pbudgetProposal));
         }
 
         ++it2;
     }
     // Remove invalid entries by overwriting complete map
-    // mapFinalizedBudgets = tmpMapFinalizedBudgets;
-    // mapProposals = tmpMapProposals;
-
-    // LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapFinalizedBudgets cleanup - size after: %d\n", mapFinalizedBudgets.size());
-    // LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapProposals cleanup - size after: %d\n", mapProposals.size());
+    mapFinalizedBudgets = tmpMapFinalizedBudgets;
+    mapProposals = tmpMapProposals;
+    hasChanges = true;
+    LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapFinalizedBudgets cleanup - size after: %d\n", mapFinalizedBudgets.size());
+    LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapProposals cleanup - size after: %d\n", mapProposals.size());
     LogPrint("masternode","CBudgetManager::CheckAndRemove - PASSED\n");
 
 }
@@ -800,7 +802,18 @@ std::vector<CBudgetProposal*> CBudgetManager::GetAllProposals()
         (*it).second.CleanAndRemove(false);
 
         CBudgetProposal* pbudgetProposal = &((*it).second);
-        vBudgetProposalRet.push_back(pbudgetProposal);
+        if (pbudgetProposal->GetRemainingPaymentCount() != 0) 
+			vBudgetProposalRet.push_back(pbudgetProposal); //First add the budget with remaining payments
+
+        ++it;
+    }
+
+	it = mapProposals.begin();
+    while (it != mapProposals.end()) {
+
+        CBudgetProposal* pbudgetProposal = &((*it).second);
+        if (pbudgetProposal->GetRemainingPaymentCount() == 0)  //Then add the budget with no remaining payments
+            vBudgetProposalRet.push_back(pbudgetProposal);
 
         ++it;
     }
@@ -978,9 +991,26 @@ void CBudgetManager::NewBlock()
     if (strBudgetMode == "suggest") { //suggest the budget we see
         SubmitFinalBudget();
     } else if (strBudgetMode != "auto") {
-        uint256 budgetHash(strBudgetMode);
-		LogPrintf("Checking budget %s - hash %s\n", strBudgetMode, budgetHash.ToString());
-        SubmitFinalBudget(budgetHash);
+        std::vector<uint256> vBudgetHash;
+
+		int posInit = 0;
+        int posFound = 0;
+     
+		std::string substring;
+
+        while (posFound >= 0) {
+			posFound = strBudgetMode.find(",", posInit);
+            substring = strBudgetMode.substr(posInit, posFound - posInit);
+            posInit = posFound + 1;
+            uint256 budgetHash(substring);
+            vBudgetHash.push_back(budgetHash);
+        }        
+        LogPrintf("Checking %ld budgets...\n", vBudgetHash.size());
+        for (int i = 0; i < vBudgetHash.size(); i++)
+            LogPrintf("Budget Hash: %s\n", vBudgetHash[i].ToString());
+
+		LogPrintf("DONE");
+        SubmitFinalBudget(vBudgetHash);
 	}
 
 
@@ -1146,6 +1176,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
 
         //We might have active votes for this proposal that are valid now
         CheckOrphanVotes();
+        hasChanges = true;
     }
 
     if (strCommand == "mvote") { //Masternode Vote
@@ -1180,7 +1211,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             vote.Relay();
             masternodeSync.AddedBudgetItem(vote.GetHash());
         }
-
+        hasChanges = true;
         LogPrint("masternode","mvote - new budget vote for budget %s - %s\n", vote.nProposalHash.ToString(),  vote.GetHash().ToString());
     }
 
@@ -1501,6 +1532,18 @@ CBudgetProposal::CBudgetProposal(const CBudgetProposal& other)
 
 bool CBudgetProposal::IsValid(std::string& strError, bool fCheckCollateral)
 {
+    uint256 oldBudget1("092a5991dd9aefc39af89d7e2d64c1bcd0b2b3ecb7885fafd303f581b248a09d");
+    uint256 oldBudget2("52ae2acd10add98daf74d1646bf75915c58506cb88a6f2da2b042f68b54df25a");
+
+    if (GetHash() == oldBudget1) {
+        strError = "Old Budget.";
+        return false;
+    }
+    if (GetHash() == oldBudget2) {
+        strError = "Old Budget.";
+        return false;
+    }
+
     if (GetNays() - GetYeas() > mnodeman.CountEnabled(ActiveProtocol()) / 10) {
         strError = "Proposal " + strProposalName + ": Active removal";
         return false;
@@ -2270,4 +2313,51 @@ std::string CBudgetManager::ToString() const
     info << "Proposals: " << (int)mapProposals.size() << ", Budgets: " << (int)mapFinalizedBudgets.size() << ", Seen Budgets: " << (int)mapSeenMasternodeBudgetProposals.size() << ", Seen Budget Votes: " << (int)mapSeenMasternodeBudgetVotes.size() << ", Seen Final Budgets: " << (int)mapSeenFinalizedBudgets.size() << ", Seen Final Budget Votes: " << (int)mapSeenFinalizedBudgetVotes.size();
 
     return info.str();
+}
+
+std::string CBudgetManager::voteManyBudget(uint256 nHash, int nVote) {
+	
+	std::string output = "";
+
+	if ((nVote != VOTE_ABSTAIN) && (nVote != VOTE_YES) && (nVote != VOTE_NO))
+		return "Vote Error.";
+
+	BOOST_FOREACH (CMasternodeConfig::CMasternodeEntry mne, masternodeConfig.getEntries()) {
+        std::string errorMessage;
+        std::vector<unsigned char> vchMasterNodeSignature;
+        std::string strMasterNodeSignMessage;
+
+        CPubKey pubKeyCollateralAddress;
+        CKey keyCollateralAddress;
+        CPubKey pubKeyMasternode;
+        CKey keyMasternode;
+
+	    if (!obfuScationSigner.SetKey(mne.getPrivKey(), errorMessage, keyMasternode, pubKeyMasternode)) {
+			output += "Vote with " + mne.getAlias() + " failed\n";
+            continue;
+        }
+
+        CMasternode* pmn = mnodeman.Find(pubKeyMasternode);
+        if (pmn == NULL) {
+            output += "Vote with " + mne.getAlias() + " failed\n";
+            continue;
+        }
+
+        CBudgetVote vote(pmn->vin, nHash, nVote);
+        if (!vote.Sign(keyMasternode, pubKeyMasternode)) {
+            output += "Vote with " + mne.getAlias() + " failed\n";
+            continue;
+        }
+
+        std::string strError = "";
+        if (budget.UpdateProposal(vote, NULL, strError)) {
+            budget.mapSeenMasternodeBudgetVotes.insert(make_pair(vote.GetHash(), vote));
+            vote.Relay();
+            output += "Vote with " + mne.getAlias() + " success\n";
+        } else {
+            output += "Vote with " + mne.getAlias() + " failed\n";
+        }
+    }
+    hasChanges = true;
+    return output;
 }

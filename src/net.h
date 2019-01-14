@@ -309,6 +309,17 @@ public:
     // Whether a ping is requested.
     bool fPingQueued;
 
+	//Return a numeric format version string.
+	int getNumericVersion() {
+        if (nVersion == 0) return 0;
+
+        string strResult;
+		for (std::string::size_type i = 0; i < strSubVer.size(); i++) {
+            if ((strSubVer[i] <= '9') && (strSubVer[i] >= '0'))
+				strResult.push_back(strSubVer[i]);
+        }
+        return std::stoi(strResult);
+	}
     CNode(SOCKET hSocketIn, CAddress addrIn, std::string addrNameIn = "", bool fInboundIn = false);
     ~CNode();
 

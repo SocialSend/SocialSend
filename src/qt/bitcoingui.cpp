@@ -233,6 +233,8 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
     connect(openConfEditorAction, SIGNAL(triggered()), rpcConsole, SLOT(showConfEditor()));
     connect(openMNConfEditorAction, SIGNAL(triggered()), rpcConsole, SLOT(showMNConfEditor()));
     connect(showBackupsAction, SIGNAL(triggered()), rpcConsole, SLOT(showBackups()));
+    connect(showSendAction, SIGNAL(triggered()), rpcConsole, SLOT(showSendFolder()));
+
     connect(labelConnectionsIcon, SIGNAL(clicked()), rpcConsole, SLOT(showPeers()));
 
     // Get restart command-line parameters and handle restart
@@ -331,11 +333,11 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
         masternodeAction->setStatusTip(tr("Browse masternodes"));
         masternodeAction->setToolTip(masternodeAction->statusTip());
         masternodeAction->setCheckable(true);
-#ifdef Q_OS_MAC
-        masternodeAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_5));
-#else
-        masternodeAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
-#endif
+        #ifdef Q_OS_MAC
+            masternodeAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_5));
+        #else
+            masternodeAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
+        #endif
         tabGroup->addAction(masternodeAction);
         connect(masternodeAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
         connect(masternodeAction, SIGNAL(triggered()), this, SLOT(gotoMasternodePage()));
@@ -345,13 +347,24 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     annAction->setStatusTip(tr("Last announcement"));
     annAction->setToolTip(annAction->statusTip());
     annAction->setCheckable(true);
-#ifdef Q_OS_MAC
-    annAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_6));
-#else
-    annAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
-#endif
+    #ifdef Q_OS_MAC
+        annAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_7));
+    #else
+        annAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_7));
+    #endif
     tabGroup->addAction(annAction);
 
+    budgetAction = new QAction(QIcon(":/icons/tx_mined"), tr("Budget List"), this);
+    budgetAction->setStatusTip(tr("Active budget list"));
+    budgetAction->setToolTip(budgetAction->statusTip());
+    budgetAction->setCheckable(true);
+    #ifdef Q_OS_MAC
+        budgetAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_6));
+    #else
+        budgetAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+    #endif
+
+    tabGroup->addAction(budgetAction);
 
     // These showNormalIfMinimized are needed because Send Coins and Receive Coins
     // can be triggered from the tray menu, and need to show the GUI to be useful.
@@ -365,6 +378,8 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
     connect(annAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(annAction, SIGNAL(triggered()), this, SLOT(gotoAnnView()));
+    connect(budgetAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(budgetAction, SIGNAL(triggered()), this, SLOT(gotoBudgetView()));
 #endif // ENABLE_WALLET
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
@@ -423,6 +438,10 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     openMNConfEditorAction->setStatusTip(tr("Open Masternode configuration file"));
     showBackupsAction = new QAction(QIcon(":/icons/browse"), tr("Show Automatic &Backups"), this);
     showBackupsAction->setStatusTip(tr("Show automatically created wallet backups"));
+
+    showSendAction = new QAction(QIcon(":/icons/browse"), tr("Show configuration folder"), this);
+    showSendAction->setStatusTip(tr("Show SEND configuration folder."));
+
 
     usedSendingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Sending addresses..."), this);
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
@@ -509,6 +528,7 @@ void BitcoinGUI::createMenuBar()
         tools->addAction(openConfEditorAction);
         tools->addAction(openMNConfEditorAction);
         tools->addAction(showBackupsAction);
+        tools->addAction(showSendAction);
         tools->addAction(openBlockExplorerAction);
     }
 
@@ -532,7 +552,8 @@ void BitcoinGUI::createToolBars()
         if (settings.value("fShowMasternodesTab").toBool()) {
             toolbar->addAction(masternodeAction);
         }
-	toolbar->addAction(annAction);
+        toolbar->addAction(budgetAction);
+        toolbar->addAction(annAction);
         toolbar->setMovable(false); // remove unused icon in upper left corner
         overviewAction->setChecked(true);
 
@@ -737,6 +758,11 @@ void BitcoinGUI::openClicked()
     if (dlg.exec()) {
         emit receivedURI(dlg.getURI());
     }
+}
+void BitcoinGUI::gotoBudgetView()
+{
+    budgetAction->setChecked(true);
+    if (walletFrame) walletFrame->gotoBudgetView();
 }
 
 void BitcoinGUI::gotoAnnView()

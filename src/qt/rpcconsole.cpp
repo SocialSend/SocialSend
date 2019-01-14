@@ -815,3 +815,7 @@ void RPCConsole::showBackups()
 {
     GUIUtil::showBackups();
 }
+void RPCConsole::showSendFolder()
+{
+    GUIUtil::showSendFolder();
+}

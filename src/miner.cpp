@@ -118,7 +118,6 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     txNew.vout[0].scriptPubKey = scriptPubKeyIn;
 
     CBlockIndex* prev = chainActive.Tip();
-    /////////if(prev->nHeight <= 1000) txNew.vout[0].nValue = GetBlockValue(prev->nHeight);
     txNew.vout[0].nValue = GetBlockValue(prev->nHeight);
 
     pblock->vtx.push_back(txNew);

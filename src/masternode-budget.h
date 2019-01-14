@@ -181,6 +181,8 @@ private:
     map<uint256, uint256> mapCollateralTxids;
 
 public:
+    bool hasChanges;
+
     // critical section to protect the inner data structures
     mutable CCriticalSection cs;
 
@@ -199,6 +201,7 @@ public:
     {
         mapProposals.clear();
         mapFinalizedBudgets.clear();
+        hasChanges = false;
     }
 
     void ClearSeen()
@@ -255,6 +258,7 @@ public:
         mapSeenFinalizedBudgetVotes.clear();
         mapOrphanMasternodeBudgetVotes.clear();
         mapOrphanFinalizedBudgetVotes.clear();
+        hasChanges = true;
     }
     void CheckAndRemove();
     std::string ToString() const;

@@ -558,8 +558,8 @@ void CBudgetManager::CheckAndRemove()
 {
     LogPrint("mnbudget", "CBudgetManager::CheckAndRemove\n");
 
-    // map<uint256, CFinalizedBudget> tmpMapFinalizedBudgets;
-    // map<uint256, CBudgetProposal> tmpMapProposals;
+    map<uint256, CFinalizedBudget> tmpMapFinalizedBudgets;
+    map<uint256, CBudgetProposal> tmpMapProposals;
 
     std::string strError = "";
 
@@ -579,7 +579,7 @@ void CBudgetManager::CheckAndRemove()
 
         if (pfinalizedBudget->fValid) {
             pfinalizedBudget->AutoCheck();
-            // tmpMapFinalizedBudgets.insert(make_pair(pfinalizedBudget->GetHash(), *pfinalizedBudget));
+            tmpMapFinalizedBudgets.insert(make_pair(pfinalizedBudget->GetHash(), *pfinalizedBudget));
         }
 
         ++it;
@@ -590,7 +590,8 @@ void CBudgetManager::CheckAndRemove()
     while (it2 != mapProposals.end()) {
         CBudgetProposal* pbudgetProposal = &((*it2).second);
         pbudgetProposal->fValid = pbudgetProposal->IsValid(strError);
-        if (!strError.empty ()) {
+       
+		if (!strError.empty ()) {
             LogPrint("masternode","CBudgetManager::CheckAndRemove - Invalid budget proposal - %s\n", strError);
             strError = "";
         }
@@ -599,17 +600,17 @@ void CBudgetManager::CheckAndRemove()
                       pbudgetProposal->strProposalName.c_str(), pbudgetProposal->nFeeTXHash.ToString().c_str());
         }
         if (pbudgetProposal->fValid) {
-            // tmpMapProposals.insert(make_pair(pbudgetProposal->GetHash(), *pbudgetProposal));
+            tmpMapProposals.insert(make_pair(pbudgetProposal->GetHash(), *pbudgetProposal));
         }
 
         ++it2;
     }
     // Remove invalid entries by overwriting complete map
-    // mapFinalizedBudgets = tmpMapFinalizedBudgets;
-    // mapProposals = tmpMapProposals;
-
-    // LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapFinalizedBudgets cleanup - size after: %d\n", mapFinalizedBudgets.size());
-    // LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapProposals cleanup - size after: %d\n", mapProposals.size());
+    mapFinalizedBudgets = tmpMapFinalizedBudgets;
+    mapProposals = tmpMapProposals;
+    hasChanges = true;
+    LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapFinalizedBudgets cleanup - size after: %d\n", mapFinalizedBudgets.size());
+    LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapProposals cleanup - size after: %d\n", mapProposals.size());
     LogPrint("masternode","CBudgetManager::CheckAndRemove - PASSED\n");
 
 }
@@ -801,7 +802,18 @@ std::vector<CBudgetProposal*> CBudgetManager::GetAllProposals()
         (*it).second.CleanAndRemove(false);
 
         CBudgetProposal* pbudgetProposal = &((*it).second);
-        vBudgetProposalRet.push_back(pbudgetProposal);
+        if (pbudgetProposal->GetRemainingPaymentCount() != 0) 
+			vBudgetProposalRet.push_back(pbudgetProposal); //First add the budget with remaining payments
+
+        ++it;
+    }
+
+	it = mapProposals.begin();
+    while (it != mapProposals.end()) {
+
+        CBudgetProposal* pbudgetProposal = &((*it).second);
+        if (pbudgetProposal->GetRemainingPaymentCount() == 0)  //Then add the budget with no remaining payments
+            vBudgetProposalRet.push_back(pbudgetProposal);
 
         ++it;
     }
@@ -1164,6 +1176,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
 
         //We might have active votes for this proposal that are valid now
         CheckOrphanVotes();
+        hasChanges = true;
     }
 
     if (strCommand == "mvote") { //Masternode Vote
@@ -1198,7 +1211,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             vote.Relay();
             masternodeSync.AddedBudgetItem(vote.GetHash());
         }
-
+        hasChanges = true;
         LogPrint("masternode","mvote - new budget vote for budget %s - %s\n", vote.nProposalHash.ToString(),  vote.GetHash().ToString());
     }
 
@@ -1519,6 +1532,18 @@ CBudgetProposal::CBudgetProposal(const CBudgetProposal& other)
 
 bool CBudgetProposal::IsValid(std::string& strError, bool fCheckCollateral)
 {
+    uint256 oldBudget1("092a5991dd9aefc39af89d7e2d64c1bcd0b2b3ecb7885fafd303f581b248a09d");
+    uint256 oldBudget2("52ae2acd10add98daf74d1646bf75915c58506cb88a6f2da2b042f68b54df25a");
+
+    if (GetHash() == oldBudget1) {
+        strError = "Old Budget.";
+        return false;
+    }
+    if (GetHash() == oldBudget2) {
+        strError = "Old Budget.";
+        return false;
+    }
+
     if (GetNays() - GetYeas() > mnodeman.CountEnabled(ActiveProtocol()) / 10) {
         strError = "Proposal " + strProposalName + ": Active removal";
         return false;
@@ -2333,5 +2358,6 @@ std::string CBudgetManager::voteManyBudget(uint256 nHash, int nVote) {
             output += "Vote with " + mne.getAlias() + " failed\n";
         }
     }
+    hasChanges = true;
     return output;
 }

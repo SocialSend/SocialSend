@@ -102,6 +102,8 @@ public slots:
     void peerLayoutChanged();
     /** Show folder with wallet backups in default browser */
     void showBackups();
+    /** Show SEND configuration folder in default browser */
+    void showSendFolder();
 
 signals:
     // For RPC command executor

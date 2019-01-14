@@ -1,4 +1,6 @@
-<TS language="es" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="es">
 <context>
     <name>AddressBookPage</name>
     <message>
@@ -133,7 +135,7 @@
     </message>
     <message>
         <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
-        <translation>Sirve para desactivar el envío de dinero cuando la cuenta del SO está comprometida. No provee de una seguridad real</translation>
+        <translation type="unfinished">Sirve para desactivar el envío de dinero cuando la cuenta del SO está comprometida. No provee de una seguridad real.</translation>
     </message>
     <message>
         <source>For anonymization and staking only</source>
@@ -141,7 +143,7 @@
     </message>
     <message>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
-        <translation>Escriba la nueva contraseña para la Wallet. &lt;br/&gt;Por favor utilice una contraseña de &lt;b&gt;10 o más caracteres aleatorios&lt;/b&gt;, u &lt;b&gt; ocho o más palabras&lt;/b&gt;</translation>
+        <translation type="unfinished">Escriba la nueva contraseña para la Wallet. &lt;br/&gt;Por favor utilice una contraseña de &lt;b&gt;10 o más caracteres aleatorios&lt;/b&gt;, u &lt;b&gt; ocho o más palabras&lt;/b&gt;.</translation>
     </message>
     <message>
         <source>Encrypt wallet</source>
@@ -149,7 +151,7 @@
     </message>
     <message>
         <source>This operation needs your wallet passphrase to unlock the wallet.</source>
-        <translation>Esta operación requiere su contraseña para desbloquear la Wallet</translation>
+        <translation type="unfinished">Esta operación requiere su contraseña para desbloquear la Wallet.</translation>
     </message>
     <message>
         <source>Unlock wallet</source>
@@ -157,7 +159,7 @@
     </message>
     <message>
         <source>This operation needs your wallet passphrase to decrypt the wallet.</source>
-        <translation>Esta operación requiere su contraseña para desbloquear la Wallet</translation>
+        <translation type="unfinished">Esta operación requiere su contraseña para desbloquear la Wallet.</translation>
     </message>
     <message>
         <source>Decrypt wallet</source>
@@ -169,7 +171,7 @@
     </message>
     <message>
         <source>Enter the old and new passphrase to the wallet.</source>
-        <translation>Ingrese la antigua y nueva contraseña para la Wallet</translation>
+        <translation type="unfinished">Ingrese la antigua y nueva contraseña para la Wallet.</translation>
     </message>
     <message>
         <source>Confirm wallet encryption</source>
@@ -299,8 +301,8 @@
         <translation>&amp;Desencriptación BIP 38</translation>
     </message>
     <message>
-        <source>Enter the BIP 38 encrypted private key. Enter the passphrase in the middle box. Click Decrypt Key to compute the private key. After the key is decrypted, clicking 'Import Address' will add this private key to the wallet.</source>
-        <translation>Introducir la clave encriptada privada BIP 38. Introducir la contraseña en la caja central. Pulsar en Desencriptar Clave para computar la clave privada. Después de que la clave sea desencriptada, pulsando en 'Importar Dirección' añadirá esta clave privada a la wallet.</translation>
+        <source>Enter the BIP 38 encrypted private key. Enter the passphrase in the middle box. Click Decrypt Key to compute the private key. After the key is decrypted, clicking &apos;Import Address&apos; will add this private key to the wallet.</source>
+        <translation>Introducir la clave encriptada privada BIP 38. Introducir la contraseña en la caja central. Pulsar en Desencriptar Clave para computar la clave privada. Después de que la clave sea desencriptada, pulsando en &apos;Importar Dirección&apos; añadirá esta clave privada a la wallet.</translation>
     </message>
     <message>
         <source>The SEND address the message was signed with</source>
@@ -327,8 +329,8 @@
         <translation>Importar Dirección</translation>
     </message>
     <message>
-        <source>Click "Decrypt Key" to compute key</source>
-        <translation>Clickar "Desencriptar Clave" para computar la clave</translation>
+        <source>Click &quot;Decrypt Key&quot; to compute key</source>
+        <translation>Clickar &quot;Desencriptar Clave&quot; para computar la clave</translation>
     </message>
     <message>
         <source>The entered passphrase is invalid. </source>
@@ -550,6 +552,14 @@
         <translation>Mostrar las copias de seguridad creadas automáticamente</translation>
     </message>
     <message>
+        <source>Show configuration folder</source>
+        <translation>Mostrar carpeta de configuracion</translation>
+    </message>
+    <message>
+        <source>Show SEND configuration folder.</source>
+        <translation>Mostrar carpeta de configuracion del monedero.</translation>
+    </message>
+    <message>
         <source>&amp;Sending addresses...</source>
         <translation>&amp;Direcciones de envío...</translation>
     </message>
@@ -575,7 +585,10 @@
     </message>
     <message numerus="yes">
         <source>Processed %n blocks of transaction history.</source>
-        <translation><numerusform>Procesados %n bloque del histórico de transacciones.</numerusform><numerusform>Procesados %n bloques del histórico de transacciones.</numerusform></translation>
+        <translation>
+            <numerusform>Procesados %n bloque del histórico de transacciones.</numerusform>
+            <numerusform>Procesados %n bloques del histórico de transacciones.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Synchronizing additional data: %p%</source>
@@ -620,6 +633,18 @@
     <message>
         <source>Announcement</source>
         <translation>Anuncios</translation>
+    </message>
+    <message>
+        <source>Last announcement</source>
+        <translation>Ultimos anuncios</translation>
+    </message>
+    <message>
+        <source>Active budget list</source>
+        <translation>Lista de propuestas activas</translation>
+    </message>
+    <message>
+        <source>Budget List</source>
+        <translation>Propuestas</translation>
     </message>
     <message>
         <source>Browse masternodes</source>
@@ -695,7 +720,10 @@
     </message>
     <message numerus="yes">
         <source>%n active connection(s) to SEND network</source>
-        <translation><numerusform>%n conexión(es) activa a la red SEND</numerusform><numerusform>%n conexion(es) activas a la red SEND</numerusform></translation>
+        <translation>
+            <numerusform>%n conexión(es) activa a la red SEND</numerusform>
+            <numerusform>%n conexion(es) activas a la red SEND</numerusform>
+        </translation>
     </message>
     <message>
         <source>Synchronizing with network...</source>
@@ -719,15 +747,24 @@
     </message>
     <message numerus="yes">
         <source>%n hour(s)</source>
-        <translation><numerusform>%n hora</numerusform><numerusform>%n horas</numerusform></translation>
+        <translation>
+            <numerusform>%n hora</numerusform>
+            <numerusform>%n horas</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%n day(s)</source>
-        <translation><numerusform>%n día</numerusform><numerusform>%n días</numerusform></translation>
+        <translation>
+            <numerusform>%n día</numerusform>
+            <numerusform>%n días</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%n week(s)</source>
-        <translation><numerusform>%n semana</numerusform><numerusform>%n semanas</numerusform></translation>
+        <translation>
+            <numerusform>%n semana</numerusform>
+            <numerusform>%n semanas</numerusform>
+        </translation>
     </message>
     <message>
         <source>%1 and %2</source>
@@ -735,7 +772,10 @@
     </message>
     <message numerus="yes">
         <source>%n year(s)</source>
-        <translation><numerusform>%n año</numerusform><numerusform>%n años</numerusform></translation>
+        <translation>
+            <numerusform>%n año</numerusform>
+            <numerusform>%n años</numerusform>
+        </translation>
     </message>
     <message>
         <source>%1 behind</source>
@@ -842,7 +882,7 @@ MultiEnvío: %1</translation>
     </message>
     <message>
         <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (send.conf).</source>
-        <translation>No se muestran todas las transacciones. Para ver todas las transacciones introduzca la línea "txindex=1" en el archivo de configuración (send.conf).</translation>
+        <translation>No se muestran todas las transacciones. Para ver todas las transacciones introduzca la línea &quot;txindex=1&quot; en el archivo de configuración (send.conf).</translation>
     </message>
 </context>
 <context>
@@ -999,8 +1039,8 @@ MultiEnvío: %1</translation>
         <translation>Copiar cambio</translation>
     </message>
     <message>
-        <source>Please switch to "List mode" to use this function.</source>
-        <translation>Por favor cambie a "Modo de Lista" para utilizar esta función.</translation>
+        <source>Please switch to &quot;List mode&quot; to use this function.</source>
+        <translation>Por favor cambie a &quot;Modo de Lista&quot; para utilizar esta función.</translation>
     </message>
     <message>
         <source>Non-anonymized input selected. &lt;b&gt;Obfuscation will be disabled.&lt;/b&gt;&lt;br&gt;&lt;br&gt;If you still want to use Obfuscation, please deselect all non-nonymized inputs first and then check Obfuscation checkbox again.</source>
@@ -1083,8 +1123,8 @@ MultiEnvío: %1</translation>
         <translation>Las transacciones con alta prioridad tienen más probabilidades de ser incluidas en un bloque.</translation>
     </message>
     <message>
-        <source>This label turns red, if the priority is smaller than "medium".</source>
-        <translation>Esta etiqueta se vuelve roja, si la prioridad es inferior a "media".</translation>
+        <source>This label turns red, if the priority is smaller than &quot;medium&quot;.</source>
+        <translation>Esta etiqueta se vuelve roja, si la prioridad es inferior a &quot;media&quot;.</translation>
     </message>
     <message>
         <source>This label turns red, if any recipient receives an amount smaller than %1.</source>
@@ -1142,12 +1182,12 @@ MultiEnvío: %1</translation>
         <translation>Editar dirección de envío</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid SEND address.</source>
-        <translation>La dirección introducida "%1" no es una dirección SEND válida.</translation>
+        <source>The entered address &quot;%1&quot; is not a valid SEND address.</source>
+        <translation>La dirección introducida &quot;%1&quot; no es una dirección SEND válida.</translation>
     </message>
     <message>
-        <source>The entered address "%1" is already in the address book.</source>
-        <translation>La dirección introducida "%1" ya está en la libreta de direcciones.</translation>
+        <source>The entered address &quot;%1&quot; is already in the address book.</source>
+        <translation>La dirección introducida &quot;%1&quot; ya está en la libreta de direcciones.</translation>
     </message>
     <message>
         <source>Could not unlock wallet.</source>
@@ -1224,8 +1264,8 @@ MultiEnvío: %1</translation>
         <translation>Mostrar pantalla de bienvenida al arrancar (por defecto: %u)</translation>
     </message>
     <message>
-        <source>Set language, for example "de_DE" (default: system locale)</source>
-        <translation>Seleccionar el idioma, por ejemplo "es_ES" (por defecto: idioma del sistema)</translation>
+        <source>Set language, for example &quot;de_DE&quot; (default: system locale)</source>
+        <translation>Seleccionar el idioma, por ejemplo &quot;es_ES&quot; (por defecto: idioma del sistema)</translation>
     </message>
     <message>
         <source>Start minimized</source>
@@ -1267,8 +1307,8 @@ MultiEnvío: %1</translation>
         <translation>Núcleo SEND</translation>
     </message>
     <message>
-        <source>Error: Specified data directory "%1" cannot be created.</source>
-        <translation>Error: La carpeta de datos especificada "%1" no pudo ser creada.</translation>
+        <source>Error: Specified data directory &quot;%1&quot; cannot be created.</source>
+        <translation>Error: La carpeta de datos especificada &quot;%1&quot; no pudo ser creada.</translation>
     </message>
     <message>
         <source>Error</source>
@@ -1294,8 +1334,8 @@ MultiEnvío: %1</translation>
         <translation>Mis Nodos Maestros</translation>
     </message>
     <message>
-        <source>Note: Status of your masternodes in local wallet can potentially be slightly incorrect.&lt;br /&gt;Always wait for wallet to sync additional data and then double check from another node&lt;br /&gt;if your node should be running but you still see "MISSING" in "Status" field.</source>
-        <translation>Nota: El estado de tus nodos maestros en el monedero local podría ser incorrecto.&lt;br /&gt;Siempre espere a que el monedero sincronice la información adicional y entonces compruébelo desde otro nodo&lt;br /&gt;si su nodo debería estar funcionando pero aún vee el mensaje "FALTA" en el campo "Estado".</translation>
+        <source>Note: Status of your masternodes in local wallet can potentially be slightly incorrect.&lt;br /&gt;Always wait for wallet to sync additional data and then double check from another node&lt;br /&gt;if your node should be running but you still see &quot;MISSING&quot; in &quot;Status&quot; field.</source>
+        <translation>Nota: El estado de tus nodos maestros en el monedero local podría ser incorrecto.&lt;br /&gt;Siempre espere a que el monedero sincronice la información adicional y entonces compruébelo desde otro nodo&lt;br /&gt;si su nodo debería estar funcionando pero aún vee el mensaje &quot;FALTA&quot; en el campo &quot;Estado&quot;.</translation>
     </message>
     <message>
         <source>Alias</source>
@@ -1323,7 +1363,7 @@ MultiEnvío: %1</translation>
     </message>
     <message>
         <source>Pubkey</source>
-        <translation>Llave pública</translation>
+        <translation>Direccion de SEND</translation>
     </message>
     <message>
         <source>S&amp;tart alias</source>
@@ -1335,7 +1375,7 @@ MultiEnvío: %1</translation>
     </message>
     <message>
         <source>Start &amp;MISSING</source>
-        <translation>Iniciar &amp;FALTAN</translation>
+        <translation>Iniciar &amp;MISSING</translation>
     </message>
     <message>
         <source>&amp;Update status</source>
@@ -1374,7 +1414,7 @@ MultiEnvío: %1</translation>
         <translation>El comando no está disponible en este momento</translation>
     </message>
     <message>
-        <source>You can't use this command until masternode list is synced</source>
+        <source>You can&apos;t use this command until masternode list is synced</source>
         <translation>No se puede utilizar este comando hasta que la lista de nodos maestros esté sincronizada</translation>
     </message>
     <message>
@@ -1580,15 +1620,15 @@ Por favor compruebe la dirección e inténtelo de nuevo.</translation>
         <translation>Configuración de Ofuscación</translation>
     </message>
     <message>
-        <source>Obfuscation was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening SEND's configuration screen.</source>
+        <source>Obfuscation was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening SEND&apos;s configuration screen.</source>
         <translation>La Ofuscación se configuró correctamente en modo básico (%1 y 2 rondas). Puedes cambiar esto en cualquier momento accediendo a la ventana de configuración de SEND.</translation>
     </message>
     <message>
-        <source>Obfuscation was successfully set to high (%1 and 8 rounds). You can change this at any time by opening SEND's configuration screen.</source>
+        <source>Obfuscation was successfully set to high (%1 and 8 rounds). You can change this at any time by opening SEND&apos;s configuration screen.</source>
         <translation>La Ofuscación se activó correctamente en modo alto (%1 y 8 rondas). Usted puede cambiar esto en cualquier momento abriendo la ventana de configuración de SEND.</translation>
     </message>
     <message>
-        <source>Obfuscation was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening SEND's configuration screen.</source>
+        <source>Obfuscation was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening SEND&apos;s configuration screen.</source>
         <translation>La Ofuscación se activó correctamente en su grado máximo (%1 y 16 rondas). Usted puede cambiar ésto en cualquier momento en la ventana de configuración de SEND.</translation>
     </message>
 </context>
@@ -1686,7 +1726,7 @@ Por favor compruebe la dirección e inténtelo de nuevo.</translation>
         <translation>Rondas de Ofuscación a utilizar</translation>
     </message>
     <message>
-        <source>This amount acts as a threshold to turn off Obfuscation once it's reached.</source>
+        <source>This amount acts as a threshold to turn off Obfuscation once it&apos;s reached.</source>
         <translation>Esta cantidad actúa como un techo para desactivar la Ofuscación una vez alcanzado.</translation>
     </message>
     <message>
@@ -1855,6 +1895,18 @@ https://www.transifex.com/send-project/send-project-translations</translation>
 <context>
     <name>OverviewPage</name>
     <message>
+        <source>Start Mixing</source>
+        <translation>Comenzar Mezclado</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation>Deshabilitado</translation>
+    </message>
+    <message>
+        <source>Coin Mixing</source>
+        <translation>Mezclado de Monedas</translation>
+    </message>
+    <message>
         <source>Form</source>
         <translation>Formulario</translation>
     </message>
@@ -1943,7 +1995,7 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>Intentar enviar manualmente una solicitud de Ofuscación.</translation>
     </message>
     <message>
-        <source>Reset the current status of Obfuscation (can interrupt Obfuscation if it's in the process of Mixing, which can cost you money!)</source>
+        <source>Reset the current status of Obfuscation (can interrupt Obfuscation if it&apos;s in the process of Mixing, which can cost you money!)</source>
         <translation>Reiniciar el estado actual de Ofuscación (puede interrumpir la Ofuscación si está en el proceso de Mezcla, que puede costarle dinero!)</translation>
     </message>
     <message>
@@ -1995,20 +2047,19 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>desincronizado</translation>
     </message>
     <message>
-        <source>Disabled</source>
-        <translation>Desactivado</translation>
-    </message>
-    <message>
         <source>No inputs detected</source>
         <translation>No se detectan entradas</translation>
     </message>
     <message numerus="yes">
         <source>%n Rounds</source>
-        <translation><numerusform>%n Ronda</numerusform><numerusform>%n Rondas</numerusform></translation>
+        <translation>
+            <numerusform>%n Ronda</numerusform>
+            <numerusform>%n Rondas</numerusform>
+        </translation>
     </message>
     <message>
-        <source>Not enough compatible inputs to anonymize &lt;span style='color:red;'&gt;%1&lt;/span&gt;,&lt;br&gt;will anonymize &lt;span style='color:red;'&gt;%2&lt;/span&gt; instead</source>
-        <translation>No hay suficientes entradas compatibles para anonimizar &lt;span style='color:red;'&gt;%1&lt;/span&gt;,&lt;br&gt;anonimizará &lt;span style='color:red;'&gt;%2&lt;/span&gt; en su lugar
+        <source>Not enough compatible inputs to anonymize &lt;span style=&apos;color:red;&apos;&gt;%1&lt;/span&gt;,&lt;br&gt;will anonymize &lt;span style=&apos;color:red;&apos;&gt;%2&lt;/span&gt; instead</source>
+        <translation>No hay suficientes entradas compatibles para anonimizar &lt;span style=&apos;color:red;&apos;&gt;%1&lt;/span&gt;,&lt;br&gt;anonimizará &lt;span style=&apos;color:red;&apos;&gt;%2&lt;/span&gt; en su lugar
 </translation>
     </message>
     <message>
@@ -2025,7 +2076,10 @@ https://www.transifex.com/send-project/send-project-translations</translation>
     </message>
     <message numerus="yes">
         <source>Denominated inputs have %5 of %n rounds on average</source>
-        <translation><numerusform>La entrada denominada tiene %5 de %n rondas de promedio</numerusform><numerusform>Las entradas seleccionadas tienen %5 de %n rondas de promedio</numerusform></translation>
+        <translation>
+            <numerusform>La entrada denominada tiene %5 de %n rondas de promedio</numerusform>
+            <numerusform>Las entradas seleccionadas tienen %5 de %n rondas de promedio</numerusform>
+        </translation>
     </message>
     <message>
         <source>Last Obfuscation message:
@@ -2038,8 +2092,8 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>La Ofuscación fue reiniciada satisfactoriamente.</translation>
     </message>
     <message>
-        <source>If you don't want to see internal Obfuscation fees/transactions select "Most Common" as Type on the "Transactions" tab.</source>
-        <translation>Si no quiere ver aquí las operaciones internas de Ofuscación seleccione "Las Más Comunes" como el Tipo en la pestaña de "Transacciones".</translation>
+        <source>If you don&apos;t want to see internal Obfuscation fees/transactions select &quot;Most Common&quot; as Type on the &quot;Transactions&quot; tab.</source>
+        <translation>Si no quiere ver aquí las operaciones internas de Ofuscación seleccione &quot;Las Más Comunes&quot; como el Tipo en la pestaña de &quot;Transacciones&quot;.</translation>
     </message>
     <message>
         <source>Obfuscation requires at least %1 to use.</source>
@@ -2113,7 +2167,7 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>Solicitud de pago rechazada</translation>
     </message>
     <message>
-        <source>Payment request network doesn't match client network.</source>
+        <source>Payment request network doesn&apos;t match client network.</source>
         <translation>La solicitud de pago no coincide con la red del cliente.</translation>
     </message>
     <message>
@@ -2845,12 +2899,12 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>Tiempo de confirmación:</translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 uSENDs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uSENDs in fee,&lt;br /&gt;while "at least" pays 1000 uSENDs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>Si la comisión personalizada se fija en 1000 uSENDs y la transacción necesita sólo 250 bytes, entonces la opción "por kilobyte" sólo pagará 250 uSENDs de comisión,&lt;br/&gt;mientras "por lo menos" pagará 1000 uSENDs. Para transacciones que midan más de un kilobyte ambas pagan por kilobyte.</translation>
+        <source>If the custom fee is set to 1000 uSENDs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uSENDs in fee,&lt;br /&gt;while &quot;at least&quot; pays 1000 uSENDs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>Si la comisión personalizada se fija en 1000 uSENDs y la transacción necesita sólo 250 bytes, entonces la opción &quot;por kilobyte&quot; sólo pagará 250 uSENDs de comisión,&lt;br/&gt;mientras &quot;por lo menos&quot; pagará 1000 uSENDs. Para transacciones que midan más de un kilobyte ambas pagan por kilobyte.</translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 uSENDs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uSENDs in fee,&lt;br /&gt;while "total at least" pays 1000 uSENDs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>Si la comisión personalizada se fija en 1000 uSENDs y la transacción necesita sólo 250 bytes, entonces la opción "por kilobyte" sólo pagará 250 uSENDs de comisión,&lt;br/&gt;mientras "por lo menos" pagará 1000 uSENDs. Para transacciones que midan más de un kilobyte ambas pagan por kilobyte.</translation>
+        <source>If the custom fee is set to 1000 uSENDs and the transaction is only 250 bytes, then &quot;per kilobyte&quot; only pays 250 uSENDs in fee,&lt;br /&gt;while &quot;total at least&quot; pays 1000 uSENDs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
+        <translation>Si la comisión personalizada se fija en 1000 uSENDs y la transacción necesita sólo 250 bytes, entonces la opción &quot;por kilobyte&quot; sólo pagará 250 uSENDs de comisión,&lt;br/&gt;mientras &quot;por lo menos&quot; pagará 1000 uSENDs. Para transacciones que midan más de un kilobyte ambas pagan por kilobyte.</translation>
     </message>
     <message>
         <source>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks.&lt;br /&gt;But be aware that this can end up in a never confirming transaction once there is more demand for SEND transactions than the network can process.</source>
@@ -2994,7 +3048,10 @@ https://www.transifex.com/send-project/send-project-translations</translation>
     </message>
     <message numerus="yes">
         <source>Estimated to begin confirmation within %n block(s).</source>
-        <translation><numerusform>Estimamos que empezará la confirmación en %n bloque.</numerusform><numerusform>Estimamos que empezará la confirmación en %n bloques.</numerusform></translation>
+        <translation>
+            <numerusform>Estimamos que empezará la confirmación en %n bloque.</numerusform>
+            <numerusform>Estimamos que empezará la confirmación en %n bloques.</numerusform>
+        </translation>
     </message>
     <message>
         <source>The recipient address is not valid, please recheck.</source>
@@ -3151,7 +3208,7 @@ https://www.transifex.com/send-project/send-project-translations</translation>
     </message>
     <message>
         <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Usted puede firmar mensajes con su dirección para probar que son auténticos. Tenga cuidado con firmar algo corto o vago como "hola", pues los ataques de phising pueden engañarle para que firme su identidad para ellos. Sólo firme textos detallados con los que esté de acuerdo.</translation>
+        <translation>Usted puede firmar mensajes con su dirección para probar que son auténticos. Tenga cuidado con firmar algo corto o vago como &quot;hola&quot;, pues los ataques de phising pueden engañarle para que firme su identidad para ellos. Sólo firme textos detallados con los que esté de acuerdo.</translation>
     </message>
     <message>
         <source>The SEND address to sign the message with</source>
@@ -3215,7 +3272,7 @@ https://www.transifex.com/send-project/send-project-translations</translation>
     </message>
     <message>
         <source>Enter the signing address, message (ensure you copy line breaks, spaces, tabs, etc. exactly) and signature below to verify the message. Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack.</source>
-        <translation>Introduzca la dirección de firma, mensaje (asegúrese de que copia los puntos y aparte, espacios, tabuladores, etc. exactamente) y la firma debajo para verificar el mensaje. Vaya con cuidado de no leer más en la firma de loque está en el mensaje firmado propiamente dicho, para evitar ser engañado por un ataque "hombre en el medio".</translation>
+        <translation>Introduzca la dirección de firma, mensaje (asegúrese de que copia los puntos y aparte, espacios, tabuladores, etc. exactamente) y la firma debajo para verificar el mensaje. Vaya con cuidado de no leer más en la firma de loque está en el mensaje firmado propiamente dicho, para evitar ser engañado por un ataque &quot;hombre en el medio&quot;.</translation>
     </message>
     <message>
         <source>Verify &amp;Message</source>
@@ -3226,8 +3283,8 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>Resetear todos los campos de verificación de mensaje</translation>
     </message>
     <message>
-        <source>Click "Sign Message" to generate signature</source>
-        <translation>Haga click en "Firmar Mensaje" para generar la firma</translation>
+        <source>Click &quot;Sign Message&quot; to generate signature</source>
+        <translation>Haga click en &quot;Firmar Mensaje&quot; para generar la firma</translation>
     </message>
     <message>
         <source>The entered address is invalid.</source>
@@ -3297,6 +3354,10 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>Los desarrolladores de Dash Core</translation>
     </message>
     <message>
+        <source>The PIVX Core developers</source>
+        <translation>Los desarrolladores de Pivx Core</translation>
+    </message>
+    <message>
         <source>The SEND Core developers</source>
         <translation>Los desarrolladores de SEND Core</translation>
     </message>
@@ -3316,7 +3377,10 @@ https://www.transifex.com/send-project/send-project-translations</translation>
     <name>TransactionDesc</name>
     <message numerus="yes">
         <source>Open for %n more block(s)</source>
-        <translation><numerusform>Abierto para %n bloque más</numerusform><numerusform>Abierto para %n bloques más</numerusform></translation>
+        <translation>
+            <numerusform>Abierto para %n bloque más</numerusform>
+            <numerusform>Abierto para %n bloques más</numerusform>
+        </translation>
     </message>
     <message>
         <source>Open until %1</source>
@@ -3380,7 +3444,10 @@ https://www.transifex.com/send-project/send-project-translations</translation>
     </message>
     <message numerus="yes">
         <source>, broadcast through %n node(s)</source>
-        <translation><numerusform>, retransmitido a través de %n nodo</numerusform><numerusform>, retransmitido a través de %n nodos</numerusform></translation>
+        <translation>
+            <numerusform>, retransmitido a través de %n nodo</numerusform>
+            <numerusform>, retransmitido a través de %n nodos</numerusform>
+        </translation>
     </message>
     <message>
         <source>Date</source>
@@ -3424,7 +3491,10 @@ https://www.transifex.com/send-project/send-project-translations</translation>
     </message>
     <message numerus="yes">
         <source>matures in %n more block(s)</source>
-        <translation><numerusform>madura en %n bloque más</numerusform><numerusform>madura en %n bloques más</numerusform></translation>
+        <translation>
+            <numerusform>madura en %n bloque más</numerusform>
+            <numerusform>madura en %n bloques más</numerusform>
+        </translation>
     </message>
     <message>
         <source>not accepted</source>
@@ -3471,8 +3541,8 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>Comerciante</translation>
     </message>
     <message>
-        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Las monedas generadas deben madurarse %1 bloques hasta que puedan ser gastadas de nuevo. Cuando generaste este bloque, se retransmitió a la red para añadirse a la cadena de bloques. Si falla en unirse a la cadena, su estado cambiará a "no aceptado" y no se podrá gastar de nuevo (bloque huérfano). Esto puede ocurrir ocasionalmente si otro nodo genera un bloque casi al mismo tiempo que el tuyo.</translation>
+        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to &quot;not accepted&quot; and it won&apos;t be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
+        <translation>Las monedas generadas deben madurarse %1 bloques hasta que puedan ser gastadas de nuevo. Cuando generaste este bloque, se retransmitió a la red para añadirse a la cadena de bloques. Si falla en unirse a la cadena, su estado cambiará a &quot;no aceptado&quot; y no se podrá gastar de nuevo (bloque huérfano). Esto puede ocurrir ocasionalmente si otro nodo genera un bloque casi al mismo tiempo que el tuyo.</translation>
     </message>
     <message>
         <source>Debug information</source>
@@ -3526,7 +3596,10 @@ https://www.transifex.com/send-project/send-project-translations</translation>
     </message>
     <message numerus="yes">
         <source>Open for %n more block(s)</source>
-        <translation><numerusform>Abierto para %n bloque más</numerusform><numerusform>Abierto para %n bloques más</numerusform></translation>
+        <translation>
+            <numerusform>Abierto para %n bloque más</numerusform>
+            <numerusform>Abierto para %n bloques más</numerusform>
+        </translation>
     </message>
     <message>
         <source>Open until %1</source>
@@ -3845,7 +3918,7 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>Enviar Monedas</translation>
     </message>
     <message>
-        <source>SwiftTX doesn't support sending values that high yet. Transactions are currently limited to %1 SEND.</source>
+        <source>SwiftTX doesn&apos;t support sending values that high yet. Transactions are currently limited to %1 SEND.</source>
         <translation>SwiftTX no soporta el envío de importes tan altos todavía. Las transacciones están actualmente limitadas a %1 SEND.</translation>
     </message>
 </context>
@@ -3963,7 +4036,7 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>Error: La escucha para conexiones entrantes falló (la escucha retorno error %s)</translation>
     </message>
     <message>
-        <source>Error: Unsupported argument -socks found. Setting SOCKS version isn't possible anymore, only SOCKS5 proxies are supported.</source>
+        <source>Error: Unsupported argument -socks found. Setting SOCKS version isn&apos;t possible anymore, only SOCKS5 proxies are supported.</source>
         <translation>Error: Argumento -socks no soportado. No se permite utilizar la versión SOCKS, solo proxies de SOCKS5 están soportados.</translation>
     </message>
     <message>
@@ -4007,8 +4080,8 @@ https://www.transifex.com/send-project/send-project-translations</translation>
         <translation>En este modo -genproclimit controla cuantos bloques son generados inmediatamente.</translation>
     </message>
     <message>
-        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s' (must be at least the minrelay fee of %s to prevent stuck transactions)</source>
-        <translation>Importe inválido para -maxtxfee=&lt;amount&gt;:'%s' (debe ser al menos la comisión minrelay de %s para prevenir transacciones atascadas)</translation>
+        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: &apos;%s&apos; (must be at least the minrelay fee of %s to prevent stuck transactions)</source>
+        <translation>Importe inválido para -maxtxfee=&lt;amount&gt;:&apos;%s&apos; (debe ser al menos la comisión minrelay de %s para prevenir transacciones atascadas)</translation>
     </message>
     <message>
         <source>Keep the specified amount available for spending at all times (default: 0)</source>
@@ -4096,7 +4169,7 @@ rpcpassword=%s
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s "SEND Alert" admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;SEND Alert&quot; admin@foo.com
 </source>
         <translation>Para usar sendd, o la opción -server de send-qt, debes definir un rpcpassword en el archivo de configuración:
 %s
@@ -4107,7 +4180,7 @@ rpcrpcpassword=%s
 El nombre de usuario y contraseña NO DEBEN ser los mismos.
 Si el archivo no existe, crearlo con permisos de solo lectura para el propietario.
 También es recomendado definir alertnotify de manera que seas notificado de problemas;
-por ejemplo: alertnotify=echo %%s | mail -s "SEND Alert" admin@foo.com
+por ejemplo: alertnotify=echo %%s | mail -s &quot;SEND Alert&quot; admin@foo.com
 </translation>
     </message>
     <message>
@@ -4139,7 +4212,7 @@ por ejemplo: alertnotify=echo %%s | mail -s "SEND Alert" admin@foo.com
         <translation>Advertencia: -paytxfee esta muy alta! Esta es la comisión de transacción que pagarás si envías una transacción.</translation>
     </message>
     <message>
-        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong SEND Core will not work properly.</source>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong SEND Core will not work properly.</source>
         <translation>Advertencia: Por favor verifique que la fecha y hora de su computadora sean correctas! Si su reloj esta fuera de hora SEND Core no funcionará adecuadamente.</translation>
     </message>
     <message>
@@ -4227,15 +4300,15 @@ por ejemplo: alertnotify=echo %%s | mail -s "SEND Alert" admin@foo.com
         <translation>Opciones de creación de bloque:</translation>
     </message>
     <message>
-        <source>Can't denominate: no compatible inputs left.</source>
+        <source>Can&apos;t denominate: no compatible inputs left.</source>
         <translation>No se puede denominar: quedaron entradas no compatibles.</translation>
     </message>
     <message>
-        <source>Can't find random Masternode.</source>
+        <source>Can&apos;t find random Masternode.</source>
         <translation>No se puede encontrar un Masternode al azar.</translation>
     </message>
     <message>
-        <source>Can't mix while sync in progress.</source>
+        <source>Can&apos;t mix while sync in progress.</source>
         <translation>No se puede mezclar mientras la sincronización esta en progreso.</translation>
     </message>
     <message>
@@ -4243,16 +4316,16 @@ por ejemplo: alertnotify=echo %%s | mail -s "SEND Alert" admin@foo.com
         <translation>No se puede volver a una versión anterior de la billetera</translation>
     </message>
     <message>
-        <source>Cannot resolve -bind address: '%s'</source>
-        <translation>No se puede resolver la dirección -bind: '%s'</translation>
+        <source>Cannot resolve -bind address: &apos;%s&apos;</source>
+        <translation>No se puede resolver la dirección -bind: &apos;%s&apos;</translation>
     </message>
     <message>
-        <source>Cannot resolve -externalip address: '%s'</source>
-        <translation>No se puede resolver la dirección -externalip: '%s'</translation>
+        <source>Cannot resolve -externalip address: &apos;%s&apos;</source>
+        <translation>No se puede resolver la dirección -externalip: &apos;%s&apos;</translation>
     </message>
     <message>
-        <source>Cannot resolve -whitebind address: '%s'</source>
-        <translation>No se puede resolver la dirección -whitebind: '%s'</translation>
+        <source>Cannot resolve -whitebind address: &apos;%s&apos;</source>
+        <translation>No se puede resolver la dirección -whitebind: &apos;%s&apos;</translation>
     </message>
     <message>
         <source>Cannot write default address</source>
@@ -4383,7 +4456,7 @@ por ejemplo: alertnotify=echo %%s | mail -s "SEND Alert" admin@foo.com
         <translation>Error: Un error interno fatal a ocurrido, ver debug.log para mas detalles</translation>
     </message>
     <message>
-        <source>Error: Can't select current denominated inputs</source>
+        <source>Error: Can&apos;t select current denominated inputs</source>
         <translation>Error: No se pudo seleccionar las entradas denominadas actuales</translation>
     </message>
     <message>
@@ -4483,32 +4556,32 @@ por ejemplo: alertnotify=echo %%s | mail -s "SEND Alert" admin@foo.com
         <translation>Fondos insuficientes.</translation>
     </message>
     <message>
-        <source>Invalid -onion address: '%s'</source>
-        <translation>Dirección -onion inválida: '%s'</translation>
+        <source>Invalid -onion address: &apos;%s&apos;</source>
+        <translation>Dirección -onion inválida: &apos;%s&apos;</translation>
     </message>
     <message>
-        <source>Invalid -proxy address: '%s'</source>
-        <translation>Dirección -proxy inválida: '%s'</translation>
+        <source>Invalid -proxy address: &apos;%s&apos;</source>
+        <translation>Dirección -proxy inválida: &apos;%s&apos;</translation>
     </message>
     <message>
-        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Importe inválido para -maxtxfee=&lt;amount&gt;: '%s'</translation>
+        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: &apos;%s&apos;</source>
+        <translation>Importe inválido para -maxtxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
     </message>
     <message>
-        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Importe inválido para -minrelaytxfee=&lt;amount&gt;: '%s'</translation>
+        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: &apos;%s&apos;</source>
+        <translation>Importe inválido para -minrelaytxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
     </message>
     <message>
-        <source>Invalid amount for -mintxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Importe inválido para -mintxfee=&lt;amount&gt;: '%s'</translation>
+        <source>Invalid amount for -mintxfee=&lt;amount&gt;: &apos;%s&apos;</source>
+        <translation>Importe inválido para -mintxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
     </message>
     <message>
-        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (must be at least %s)</source>
-        <translation>Importe inválido para -paytxfee=&lt;amount&gt;: '%s' (debe ser al menos %s)</translation>
+        <source>Invalid amount for -paytxfee=&lt;amount&gt;: &apos;%s&apos; (must be at least %s)</source>
+        <translation>Importe inválido para -paytxfee=&lt;amount&gt;: &apos;%s&apos; (debe ser al menos %s)</translation>
     </message>
     <message>
-        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Importe inválido para -paytxfee=&lt;amount&gt;: '%s'</translation>
+        <source>Invalid amount for -paytxfee=&lt;amount&gt;: &apos;%s&apos;</source>
+        <translation>Importe inválido para -paytxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
     </message>
     <message>
         <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
@@ -4519,8 +4592,8 @@ por ejemplo: alertnotify=echo %%s | mail -s "SEND Alert" admin@foo.com
         <translation>Valor de masternodeprivkey es inválido. Por favor ver la documentación.</translation>
     </message>
     <message>
-        <source>Invalid netmask specified in -whitelist: '%s'</source>
-        <translation>Máscara de red inválida especificada en -whitelist: '%s'</translation>
+        <source>Invalid netmask specified in -whitelist: &apos;%s&apos;</source>
+        <translation>Máscara de red inválida especificada en -whitelist: &apos;%s&apos;</translation>
     </message>
     <message>
         <source>Invalid port detected in masternode.conf</source>
@@ -4683,8 +4756,8 @@ por ejemplo: alertnotify=echo %%s | mail -s "SEND Alert" admin@foo.com
         <translation>Mezcla en progreso...</translation>
     </message>
     <message>
-        <source>Need to specify a port with -whitebind: '%s'</source>
-        <translation>Necesita especificar un puerto con -whitebind: '%s'</translation>
+        <source>Need to specify a port with -whitebind: &apos;%s&apos;</source>
+        <translation>Necesita especificar un puerto con -whitebind: &apos;%s&apos;</translation>
     </message>
     <message>
         <source>No Masternodes detected.</source>
@@ -5035,8 +5108,8 @@ por ejemplo: alertnotify=echo %%s | mail -s "SEND Alert" admin@foo.com
         <translation>Imposible firmar el mensaje spork, ¿llave equivocada?</translation>
     </message>
     <message>
-        <source>Unknown network specified in -onlynet: '%s'</source>
-        <translation>Red especificada desconocida en -onlynet: '%s'</translation>
+        <source>Unknown network specified in -onlynet: &apos;%s&apos;</source>
+        <translation>Red especificada desconocida en -onlynet: &apos;%s&apos;</translation>
     </message>
     <message>
         <source>Unknown state: id = %u</source>
@@ -5149,6 +5222,103 @@ por ejemplo: alertnotify=echo %%s | mail -s "SEND Alert" admin@foo.com
     <message>
         <source>wallet.dat corrupt, salvage failed</source>
         <translation>wallet.dat esta corrupto, guardado falló</translation>
+    </message>
+</context>
+<context>
+    <name>BudgetListView</name>
+    <message>
+        <source>Active Budget List</source>
+        <translation>Lista de propuestas activas</translation>
+    </message>
+    <message>
+        <source>Reload</source>
+        <translation>Recargar</translation>
+    </message>
+</context>
+<context>
+    <name>AnnouncementView</name>
+    <message>
+        <source>Social Send Announcement</source>
+        <translation>Anuncios de Social Send</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>Recargar</translation>
+    </message>
+</context>
+<context>
+    <name>BudgetItem</name>
+    <message>
+        <source>(Finalized)</source>
+        <translation>(Finalizada)</translation>
+    </message>
+    <message>
+        <source>Vote YES</source>
+        <translation>Votar SI</translation>
+    </message>
+    <message>
+        <source>Vote NO</source>
+        <translation>Votar NO</translation>
+    </message>
+    <message>
+        <source>Vote ABSTAIN</source>
+        <translation>Votar ABSTENER</translation>
+    </message>
+    <message>
+        <source>VOTES</source>
+        <translation>VOTOS</translation>
+    </message>
+    <message>
+        <source>BLOCKS</source>
+        <translation>BLOQUES</translation>
+    </message>
+    <message>
+        <source>Payment Address:</source>
+        <translation>Direccion de Pago:</translation>
+    </message>
+    <message>
+        <source>ABSTAIN: </source>
+        <translation>ABSTENCIONES: </translation>
+    </message>
+    <message>
+        <source>YES: </source>
+        <translation>SI: </translation>
+    </message>
+    <message>
+        <source>NO: </source>
+        <translation>NO: </translation>
+    </message>
+    <message>
+        <source>Block Start: </source>
+        <translation>Bloque Inicial: </translation>
+    </message>
+    <message>
+        <source>Payment Count: </source>
+        <translation>Cantidad de Pagos: </translation>
+    </message>
+    <message>
+        <source>Monthly Payment: </source>
+        <translation>Pago Mensual: </translation>
+    </message>
+    <message>
+        <source>Remaining Payment: </source>
+        <translation>Pagos Restantes: </translation>
+    </message>
+    <message>
+        <source>Budget Vote</source>
+        <translation>Votar en la Propuesta</translation>
+    </message>
+    <message>
+        <source>Do you want to vote YES with yours masternodes?</source>
+        <translation>¿Queres votar SI con todos tus masternodos?</translation>
+    </message>
+    <message>
+        <source>Do you want to vote NO with yours masternodes?</source>
+        <translation>¿Queres votar NO con todos tus masternodos?</translation>
+    </message>
+    <message>
+        <source>Do you want to vote ABSTAIN with yours masternodes?</source>
+        <translation>¿Queres votar ABSTENER con todos tus masternodos?</translation>
     </message>
 </context>
 </TS>

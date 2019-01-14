@@ -2,12 +2,21 @@
 /*************** [COLOR CODES] DARK Grey:#4a4a4a LIGHT Grey:#535353 *****************/
 /****************************************************************************************/
 
-
+/*
 WalletFrame {
 border-image: url(':/images/walletFrame_bg') 0 0 0 0 stretch stretch;
 border-top:0px solid #000;
 margin:0;
 padding:0;
+}*/
+WalletFrame
+{
+    background-image: url(':/images/walletFrame_bg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-top:0px solid #000;
+	margin:0;
+	padding:0;
 }
 
 QStatusBar {
@@ -322,6 +331,10 @@ background:transparent;
 border:0;
 }
 
+QScrollArea { background: transparent; }
+QScrollArea > QWidget > QWidget { background: transparent; }
+QScrollArea > QWidget > QScrollBar { background: palette(base); }
+
 .QTableView { /* Table - has to be selected as a class otherwise it throws off QCalendarWidget */
 background:transparent;
 border:1px solid #333;
@@ -460,6 +473,7 @@ border-radius:3px;
 
 QDialog {
 background-color: #f8f6f6;
+
 }
 
 QDialog .QTabWidget {
@@ -1171,7 +1185,7 @@ margin-left:0px; /* CSS Voodoo - set to -66px to hide default transaction icons 
 /**************************** SEND DIALOG ***********************************************/
 
 QDialog#SendCoinsDialog {
-background-color:#fff;
+background-color:transparent;
 }
 
 QDialog#SendCoinsDialog .QFrame#frameCoinControl { /* Coin Control Section */
@@ -1213,7 +1227,11 @@ margin-right:112px;
 }
 
 QDialog#SendCoinsDialog .QScrollArea#scrollArea .QWidget#scrollAreaWidgetContents { /* Send To Widget */
-background:transparent;
+background-color:transparent !important;
+}
+
+QDialog#SendCoinsDialog .QScrollArea#scrollArea { /* Send To Widget */
+background-color:transparent !important;
 }
 
 QDialog#SendCoinsDialog .QPushButton#sendButton { /* Send Button */
@@ -1308,6 +1326,7 @@ min-height:27px;
 
 QStackedWidget#SendCoinsEntry .QFrame#SendCoins > .QLabel { /* Send Coin Entry Labels */
 background-color:#535353;
+background-color:transparent;
 min-width:102px;
 font-weight:bold;
 font-size:11px;
@@ -1315,6 +1334,10 @@ color:#ffffff;
 min-height:25px;
 margin-right:5px;
 padding-right:5px;
+}
+
+QStackedWidget#SendCoinsEntry .QFrame#SendCoins{
+	background-color:transparent;
 }
 
 QStackedWidget#SendCoinsEntry .QFrame#SendCoins .QLabel#amountLabel {

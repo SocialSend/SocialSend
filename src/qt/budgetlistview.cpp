@@ -10,13 +10,23 @@ BudgetListView::BudgetListView(QWidget *parent) :
     ui(new Ui::BudgetListView)
 {
     ui->setupUi(this);
-
+    ui->titleLabel->setText(tr("Active Budget List"));
+    ui->buttonReload->setText(tr("Reload"));
     list = new QVBoxLayout();
     list->setAlignment(Qt::AlignTop);
     ui->scrollBudgets->setLayout(list);
     loadBudgets();
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(timerTimeOut()));
+    timer->start(1000);
 }
 
+void BudgetListView::timerTimeOut(){
+    if(budget.hasChanges){
+        budget.hasChanges = false;
+        loadBudgets();
+    }
+}
 
 void BudgetListView::loadBudgets(){
 
@@ -57,7 +67,7 @@ void BudgetListView::loadBudgets(){
             line->setFrameShape(QFrame::HLine);
             line->setFixedHeight(2);
             line->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            line->setStyleSheet(QString("background-color: #c0c0c0;"));
+            line->setStyleSheet(QString("background-color: #000000;"));
             list->addWidget(line);
         }
     }
@@ -67,5 +77,11 @@ void BudgetListView::loadBudgets(){
 
 BudgetListView::~BudgetListView()
 {
+    disconnect(timer, SIGNAL(timeout()), this, SLOT(timerTimeOut()));
     delete ui;
+}
+
+void BudgetListView::on_buttonReload_clicked()
+{
+    loadBudgets();
 }

@@ -6,6 +6,11 @@ BudgetItem::BudgetItem(QWidget *parent) :
     ui(new Ui::BudgetItem)
 {
     ui->setupUi(this);
+    ui->pushVoteYes->setText(tr("Vote YES"));
+    ui->pushVoteNo->setText(tr("Vote NO"));
+    ui->pushVoteAbstain->setText(tr("Vote ABSTAIN"));
+    ui->lblVotes->setText(tr("VOTES"));
+    ui->lblBlocks->setText(tr("BLOCKS"));
 
 }
 
@@ -19,19 +24,20 @@ void BudgetItem::setData(BudgetData data)
     ui->lblBudgetUrl->setText(data.url);
     ui->lblBudgetHash->setText("Hash:");
     ui->txtBudgetHash->setText(data.hash);
-    ui->lblBudgetAddress->setText("Payment Address:");
+    ui->lblBudgetAddress->setText(tr("Payment Address:"));
     ui->txtBudgetAddress->setText(data.address);
 
-    ui->lblVoteYes->setText("YES: " +  QString::number(data.yeas));
-    ui->lblVoteNo->setText("NO: " +  QString::number(data.nays));
-    ui->lblVoteAbstain->setText("ABSTAIN: " +  QString::number(data.abstain));
+    ui->lblVoteYes->setText(tr("YES: ") +  QString::number(data.yeas));
+    ui->lblVoteNo->setText(tr("NO: ") +  QString::number(data.nays));
+    ui->lblVoteAbstain->setText(tr("ABSTAIN: ") +  QString::number(data.abstain));
 
-    ui->lblBlockStart->setText("Block Start: " +  QString::number(data.blockStart));
-    ui->lblPaymentCount->setText("Payment Count: " +  QString::number(data.paymentCount));
+    ui->lblBlockStart->setText(tr("Block Start: ") +  QString::number(data.blockStart));
+    ui->lblPaymentCount->setText(tr("Payment Count: ") +  QString::number(data.paymentCount));
 
-    ui->lblMonthlyPayment->setText("Monthly Payment: " +  QString::number(data.monthlyPayment));
-    ui->lblRemainingPayment->setText("Remaining Payment: " +  QString::number(data.remaingPayment));
+    ui->lblMonthlyPayment->setText(tr("Monthly Payment: ") +  QString::number(data.monthlyPayment));
+    ui->lblRemainingPayment->setText(tr("Remaining Payment: ") +  QString::number(data.remaingPayment));
 
+    ui->lblFinalized->setVisible(data.remaingPayment == 0);
 
     hash = data.hash;
 }

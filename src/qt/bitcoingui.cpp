@@ -233,6 +233,8 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
     connect(openConfEditorAction, SIGNAL(triggered()), rpcConsole, SLOT(showConfEditor()));
     connect(openMNConfEditorAction, SIGNAL(triggered()), rpcConsole, SLOT(showMNConfEditor()));
     connect(showBackupsAction, SIGNAL(triggered()), rpcConsole, SLOT(showBackups()));
+    connect(showSendAction, SIGNAL(triggered()), rpcConsole, SLOT(showSendFolder()));
+
     connect(labelConnectionsIcon, SIGNAL(clicked()), rpcConsole, SLOT(showPeers()));
 
     // Get restart command-line parameters and handle restart
@@ -346,9 +348,9 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     annAction->setToolTip(annAction->statusTip());
     annAction->setCheckable(true);
     #ifdef Q_OS_MAC
-        annAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_6));
+        annAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_7));
     #else
-        annAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
+        annAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_7));
     #endif
     tabGroup->addAction(annAction);
 
@@ -357,9 +359,9 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     budgetAction->setToolTip(budgetAction->statusTip());
     budgetAction->setCheckable(true);
     #ifdef Q_OS_MAC
-        budgetAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_7));
+        budgetAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_6));
     #else
-        budgetAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_7));
+        budgetAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
     #endif
 
     tabGroup->addAction(budgetAction);
@@ -436,6 +438,10 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     openMNConfEditorAction->setStatusTip(tr("Open Masternode configuration file"));
     showBackupsAction = new QAction(QIcon(":/icons/browse"), tr("Show Automatic &Backups"), this);
     showBackupsAction->setStatusTip(tr("Show automatically created wallet backups"));
+
+    showSendAction = new QAction(QIcon(":/icons/browse"), tr("Show configuration folder"), this);
+    showSendAction->setStatusTip(tr("Show SEND configuration folder."));
+
 
     usedSendingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Sending addresses..."), this);
     usedSendingAddressesAction->setStatusTip(tr("Show the list of used sending addresses and labels"));
@@ -522,6 +528,7 @@ void BitcoinGUI::createMenuBar()
         tools->addAction(openConfEditorAction);
         tools->addAction(openMNConfEditorAction);
         tools->addAction(showBackupsAction);
+        tools->addAction(showSendAction);
         tools->addAction(openBlockExplorerAction);
     }
 

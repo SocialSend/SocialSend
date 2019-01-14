@@ -11,6 +11,7 @@
 #include <QtGui>
 #include <QtCore>
 #include <QVBoxLayout>
+#include <QTimer>
 #include "masternode-budget.h"
 #include "budgetitem.h"
 
@@ -29,9 +30,14 @@ public:
     ~BudgetListView();
     void loadBudgets();
 
+private slots:
+    void on_buttonReload_clicked();
+    void timerTimeOut();
+
 private:
     Ui::BudgetListView *ui;
     QVBoxLayout *list;
+    QTimer *timer;
 };
 
 

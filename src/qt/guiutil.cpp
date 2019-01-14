@@ -373,6 +373,13 @@ void openMNConfigfile()
         QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
 }
 
+void showSendFolder(){
+    boost::filesystem::path pathSend = GetDataDir();
+
+    /* Open folder with default browser */
+    if (boost::filesystem::exists(pathSend))
+        QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathSend)));
+}
 void showBackups()
 {
     boost::filesystem::path pathBackups = GetDataDir() / "backups";

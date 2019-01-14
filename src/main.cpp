@@ -68,6 +68,10 @@ bool fCheckBlockIndex = false;
 unsigned int nCoinCacheSize = 5000;
 bool fAlerts = DEFAULT_ALERTS;
 
+int peersCount = 0;
+int protocolUpdatedPeers = 0;
+int clientUpdatedPeers = 0;
+
 unsigned int nStakeMinAge = 60 * 60;
 int64_t nReserveBalance = 0;
 
@@ -2164,20 +2168,18 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
         }
 
         if (!tx.IsCoinStake()) {
-            /////////////if (nValueIn < tx.GetValueOut())
-            ///////////return state.DoS(100, error("CheckInputs() : %s value in (%s) < value out (%s)",
-            //////////               tx.GetHash().ToString(), FormatMoney(nValueIn), FormatMoney(tx.GetValueOut())),
-            ///////   REJECT_INVALID, "bad-txns-in-belowout");
+            if (nValueIn < tx.GetValueOut())
+				return state.DoS(100, error("CheckInputs() : %s value in (%s) < value out (%s)",
+                           tx.GetHash().ToString(), FormatMoney(nValueIn), FormatMoney(tx.GetValueOut())),
+						   REJECT_INVALID, "bad-txns-in-belowout");
 
             // Tally transaction fees
             CAmount nTxFee = nValueIn - tx.GetValueOut();
-            ///// if (nTxFee < 0)
-            /////return state.DoS(100, error("CheckInputs() : %s nTxFee < 0", tx.GetHash().ToString()),
-            /////REJECT_INVALID, "bad-txns-fee-negative");
+            if (nTxFee < 0)
+				return state.DoS(100, error("CheckInputs() : %s nTxFee < 0", tx.GetHash().ToString()), REJECT_INVALID, "bad-txns-fee-negative");
             nFees += nTxFee;
-            ////if (!MoneyRange(nFees))
-            //// return state.DoS(100, error("CheckInputs() : nFees out of range"),
-            //// REJECT_INVALID, "bad-txns-fee-outofrange");
+            if (!MoneyRange(nFees))
+				return state.DoS(100, error("CheckInputs() : nFees out of range"), REJECT_INVALID, "bad-txns-fee-outofrange");
         }
         // The first loop above does all the inexpensive checks.
         // Only if ALL inputs pass do we perform expensive ECDSA signature checks.
@@ -4906,7 +4908,25 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             pfrom->fDisconnect = true;
             return true;
         }
+        peersCount++;
+		if (pfrom->nVersion > PROTOCOL_VERSION) {
+            protocolUpdatedPeers++;
+            if (protocolUpdatedPeers > (peersCount / 2))	//If more than 50% of detected peers has a newer protocol version show warning
+				strMiscWarning = "Check your wallet version, there is a new protocol on network.";
+            else
+                strMiscWarning = "";
 
+            uiInterface.NotifyAlertChanged(uint256(0), CT_MESSAGE);
+		}
+        if (pfrom->getNumericVersion() > NUMERIC_VERSION) {
+            clientUpdatedPeers++;
+            if (clientUpdatedPeers > (peersCount / 2))		//If more than 50% of detected peers has a newer client version show warning
+                strMiscWarning = "Check your wallet version, you have connected to a newer client version.";
+            else
+                strMiscWarning = "";
+            uiInterface.NotifyAlertChanged(uint256(0), CT_MESSAGE);    
+		}
+        
         pfrom->addrLocal = addrMe;
         if (pfrom->fInbound && addrMe.IsRoutable()) {
             SeenLocal(addrMe);

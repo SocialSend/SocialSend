@@ -460,6 +460,7 @@ const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
         //assert(genesis.hashMerkleRoot == uint256("0x1b2ef6e2f28be914103a277377ae7729dcd125dfeb8bf97bd5964ba72b6dc39b"));
 
         vSeeds.push_back(CDNSSeedData("dns.socialsend.io", "seed.dns.socialsend.io"));     // Primary DNS Seeder
+        vSeeds.push_back(CDNSSeedData("dns.socialsend.info", "seed.dns.socialsend.info"));
         //vSeeds.push_back(CDNSSeedData("send.goldlineit.org", "seed.send.goldlineit.org"));    // Secondary DNS Seeder from Remapper
         //vSeeds.push_back(CDNSSeedData("45.32.182.161", "45.76.133.159"));         // Single node address
         //vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.77.224.241")); // Single node address

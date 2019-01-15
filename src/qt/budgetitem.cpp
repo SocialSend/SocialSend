@@ -18,7 +18,7 @@ BudgetItem::BudgetItem(QWidget *parent) :
 void BudgetItem::setData(BudgetData data)
 {
     ui->lblBudgetName->setText(data.name);
-    if(!data.url.startsWith("http://") || !data.url.startsWith("https://")){
+    if(!data.url.startsWith("http", Qt::CaseInsensitive)){
         data.url = "http://" + data.url;
     }
     ui->lblBudgetUrl->setText(data.url);

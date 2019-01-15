@@ -1013,10 +1013,9 @@ void CBudgetManager::NewBlock()
             vBudgetHash.push_back(budgetHash);
         }        
         LogPrintf("Checking %ld budgets...\n", vBudgetHash.size());
-        for (int i = 0; i < vBudgetHash.size(); i++)
+        for (unsigned int i = 0; i < vBudgetHash.size(); i++)
             LogPrintf("Budget Hash: %s\n", vBudgetHash[i].ToString());
 
-		LogPrintf("DONE");
         SubmitFinalBudget(vBudgetHash);
 	}
 

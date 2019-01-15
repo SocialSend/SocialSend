@@ -606,8 +606,15 @@ void CBudgetManager::CheckAndRemove()
         ++it2;
     }
     // Remove invalid entries by overwriting complete map
-    mapFinalizedBudgets = tmpMapFinalizedBudgets;
-    mapProposals = tmpMapProposals;
+    //mapFinalizedBudgets = tmpMapFinalizedBudgets;
+    //mapProposals = tmpMapProposals;
+    mapProposals.clear();
+	mapProposals.insert(tmpMapProposals.begin(), tmpMapProposals.end());
+
+	mapFinalizedBudgets.clear();
+    mapFinalizedBudgets.insert(tmpMapFinalizedBudgets.begin(), tmpMapFinalizedBudgets.end());
+
+
     hasChanges = true;
     LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapFinalizedBudgets cleanup - size after: %d\n", mapFinalizedBudgets.size());
     LogPrint("mnbudget", "CBudgetManager::CheckAndRemove - mapProposals cleanup - size after: %d\n", mapProposals.size());

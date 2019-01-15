@@ -187,8 +187,8 @@ public:
     mutable CCriticalSection cs;
 
     // keep track of the scanning errors I've seen
-    map<uint256, CBudgetProposal> mapProposals;
-    map<uint256, CFinalizedBudget> mapFinalizedBudgets;
+    std::map<uint256, CBudgetProposal> mapProposals;
+    std::map<uint256, CFinalizedBudget> mapFinalizedBudgets;
 
     std::map<uint256, CBudgetProposalBroadcast> mapSeenMasternodeBudgetProposals;
     std::map<uint256, CBudgetVote> mapSeenMasternodeBudgetVotes;

@@ -182,6 +182,19 @@ bool CActiveMasternode::SendMasternodePing(std::string& errorMessage)
             return false;
         }
 
+        if (IsSporkActive(SPORK_17_MN_NETCHECK)) {
+            CNode* pnode = ConnectNode((CAddress)pmn->addr, pmn->addr.ToString().c_str(), false);
+            if (!pnode) {
+                errorMessage = "Can't connect to address: %s, ping doesn't send.";
+                LogPrintf("CActiveMasternode::SendMasternodePing() - Can't connect to address: %s, ping doesn't send.\n", pmn->addr.ToString());
+                return false;
+            }
+            pnode->fDisconnect = true;
+            pnode->Release();
+        } else {
+            LogPrintf("CActiveMasternode::SendMasternodePing() - Masternode network check is disabled.\n");
+		}
+
         pmn->lastPing = mnp;
         mnodeman.mapSeenMasternodePing.insert(make_pair(mnp.GetHash(), mnp));
 
@@ -448,7 +461,7 @@ vector<COutput> CActiveMasternode::SelectCoinsMasternode()
             mnTxHash.SetHex(mne.getTxHash());
 
             int nIndex;
-            if(!mne.castOutputIndex(nIndex))
+            if (!mne.castOutputIndex(nIndex))
                 continue;
 
             COutPoint outpoint = COutPoint(mnTxHash, nIndex);
@@ -468,16 +481,15 @@ vector<COutput> CActiveMasternode::SelectCoinsMasternode()
     int nHeight = chainActive.Height();
     // Filter
     BOOST_FOREACH (const COutput& out, vCoins) {
-	
-		if (nHeight >= Params().NewMasternodeReward_StartBlock()) {
+        if (nHeight >= Params().NewMasternodeReward_StartBlock()) {
             if (out.tx->vout[out.i].nValue == Params().NewMasternodeReward_Collateral() * COIN) { //exactly
-				filteredCoins.push_back(out);
+                filteredCoins.push_back(out);
             }
         } else {
-			if (out.tx->vout[out.i].nValue == MASTER_NODE_AMOUNT * COIN) { //exactly
-				filteredCoins.push_back(out);
-			}
-		}
+            if (out.tx->vout[out.i].nValue == MASTER_NODE_AMOUNT * COIN) { //exactly
+                filteredCoins.push_back(out);
+            }
+        }
     }
     return filteredCoins;
 }

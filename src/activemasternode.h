@@ -20,6 +20,8 @@
 #define ACTIVE_MASTERNODE_NOT_CAPABLE 3
 #define ACTIVE_MASTERNODE_STARTED 4
 
+
+
 // Responsible for activating the Masternode and pinging the network
 class CActiveMasternode
 {
@@ -36,6 +38,7 @@ private:
     /// Get 10000 SEND input that can be used for the Masternode
     bool GetMasterNodeVin(CTxIn& vin, CPubKey& pubkey, CKey& secretKey, std::string strTxHash, std::string strOutputIndex);
     bool GetVinFromOutput(COutput out, CTxIn& vin, CPubKey& pubkey, CKey& secretKey);
+    int nLastTimeMasternodeCheck = 0;
 
 public:
     // Initialized by init.cpp

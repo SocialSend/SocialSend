@@ -183,14 +183,19 @@ bool CActiveMasternode::SendMasternodePing(std::string& errorMessage)
         }
 
         if (IsSporkActive(SPORK_17_MN_NETCHECK)) {
-            CNode* pnode = ConnectNode((CAddress)pmn->addr, pmn->addr.ToString().c_str(), false);
-            if (!pnode) {
-                errorMessage = "Can't connect to address: %s, ping doesn't send.";
-                LogPrintf("CActiveMasternode::SendMasternodePing() - Can't connect to address: %s, ping doesn't send.\n", pmn->addr.ToString());
-                return false;
-            }
-            pnode->fDisconnect = true;
-            pnode->Release();
+            if (GetTime() -  nLastTimeMasternodeCheck > TIME_INTERVAL_BETWEEN_NETCHECK_SECONDS) {
+                
+                nLastTimeMasternodeCheck = GetTime();
+				CNode* pnode = ConnectNode((CAddress)pmn->addr, pmn->addr.ToString().c_str(), false);
+				if (!pnode) {
+					errorMessage = "Can't connect to masterrnode address, ping doesn't send.";
+					LogPrintf("CActiveMasternode::SendMasternodePing() - Can't connect to address: %s, ping doesn't send.\n", pmn->addr.ToString());
+					return false;
+				}
+				pnode->fDisconnect = true;
+				pnode->Release();
+                LogPrintf("CActiveMasternode::SendMasternodePing() - Checking if masternode is reachable.... PASSED\n");
+			}
         } else {
             LogPrintf("CActiveMasternode::SendMasternodePing() - Masternode network check is disabled.\n");
 		}

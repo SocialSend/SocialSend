@@ -39,6 +39,7 @@ private:
     bool GetMasterNodeVin(CTxIn& vin, CPubKey& pubkey, CKey& secretKey, std::string strTxHash, std::string strOutputIndex);
     bool GetVinFromOutput(COutput out, CTxIn& vin, CPubKey& pubkey, CKey& secretKey);
     int nLastTimeMasternodeCheck = 0;
+    bool fMasternodeReachable = true;
 
 public:
     // Initialized by init.cpp

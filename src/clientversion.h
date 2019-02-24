@@ -17,7 +17,7 @@
 #define CLIENT_VERSION_MAJOR 1
 #define CLIENT_VERSION_MINOR 2
 #define CLIENT_VERSION_REVISION 0
-#define CLIENT_VERSION_BUILD 3
+#define CLIENT_VERSION_BUILD 4
 
 //! Set to true for release, false for prerelease or test build
 #define CLIENT_VERSION_IS_RELEASE true
@@ -26,7 +26,7 @@
  * Copyright year (2009-this)
  * Todo: update this when changing our copyright comments in the source
  */
-#define COPYRIGHT_YEAR 2018
+#define COPYRIGHT_YEAR 2019
 
 #endif //HAVE_CONFIG_H
 
@@ -61,7 +61,7 @@ extern const std::string CLIENT_NAME;
 extern const std::string CLIENT_BUILD;
 extern const std::string CLIENT_DATE;
 
-static const int NUMERIC_VERSION = 1203;
+static const int NUMERIC_VERSION = 1204;
 
 std::string FormatFullVersion();
 std::string FormatSubVersion(const std::string& name, int nClientVersion, const std::vector<std::string>& comments);

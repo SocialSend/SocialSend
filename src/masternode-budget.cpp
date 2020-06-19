@@ -517,7 +517,7 @@ void DumpBudgets()
             return;
         }
     }
-    LogPrint("masternode","Writting info to budget.dat...\n");
+    LogPrint("masternode","Writing info to budget.dat...\n");
     budgetdb.Write(budget);
 
     LogPrint("masternode","Budget dump finished  %dms\n", GetTimeMillis() - nStart);

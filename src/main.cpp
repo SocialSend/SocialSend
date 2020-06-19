@@ -2073,8 +2073,8 @@ void Misbehaving(NodeId pnode, int howmuch)
     state->nMisbehavior += howmuch;
     int banscore = GetArg("-banscore", 100);
     if (state->nMisbehavior >= banscore && state->nMisbehavior - howmuch < banscore) {
-        /////////LogPrintf("Misbehaving: %s (%d -> %d) BAN THRESHOLD EXCEEDED\n", state->name, state->nMisbehavior - howmuch, state->nMisbehavior);
-        ////////state->fShouldBan = true;
+        LogPrintf("Misbehaving: %s (%d -> %d) BAN THRESHOLD EXCEEDED\n", state->name, state->nMisbehavior - howmuch, state->nMisbehavior);
+        state->fShouldBan = true;
     } else
         LogPrintf("Misbehaving: %s (%d -> %d)\n", state->name, state->nMisbehavior - howmuch, state->nMisbehavior);
 }
@@ -5000,9 +5000,9 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                 strMiscWarning = "Check your wallet version, you have connected to a newer client version.";
             else
                 strMiscWarning = "";
-            uiInterface.NotifyAlertChanged(uint256(0), CT_MESSAGE);    
+            uiInterface.NotifyAlertChanged(uint256(0), CT_MESSAGE);
 		}
-        
+
         pfrom->addrLocal = addrMe;
         if (pfrom->fInbound && addrMe.IsRoutable()) {
             SeenLocal(addrMe);
@@ -5315,7 +5315,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                 std::string errorMessage = "";
                 if (!obfuScationSigner.VerifyMessage(pmn->pubKeyMasternode, vchSig, strMessage, errorMessage)) {
                     LogPrintf("dstx: Got bad masternode address signature %s \n", vin.ToString());
-                    //pfrom->Misbehaving(20);
+                    Misbehaving(pfrom->GetId(), 20);
                     return false;
                 }
 

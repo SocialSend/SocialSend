@@ -186,7 +186,7 @@ void DumpMasternodes()
             return;
         }
     }
-    LogPrintf("Writting info to mncache.dat...\n");
+    LogPrintf("Writing info to mncache.dat...\n");
     mndb.Write(mnodeman);
 
     LogPrintf("Masternode dump finished  %dms\n", GetTimeMillis() - nStart);

@@ -2177,17 +2177,17 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
 
         if (!tx.IsCoinStake()) {
             if (nValueIn < tx.GetValueOut())
-				return state.DoS(100, error("CheckInputs() : %s value in (%s) < value out (%s)",
+                return state.DoS(100, error("CheckInputs() : %s value in (%s) < value out (%s)",
                            tx.GetHash().ToString(), FormatMoney(nValueIn), FormatMoney(tx.GetValueOut())),
-						   REJECT_INVALID, "bad-txns-in-belowout");
+                           REJECT_INVALID, "bad-txns-in-belowout");
 
             // Tally transaction fees
             CAmount nTxFee = nValueIn - tx.GetValueOut();
             if (nTxFee < 0)
-				return state.DoS(100, error("CheckInputs() : %s nTxFee < 0", tx.GetHash().ToString()), REJECT_INVALID, "bad-txns-fee-negative");
+                return state.DoS(100, error("CheckInputs() : %s nTxFee < 0", tx.GetHash().ToString()), REJECT_INVALID, "bad-txns-fee-negative");
             nFees += nTxFee;
             if (!MoneyRange(nFees))
-				return state.DoS(100, error("CheckInputs() : nFees out of range"), REJECT_INVALID, "bad-txns-fee-outofrange");
+                return state.DoS(100, error("CheckInputs() : nFees out of range"), REJECT_INVALID, "bad-txns-fee-outofrange");
         }
         // The first loop above does all the inexpensive checks.
         // Only if ALL inputs pass do we perform expensive ECDSA signature checks.
@@ -2544,7 +2544,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         if (!pblocktree->WriteTxIndex(vPos))
             return state.Abort("Failed to write transaction index");
 
-	for (const CTransaction tx : block.vtx) {
+    for (const CTransaction tx : block.vtx) {
         if (tx.IsCoinBase())
             continue;
         for (const CTxIn in : tx.vin) {
@@ -3698,7 +3698,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 
     int nHeight = pindex->nHeight;
 
-	if (block.IsProofOfStake()) {
+    if (block.IsProofOfStake()) {
         LOCK(cs_main);
 
         CCoinsViewCache coins(pcoinsTip);
@@ -4985,23 +4985,23 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             return true;
         }
         peersCount++;
-		if (pfrom->nVersion > PROTOCOL_VERSION) {
+        if (pfrom->nVersion > PROTOCOL_VERSION) {
             protocolUpdatedPeers++;
-            if (protocolUpdatedPeers > (peersCount / 2))	//If more than 50% of detected peers has a newer protocol version show warning
-				strMiscWarning = "Check your wallet version, there is a new protocol on network.";
+            if (ActiveProtocol() && protocolUpdatedPeers > 1)   // If SPORK is activated and has a couple updated peers..
+                strMiscWarning = "Check your wallet version, there is new protocol enforcement on the network.";
+            else if (protocolUpdatedPeers > (peersCount / 2))   // If more than 50% of detected peers has a newer protocol version show warning
+                strMiscWarning = "Check your wallet version, there is a new protocol on the network.";
             else
                 strMiscWarning = "";
-
             uiInterface.NotifyAlertChanged(uint256(0), CT_MESSAGE);
-		}
-        if (pfrom->getNumericVersion() > NUMERIC_VERSION) {
+        } else if (pfrom->getNumericVersion() > NUMERIC_VERSION) {
             clientUpdatedPeers++;
-            if (clientUpdatedPeers > (peersCount / 2))		//If more than 50% of detected peers has a newer client version show warning
+            if (clientUpdatedPeers > (peersCount / 2))        // If more than 50% of detected peers has a newer client version show warning
                 strMiscWarning = "Check your wallet version, you have connected to a newer client version.";
             else
                 strMiscWarning = "";
             uiInterface.NotifyAlertChanged(uint256(0), CT_MESSAGE);
-		}
+        }
 
         pfrom->addrLocal = addrMe;
         if (pfrom->fInbound && addrMe.IsRoutable()) {
@@ -5769,7 +5769,7 @@ int ActiveProtocol()
 {
     // SPORK_14 is used for 70820. Nodes < 70820 don't see it and still get their protocol version via SPORK_15
     if (IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT)) {
-        if (chainActive.Tip()->nHeight >= Params().ModifierUpgradeBlock())
+        if (chainActive.Tip()->nHeight >= 1345545)
             return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
     }
 

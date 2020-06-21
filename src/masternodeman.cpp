@@ -243,7 +243,7 @@ void CMasternodeMan::Check()
 void CMasternodeMan::CheckReachable() {
     while (true) {
 		//This is to interrupt thread when stop signal is received
-		boost::this_thread::interruption_point();     
+		boost::this_thread::interruption_point();
 		if (GetTime() - lastTimeThreadRun < TIME_INTERVAL_BETWEEN_NETCHECK_SECONDS) {
             MilliSleep(2000);
             continue;
@@ -259,10 +259,10 @@ void CMasternodeMan::CheckReachable() {
         while (it != vMasternodes.end()) {
             (*it).netCheckMasternode(); //Check each masternode on vector
 			//This is to interrupt thread when stop signal is received
-            boost::this_thread::interruption_point(); 
+            boost::this_thread::interruption_point();
 			++it;
 		}*/
-    }    
+    }
 }
 
 
@@ -400,7 +400,7 @@ int CMasternodeMan::stable_size ()
 
     return nStable_size;
 }
-    
+
 int CMasternodeMan::CountEnabled(int protocolVersion)
 {
     int i = 0;
@@ -612,7 +612,9 @@ int CMasternodeMan::GetMasternodeRank(const CTxIn& vin, int64_t nBlockHeight, in
         if (IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
             nMasternode_Age = mn.lastPing.sigTime - mn.sigTime;
             if ((nMasternode_Age) < nMasternode_Min_Age) {
-                LogPrintf("Skipping just activated Masternode. Age: %ld\n", nMasternode_Age);
+                if (nMasternode_Age > 0) {
+                    LogPrintf("Skipping just activated Masternode. Age: %ld\n", nMasternode_Age);
+                }
                 continue;                                                   // Skip masternodes younger than (default) 1 hour
             }
         }

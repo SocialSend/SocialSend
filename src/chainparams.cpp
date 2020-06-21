@@ -1,7 +1,7 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 PIVX Developers 
+// Copyright (c) 2015-2017 PIVX Developers
 // Copyright (c) 2015-2017 The SEND developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -336,11 +336,14 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
 							  (640953, uint256("0x7de563f8c1b04a1007512aa86ca6ad7867b6edf74295634b6a37d9acfba52d84"))
 							  (640954, uint256("0xc6e05be69577f8c3c6742f3a5af16b84d2184f222cc73d40a3895517b0d213ee"))
 							  (640955, uint256("0x2d7d3bb64be5c5312534fa131d0fbb5eceb717fd3c7068623b8b106865559893"))
-							  (644895, uint256("0xba58649fe95ce60e5a90e592bb09ea81453875e4aefdb359b87769c09c9d89d1"));
+							  (644895, uint256("0xba58649fe95ce60e5a90e592bb09ea81453875e4aefdb359b87769c09c9d89d1"))
+							  (1340790, uint256("0x365be7115a301111a379766d3fbc655016083b89e710d3b82654b6700b1907cc"))
+							  (1340850, uint256("0xad02ed0f42a5d76eeabb69f437fc945b43d0f999fdfd0aa251b07a4605cd3e03"))
+							  (1340965, uint256("0x52b7ea1c19d1ba12cabe461f7b3026dd5236f27dafb70636a1ce1e82732770f4"));
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1550158809, // * UNIX timestamp of last checkpoint block
-    1400912,    // * total number of transactions between genesis and last checkpoint
+    1592575048, // * UNIX timestamp of last checkpoint block
+    2884627,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2500        // * estimated number of transactions per day after checkpoint
 };
@@ -424,7 +427,7 @@ public:
         hashGenesisBlock = genesis.GetHash();
 
 
-const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
+        const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
 
           //if (true && genesis.GetHash() != hashGenesisBlock)
         if(false)
@@ -465,11 +468,18 @@ const int SCRYPT_SCRATCHPAD_SIZE = 131072 + 63;
 
         vSeeds.push_back(CDNSSeedData("dns.socialsend.io", "seed.dns.socialsend.io"));     // Primary DNS Seeder
         vSeeds.push_back(CDNSSeedData("dns.socialsend.info", "seed.dns.socialsend.info"));
-        //vSeeds.push_back(CDNSSeedData("send.goldlineit.org", "seed.send.goldlineit.org"));    // Secondary DNS Seeder from Remapper
-        //vSeeds.push_back(CDNSSeedData("45.32.182.161", "45.76.133.159"));         // Single node address
-        //vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.77.224.241")); // Single node address
-        //vSeeds.push_back(CDNSSeedData("45.76.33.246", "45.76.33.246"));           // Single node address
-		//vSeeds.push_back(CDNSSeedData("107.191.44.102", "107.191.44.102"));           // Single node address
+
+        vSeeds.push_back(CDNSSeedData("explorer.socialsend.io", "explorer.socialsend.io")); // Explorer
+        vSeeds.push_back(CDNSSeedData("us-e1.socialsend.io", "us-e1.socialsend.io")); // squid
+        vSeeds.push_back(CDNSSeedData("us-e2.socialsend.io", "us-e2.socialsend.io")); // squid
+        vSeeds.push_back(CDNSSeedData("us-w1.socialsend.io", "us-w1.socialsend.io"));
+        vSeeds.push_back(CDNSSeedData("us-w2.socialsend.io", "us-w2.socialsend.io"));
+        vSeeds.push_back(CDNSSeedData("de.socialsend.io", "de.socialsend.io")); // squid
+        vSeeds.push_back(CDNSSeedData("fr.socialsend.io", "fr.socialsend.io"));
+        vSeeds.push_back(CDNSSeedData("uk.socialsend.io", "uk.socialsend.io"));
+        vSeeds.push_back(CDNSSeedData("jp.socialsend.io", "jp.socialsend.io"));
+        vSeeds.push_back(CDNSSeedData("aus.socialsend.io", "aus.socialsend.io"));
+
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 63);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 13);
@@ -550,7 +560,7 @@ public:
         vSeeds.push_back(CDNSSeedData("35.192.34.152", "35.192.34.152"));
         vSeeds.push_back(CDNSSeedData("35.193.108.4", "35.193.108.4"));
         vSeeds.push_back(CDNSSeedData("35.226.165.157", "35.226.165.157"));
-        vSeeds.push_back(CDNSSeedData("130.211.162.170", "130.211.162.170")); 
+        vSeeds.push_back(CDNSSeedData("130.211.162.170", "130.211.162.170"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet send addresses start with 'x' or 'y'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet send script addresses start with '8' or '9'

@@ -1,11 +1,14 @@
 # General
-.DS_Store
-.AppleDouble
-.LSOverride
+*.DS_Store
+*.AppleDouble
+*.LSOverride
+
 # Icon must end with two \r
 Icon
+
 # Thumbnails
 ._*
+
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd
@@ -14,10 +17,172 @@ Icon
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+
 # Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
 Network Trash Folder
 Temporary Items
 .apdisk
+
+#Apple Build
+build
+
+*.sublime-project
+*.sublime-workspace
+todo.txt
+reset-files.bash
+
+*.tar.gz
+
 *.exe
+src/send
+src/sendd
+src/send-cli
+src/send-tx
+src/test/test_send
+src/qt/test/test_send-qt
+
+cmake-build-debug
+contrib/devtools/split-debug.sh
+background.tiff
+background.tiff.png
+background.tiff@2x.png
+src/leveldb/build_config.mk
+
+# autoreconf
+Makefile.in
+aclocal.m4
+autom4te.cache/
+build-aux/config.guess
+build-aux/config.sub
+build-aux/depcomp
+build-aux/install-sh
+build-aux/ltmain.sh
+build-aux/m4/libtool.m4
+build-aux/m4/lt~obsolete.m4
+build-aux/m4/ltoptions.m4
+build-aux/m4/ltsugar.m4
+build-aux/m4/ltversion.m4
+build-aux/missing
+build-aux/compile
+build-aux/test-driver
+config.log
+config.status
+configure
+confdefs.h
+conftest.cpp
+conftest.err
+libtool
+src/config/send-config.h
+src/config/send-config.h.in
+src/config/stamp-h1
+share/setup.nsi
+share/qt/Info.plist
+contrib/devtools/split-debug.sh
+
+src/univalue/gen
+
+src/qt/*.moc
+src/qt/moc_*.cpp
+src/qt/forms/ui_*.h
+
+src/qt/test/moc*.cpp
+
+.deps
+.dirstamp
+.libs
+.*.swp
+*.*~*
+*.bak
+*.rej
+*.orig
+*.pyc
+*.o
+*.o-*
+*.patch
+.send
+*.a
+*.pb.cc
+*.pb.h
+
+*.log
+*.trs
+*.dmg
+
+*.json.h
+*.raw.h
+
+#libtool object files
+*.lo
+*.la
+
+# Compilation and Qt preprocessor part
+*.qm
+Makefile
+send-qt
+SEND-Qt.app
+
+# Unit-tests
+Makefile.test
+send-qt_test
+src/test/buildenv.py
+
+# Resources cpp
+qrc_*.cpp
+
+# Qt creator
+*.pro.user
+
+# Mac specific
+.DS_Store
+build
+
+#lcov
+*.gcno
+/*.info
+test_pivx.coverage/
+total.coverage/
+coverage_percent.txt
+
+#build tests
+linux-coverage-build
+linux-build
+win32-build
+qa/pull-tester/run-bitcoind-for-test.sh
+qa/pull-tester/tests-config.sh
+qa/pull-tester/cache/*
+qa/pull-tester/test.*/*
+
+!src/leveldb*/Makefile
+
+.cproject
+.project
+/doc/doxygen/
+/nbproject/
+
+.idea
+CMakeLists.txt
+cmake-build-debug
+src/config/send-config.h
+src/config/send-config.h.in
+*.tmp
+doc/Doxyfile
+src/send-cli
+src/send-tx
+src/sendd
+doc/Doxyfile
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+*.brain
+out/
+target/
+
+deps/
+
+libs/
+logs/

@@ -141,7 +141,7 @@ build
 #lcov
 *.gcno
 /*.info
-test_pivx.coverage/
+test_send.coverage/
 total.coverage/
 coverage_percent.txt
 
@@ -178,11 +178,12 @@ doc/Doxyfile
 *.iml
 *.iws
 
+# Misc
+!/depends/Makefile
+!/depends/patches/*/*.patch
 *.brain
-out/
-target/
-
-deps/
-
-libs/
-logs/
+/out
+/target
+/deps
+/libs
+/logs

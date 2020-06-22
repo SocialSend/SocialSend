@@ -37,7 +37,7 @@ Social Send Platform at: https://socialsend.net
 
 *First 1000 Blocks PoW. 1001 - Infinite Blocks PoS only.
 
-**30Mil SEND Premined for Swap of existing PIE/PIEX Chain 28 Million + Pre-Sale for Cryptopia Listing. 
+**30Mil SEND Premined for Swap of existing PIE/PIEX Chain 28 Million + Pre-Sale for Cryptopia Listing.
 
 ### PoS/PoW Block Details
 <table>

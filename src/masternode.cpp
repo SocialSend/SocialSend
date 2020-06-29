@@ -192,21 +192,21 @@ uint256 CMasternode::CalculateScore(int mod, int64_t nBlockHeight)
 }
 
 void CMasternode::netCheckMasternode(){
-	if (GetTime() - lastTimeNetChecked > MASTERNODE_NETCHECK_SECONDS) {
+    if (GetTime() - lastTimeNetChecked > MASTERNODE_NETCHECK_SECONDS) {
         lastTimeNetChecked = GetTime();
 
         if (!IsValidNetAddr()) { //masternode.cpp line 320
-            activeState = MASTERNODE_UNREACHABLE; 
+            activeState = MASTERNODE_UNREACHABLE;
             LogPrintf("Checking NetMasternode %s [UNREACHABLE] take %i segs\n", addr.ToStringIPPort(), GetTime() - lastTimeNetChecked);
             return;
         } else {
             LogPrintf("Checking NetMasternode %s [OK] take %i segs\n", addr.ToStringIPPort(), GetTime() - lastTimeNetChecked);
             if (activeState == MASTERNODE_UNREACHABLE) {
-		    	//If masternode were UNREACHABLE make it ENABLED again
-		        activeState = MASTERNODE_ENABLED;
-		    }
-		}
-	}
+                //If masternode were UNREACHABLE make it ENABLED again
+                activeState = MASTERNODE_ENABLED;
+            }
+        }
+    }
 }
 
 
@@ -316,7 +316,7 @@ int64_t CMasternode::GetLastPaid()
 
         if (masternodePayments.mapMasternodeBlocks.count(BlockReading->nHeight)) {
             /*
-                Search for this payee, with at least 2 votes. This will aid in consensus allowing the network 
+                Search for this payee, with at least 2 votes. This will aid in consensus allowing the network
                 to converge on the same payees quickly, then keep the same schedule.
             */
             if (masternodePayments.mapMasternodeBlocks[BlockReading->nHeight].HasPayeeWithVotes(mnpayee, 2)) {
@@ -353,8 +353,8 @@ std::string CMasternode::GetStatus()
         return "POSE_BAN";
     case CMasternode::MASTERNODE_VIN_SPENT:
         return "VIN_SPENT";
-    case CMasternode::MASTERNODE_UNREACHABLE: 
-		return "UNREACHABLE";
+    case CMasternode::MASTERNODE_UNREACHABLE:
+        return "UNREACHABLE";
     default:
         return "UNKNOWN";
     }
@@ -492,12 +492,13 @@ bool CMasternodeBroadcast::Create(CTxIn txin, CService service, CKey keyCollater
 
     mnbRet = CMasternodeBroadcast(service, txin, pubKeyCollateralAddressNew, pubKeyMasternodeNew, PROTOCOL_VERSION);
 
-    ////////if (!mnbRet.IsValidNetAddr()) {
-      //  strErrorRet = strprintf("Invalid IP address, masternode=%s", txin.prevout.hash.ToString());
-     //   LogPrintf("CMasternodeBroadcast::Create -- %s\n", strErrorRet);
-     //   mnbRet = CMasternodeBroadcast();
-     //   return false;
-  ///  }
+    // TODO: What is this and do we need???
+    /*if (!mnbRet.IsValidNetAddr()) {
+        strErrorRet = strprintf("Invalid IP address, masternode=%s", txin.prevout.hash.ToString());
+        LogPrintf("CMasternodeBroadcast::Create -- %s\n", strErrorRet);
+        mnbRet = CMasternodeBroadcast();
+        return false;
+    }*/
 
     mnbRet.lastPing = mnp;
     if (!mnbRet.Sign(keyCollateralAddressNew)) {
@@ -613,7 +614,7 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
         else
             mnodeman.Remove(pmn->vin);
     }
-    
+
     CValidationState state;
     CMutableTransaction tx = CMutableTransaction();
     CAmount txTest;
@@ -637,10 +638,10 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
             masternodeSync.mapSeenSyncMNB.erase(GetHash());
             return false;
         }
-		//Set flag LimitFree true.. this way we force to check tx fee.
-		//with this flag in false if input has less amount than test tx this method accept the tx
-		//because the way it calculate the fee is txInAmount - txOutAmount so, if txOUtAmount > txInAmount => fee should be negative
-		//if we don't set this flag true, the method doesn't check the fee and accept an invalid tx with negative fee
+        //Set flag LimitFree true.. this way we force to check tx fee.
+        //with this flag in false if input has less amount than test tx this method accept the tx
+        //because the way it calculate the fee is txInAmount - txOutAmount so, if txOUtAmount > txInAmount => fee should be negative
+        //if we don't set this flag true, the method doesn't check the fee and accept an invalid tx with negative fee
         if (!AcceptableInputs(mempool, state, CTransaction(tx), true, NULL)) {
             //set nDos
             state.IsInvalid(nDoS);

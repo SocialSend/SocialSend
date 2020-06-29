@@ -26,10 +26,9 @@
 #include <boost/thread.hpp>
 #include <boost/tuple/tuple.hpp>
 
-
 //new header for transaction signing
-#include "script/sign.h" //This is for SignSignature method
-#include "init.h"	 //This is for pointer pwalletMain
+#include "script/sign.h"  //This is for SignSignature method
+#include "init.h"         //This is for pointer pwalletMain
 
 using namespace std;
 

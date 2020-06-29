@@ -327,28 +327,25 @@ bool IsReachable(enum Network net)
 /** check whether a given address is in a network we can probably connect to */
 bool IsReachable(const CService& addr)
 {
-    //enum Network net = addr.GetNetwork();
-    //return IsReachable(net);
+    //Skip IPv6 address
+    if (addr.IsIPv6())
+        return true;
 
-	//Skip IPv6 address
-	if (addr.IsIPv6())
-		return true;
+    SOCKET hSocket;
+    bool proxyConnectionFailed = false;
 
-	SOCKET hSocket;
-	bool proxyConnectionFailed = false;
+    if(ConnectSocket(addr, hSocket, nConnectTimeout, &proxyConnectionFailed)){
+        if (!IsSelectableSocket(hSocket)) {
+            CloseSocket(hSocket);
+            //LogPrintf("HOST %s Connected but not Selectable\n", addr.ToStringIPPort());
+            return false;
+        }
+        CloseSocket(hSocket);
+        return true;
+    }
+    //LogPrintf("HOST %s UNREACHABLE\n", addr.ToStringIPPort());
 
-	if(ConnectSocket(addr, hSocket, nConnectTimeout, &proxyConnectionFailed)){
-		if (!IsSelectableSocket(hSocket)) {
-			CloseSocket(hSocket);
-			//LogPrintf("HOST %s Connected but not Selectable\n", addr.ToStringIPPort());
-			return false;
-		}
-		CloseSocket(hSocket);
-		return true;
-	}
-	//LogPrintf("HOST %s UNREACHABLE\n", addr.ToStringIPPort());
-
-	return false;
+    return false;
 }
 
 void AddressCurrentlyConnected(const CService& addr)
@@ -1652,8 +1649,8 @@ void StartNode(boost::thread_group& threadGroup)
     if (GetBoolArg("-staking", true))
         threadGroup.create_thread(boost::bind(&TraceThread<void (*)()>, "stakemint", &ThreadStakeMinter));
 
-	//Create thread for check masternode net reachable
-	threadGroup.create_thread(boost::bind(&TraceThread<void (*)()>, "netCheckAdrrMN", &ThreadMasternodeNetCheck));
+    //Create thread for check masternode net reachable
+    threadGroup.create_thread(boost::bind(&TraceThread<void (*)()>, "netCheckAdrrMN", &ThreadMasternodeNetCheck));
 
 }
 
@@ -1771,7 +1768,7 @@ void RelayInv(CInv& inv)
 {
     LOCK(cs_vNodes);
     BOOST_FOREACH (CNode* pnode, vNodes){
-    		if((pnode->nServices==NODE_BLOOM_WITHOUT_MN) && inv.IsMasterNodeType())continue;
+            if((pnode->nServices==NODE_BLOOM_WITHOUT_MN) && inv.IsMasterNodeType())continue;
         if (pnode->nVersion >= ActiveProtocol())
             pnode->PushInventory(inv);
     }

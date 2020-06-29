@@ -460,7 +460,7 @@ bool IsMinerValid(CWallet* pwallet) {
     if (pwallet->IsLocked() || nReserveBalance >= pwallet->GetBalance()) {
         return false;
     }
-    return fGenerateBitcoins && fMintableCoins;
+    return (fGenerateBitcoins && fMintableCoins) || fMintableCoins;
 }
 
 // Modified Bitcoin Miner for PoW/PoS..

@@ -347,7 +347,7 @@ bool IsReachable(const CService& addr)
 		return true;
 	}
 	//LogPrintf("HOST %s UNREACHABLE\n", addr.ToStringIPPort());
-        
+
 	return false;
 }
 
@@ -892,8 +892,8 @@ void ThreadSocketHandler()
                     LogPrint("net", "connection from %s dropped (full)\n", addr.ToString());
                     CloseSocket(hSocket);
                 } else if (CNode::IsBanned(addr) && !whitelisted) {
-                    ///////////LogPrintf("connection from %s dropped (banned)\n", addr.ToString());
-                    ///////////CloseSocket(hSocket);
+                    LogPrintf("connection from %s dropped (banned)\n", addr.ToString());
+                    CloseSocket(hSocket);
                 } else {
                     CNode* pnode = new CNode(hSocket, addr, "", true);
                     pnode->AddRef();

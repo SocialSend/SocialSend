@@ -58,6 +58,7 @@ Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool txDe
     Object result;
     int64_t MNPayment = GetMasternodePayment(blockindex->nHeight, GetBlockValue(blockindex->nHeight));
     int64_t StakerPayment = blockindex->nMint - MNPayment;
+    double MNRewardPercent = floor(((double)MNPayment / (double)blockindex->nMint) * 100);
 
     result.push_back(Pair("hash", block.GetHash().GetHex()));
     int confirmations = -1;

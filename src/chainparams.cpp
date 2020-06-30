@@ -333,13 +333,13 @@ static void convertSeed6(std::vector<CAddress>& vSeedsOut, const SeedSpec6* data
 // + Contains no strange transactions
 static Checkpoints::MapCheckpoints mapCheckpoints =
     boost::assign::map_list_of(0, uint256("0xb06b542aa656ba613882269e38a7f487a9a04cc129a85d3f7c6463aa6a5dabc9"))
-							  (640953, uint256("0x7de563f8c1b04a1007512aa86ca6ad7867b6edf74295634b6a37d9acfba52d84"))
-							  (640954, uint256("0xc6e05be69577f8c3c6742f3a5af16b84d2184f222cc73d40a3895517b0d213ee"))
-							  (640955, uint256("0x2d7d3bb64be5c5312534fa131d0fbb5eceb717fd3c7068623b8b106865559893"))
-							  (644895, uint256("0xba58649fe95ce60e5a90e592bb09ea81453875e4aefdb359b87769c09c9d89d1"))
-							  (1340790, uint256("0x365be7115a301111a379766d3fbc655016083b89e710d3b82654b6700b1907cc"))
-							  (1340850, uint256("0xad02ed0f42a5d76eeabb69f437fc945b43d0f999fdfd0aa251b07a4605cd3e03"))
-							  (1340965, uint256("0x52b7ea1c19d1ba12cabe461f7b3026dd5236f27dafb70636a1ce1e82732770f4"));
+                              (640953, uint256("0x7de563f8c1b04a1007512aa86ca6ad7867b6edf74295634b6a37d9acfba52d84"))
+                              (640954, uint256("0xc6e05be69577f8c3c6742f3a5af16b84d2184f222cc73d40a3895517b0d213ee"))
+                              (640955, uint256("0x2d7d3bb64be5c5312534fa131d0fbb5eceb717fd3c7068623b8b106865559893"))
+                              (644895, uint256("0xba58649fe95ce60e5a90e592bb09ea81453875e4aefdb359b87769c09c9d89d1"))
+                              (1340790, uint256("0x365be7115a301111a379766d3fbc655016083b89e710d3b82654b6700b1907cc"))
+                              (1340850, uint256("0xad02ed0f42a5d76eeabb69f437fc945b43d0f999fdfd0aa251b07a4605cd3e03"))
+                              (1340965, uint256("0x52b7ea1c19d1ba12cabe461f7b3026dd5236f27dafb70636a1ce1e82732770f4"));
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
     1592575048, // * UNIX timestamp of last checkpoint block
@@ -458,13 +458,11 @@ public:
             printf("block.nTime = %u \n", genesis.nTime);
             printf("block.nNonce = %u \n", genesis.nNonce);
             printf("block.GetHash = %s\n", genesis.GetHash().ToString().c_str());
-
-            }
-
+        }
 
 
         assert(hashGenesisBlock == uint256("0xb06b542aa656ba613882269e38a7f487a9a04cc129a85d3f7c6463aa6a5dabc9"));
-        //assert(genesis.hashMerkleRoot == uint256("0x1b2ef6e2f28be914103a277377ae7729dcd125dfeb8bf97bd5964ba72b6dc39b"));
+        assert(genesis.hashMerkleRoot == uint256("0x91b58b73311ec15f5f0a2aa31626808b81d463bca5e1ccfd39617352301f9c76"));
 
         vSeeds.push_back(CDNSSeedData("dns.socialsend.io", "seed.dns.socialsend.io"));     // Primary DNS Seeder
         vSeeds.push_back(CDNSSeedData("dns.socialsend.info", "seed.dns.socialsend.info"));
@@ -486,7 +484,7 @@ public:
         base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 212);
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x02)(0x2D)(0x25)(0x33).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x02)(0x21)(0x31)(0x2B).convert_to_container<std::vector<unsigned char> >();
-        // 	BIP44 coin type is from https://github.com/satoshilabs/slips/blob/master/slip-0044.md
+        // BIP44 coin type is from https://github.com/satoshilabs/slips/blob/master/slip-0044.md
         base58Prefixes[EXT_COIN_TYPE] = boost::assign::list_of(0x80)(0x00)(0x00)(0x77).convert_to_container<std::vector<unsigned char> >();
 
         convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
@@ -553,7 +551,7 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-		//TESTNET NODES
+        //TESTNET NODES
         vSeeds.push_back(CDNSSeedData("35.224.177.163", "35.224.177.163"));
         vSeeds.push_back(CDNSSeedData("35.193.118.249", "35.193.118.249"));
         vSeeds.push_back(CDNSSeedData("35.193.60.209", "35.193.60.209"));
@@ -587,7 +585,7 @@ public:
         strObfuscationPoolDummyAddress = "y57cqfGRkekRyDRNeJiLtYVEbvhXrNbmox";
         nStartMasternodePayments = 1420837558; //Fri, 09 Jan 2015 21:05:58 GMT
 
-		nNewMasternodeReward_StartBlock = 65000;
+        nNewMasternodeReward_StartBlock = 201;
         nNewMasternodeReward_Collateral = 12500;
         nNewMasternodeReward_MNPercent = 75.0 / 100.0;
     }

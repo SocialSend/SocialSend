@@ -492,13 +492,12 @@ bool CMasternodeBroadcast::Create(CTxIn txin, CService service, CKey keyCollater
 
     mnbRet = CMasternodeBroadcast(service, txin, pubKeyCollateralAddressNew, pubKeyMasternodeNew, PROTOCOL_VERSION);
 
-    // TODO: What is this and do we need???
-    /*if (!mnbRet.IsValidNetAddr()) {
+    if (!mnbRet.IsValidNetAddr()) {
         strErrorRet = strprintf("Invalid IP address, masternode=%s", txin.prevout.hash.ToString());
         LogPrintf("CMasternodeBroadcast::Create -- %s\n", strErrorRet);
         mnbRet = CMasternodeBroadcast();
         return false;
-    }*/
+    }
 
     mnbRet.lastPing = mnp;
     if (!mnbRet.Sign(keyCollateralAddressNew)) {

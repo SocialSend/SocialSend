@@ -502,7 +502,7 @@ Value verifychain(const Array& params, bool fHelp)
 }
 
 /** Implementation of IsSuperMajority with better feedback */
-static UniValue SoftForkMajorityDesc(int minVersion, CBlockIndex* pindex, int nRequired)
+static Value SoftForkMajorityDesc(int minVersion, CBlockIndex* pindex, int nRequired)
 {
     int nFound = 0;
     CBlockIndex* pstart = pindex;
@@ -512,7 +512,7 @@ static UniValue SoftForkMajorityDesc(int minVersion, CBlockIndex* pindex, int nR
             ++nFound;
         pstart = pstart->pprev;
     }
-    UniValue rv(UniValue::VOBJ);
+    Object rv;
     rv.push_back(Pair("status", nFound >= nRequired));
     rv.push_back(Pair("found", nFound));
     rv.push_back(Pair("required", nRequired));
@@ -520,9 +520,9 @@ static UniValue SoftForkMajorityDesc(int minVersion, CBlockIndex* pindex, int nR
     return rv;
 }
 
-static UniValue SoftForkDesc(const std::string &name, int version, CBlockIndex* pindex)
+static Value SoftForkDesc(const std::string &name, int version, CBlockIndex* pindex)
 {
-    UniValue rv(UniValue::VOBJ);
+    Object rv;
     rv.push_back(Pair("id", name));
     rv.push_back(Pair("version", version));
     rv.push_back(Pair("enforce", SoftForkMajorityDesc(version, pindex, Params().EnforceBlockUpgradeMajority())));
@@ -533,7 +533,7 @@ static UniValue SoftForkDesc(const std::string &name, int version, CBlockIndex* 
 Value getblockchaininfo(const Array& params, bool fHelp)
 {
     int newBlockVersion = 5; // SoftFork Ver for BIP65
-    
+
     if (fHelp || params.size() != 0)
         throw runtime_error(
             "getblockchaininfo\n"
@@ -575,7 +575,7 @@ Value getblockchaininfo(const Array& params, bool fHelp)
     obj.push_back(Pair("verificationprogress", Checkpoints::GuessVerificationProgress(chainActive.Tip())));
     obj.push_back(Pair("chainwork", chainActive.Tip()->nChainWork.GetHex()));
     CBlockIndex* tip = chainActive.Tip();
-    UniValue softforks(UniValue::VARR);
+    Array softforks;
     softforks.push_back(SoftForkDesc("bip65", newBlockVersion, tip));
     obj.push_back(Pair("softforks", softforks));
     return obj;

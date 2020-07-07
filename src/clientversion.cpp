@@ -1,4 +1,6 @@
 // Copyright (c) 2012-2014 The Bitcoin developers
+// Copyright (c) 2017-2020 The PIVX developers
+// Copyright (c) 2019-2020 The SEND developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -18,7 +20,7 @@ const std::string CLIENT_NAME("SEND Core");
 /**
  * Client version number
  */
-#define CLIENT_VERSION_SUFFIX ""
+#define CLIENT_VERSION_SUFFIX "Core"
 
 
 /**
@@ -45,8 +47,8 @@ const std::string CLIENT_NAME("SEND Core");
 //! git will put "#define GIT_ARCHIVE 1" on the next line inside archives.
 #define GIT_ARCHIVE 1
 #ifdef GIT_ARCHIVE
-#define GIT_COMMIT_ID "4870251"
-#define GIT_COMMIT_DATE "Sun, 21 June 2020 07:59:59 -0400 UTC"
+#define GIT_COMMIT_ID "$Format:%H$"
+#define GIT_COMMIT_DATE "$Format:%cD$"
 #endif
 
 #define BUILD_DESC_WITH_SUFFIX(maj, min, rev, build, suffix) \
@@ -57,8 +59,6 @@ const std::string CLIENT_NAME("SEND Core");
 
 #define BUILD_DESC_FROM_UNKNOWN(maj, min, rev, build) \
     "v" DO_STRINGIZE(maj) "." DO_STRINGIZE(min) "." DO_STRINGIZE(rev) "." DO_STRINGIZE(build) "-unk"
-
-#define BUILD_DESC "1.2.1.3 Core"
 
 #ifndef BUILD_DESC
     #ifdef BUILD_SUFFIX
@@ -92,6 +92,11 @@ static std::string FormatVersion(int nVersion)
 std::string FormatFullVersion()
 {
     return CLIENT_BUILD;
+}
+
+std::string FormatVersionFriendly()
+{
+    return FormatVersion(CLIENT_VERSION);
 }
 
 /**

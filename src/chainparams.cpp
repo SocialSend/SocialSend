@@ -339,13 +339,15 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
                               (644895, uint256("0xba58649fe95ce60e5a90e592bb09ea81453875e4aefdb359b87769c09c9d89d1"))
                               (1340790, uint256("0x365be7115a301111a379766d3fbc655016083b89e710d3b82654b6700b1907cc"))
                               (1340850, uint256("0xad02ed0f42a5d76eeabb69f437fc945b43d0f999fdfd0aa251b07a4605cd3e03"))
-                              (1340965, uint256("0x52b7ea1c19d1ba12cabe461f7b3026dd5236f27dafb70636a1ce1e82732770f4"));
+                              (1340965, uint256("0x52b7ea1c19d1ba12cabe461f7b3026dd5236f27dafb70636a1ce1e82732770f4"))
+                              (1366146, uint256("0x524fb0b11fc44f4896a9e510bc10c1ff4963bf686f10cb1ed8abb0786852b4d5"))
+                              (1366147, uint256("0xfff907bf42e74dfab737241341472fc9d783e1c0ca1c7c8a6d80ae176f75c8f0"));
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1592575048, // * UNIX timestamp of last checkpoint block
-    2884627,    // * total number of transactions between genesis and last checkpoint
+    1594097604, // * UNIX timestamp of last checkpoint block
+    2936005,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
-    2500        // * estimated number of transactions per day after checkpoint
+    3000        // * estimated number of transactions per day after checkpoint
 };
 
 static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
@@ -385,9 +387,9 @@ public:
         bnProofOfWorkLimit = ~uint256(0) >> 20; // SEND starting difficulty is 1 / 2^12
         nSubsidyHalvingInterval = 210000;
         nMaxReorganizationDepth = 100;
-        nEnforceBlockUpgradeMajority = 750;
-        nRejectBlockOutdatedMajority = 950;
-        nToCheckBlockUpgradeMajority = 1000;
+        nEnforceBlockUpgradeMajority = 16200;  // 75% ... ((60*60*24)/30)*7.5 = 21600 or about 7 days
+        nRejectBlockOutdatedMajority = 20520;  // 95%
+        nToCheckBlockUpgradeMajority = 21600;  // Approximate expected amount of blocks in 7 days (2880*7.5)
         nMinerThreads = 0;
         nTargetTimespan = 1 * 60; // SEND: 1 day
         nTargetSpacing = 1 * 30;  // SEND: 30 seconds
@@ -530,9 +532,9 @@ public:
         pchMessageStart[3] = 0xba;
         vAlertPubKey = ParseHex("000010e83b2703ccf322f7dbd62dd5855ac7c10bd055814ce121ba32607d573b8810c02c0582aed05b4deb9c4b77b26d92428c61256cd42774babea0a073b2ed0c9");
         nDefaultPort = 51474;
-        nEnforceBlockUpgradeMajority = 51;
-        nRejectBlockOutdatedMajority = 75;
-        nToCheckBlockUpgradeMajority = 100;
+        nEnforceBlockUpgradeMajority = 6480;
+        nRejectBlockOutdatedMajority = 12312;
+        nToCheckBlockUpgradeMajority = 12960; // ((60*60*24)/30)*4.5 = 12960 or about 4 days
         nMinerThreads = 0;
         nTargetTimespan = 1 * 60; // SEND: 1 day
         nTargetSpacing = 1 * 60;  // SEND: 1 minute

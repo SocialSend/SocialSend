@@ -301,7 +301,9 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock blockFrom, const CTra
         return error("CheckStakeKernelHash() : nTime violation");
 
     if (chainActive.Tip()->nHeight > 1375100 && IsSporkActive(SPORK_18_MIN_AGE_STAKE_ENFORCEMENT)) {
-        if (nTimeBlockFrom > GetSporkValue(SPORK_18_MIN_AGE_STAKE_ENFORCEMENT)) {
+        CBlockIndex* pindexPrev = chainActive.Tip();
+        // Check if majority (>95%) of the network is producing version 5 blocks..
+        if (CBlockIndex::IsSuperMajority(5, pindexPrev, Params().RejectBlockOutdatedMajority())) {
             // NOTE: This is a consensus rule!
             // This check finds INVALID blocks starting at height 13938 due prior non-use of this method,
             //  AND causes a chain fork when a peer mints a block that fails this consensus rule on chain tip.

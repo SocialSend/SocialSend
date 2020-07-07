@@ -23,6 +23,8 @@
 #endif
 #include "masternode-payments.h"
 
+#include "spork.h"        //For SPORK check
+
 #include <boost/thread.hpp>
 #include <boost/tuple/tuple.hpp>
 
@@ -108,6 +110,18 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     // -blockversion=N to test forking scenarios
     if (Params().MineBlocksOnDemand())
         pblock->nVersion = GetArg("-blockversion", pblock->nVersion);
+
+    if (fProofOfStake) {
+        CBlockIndex* pindexPrev = chainActive.Tip();
+        bool bIsSporkAct = IsSporkActive(SPORK_19_CLTV_BLOCK_VOTE_ENFORCEMENT);
+        // Activation on SPORK_19 OR forced if Super Majority of blocks are already version 5.
+        if (bIsSporkAct || CBlockIndex::IsSuperMajority(5, pindexPrev, Params().RejectBlockOutdatedMajority())) {
+            // Supports CLTV activation
+            pblock->nVersion = 5;
+        } else {
+            pblock->nVersion = 4;
+        }
+    }
 
     // Create coinbase tx
     CMutableTransaction txNew;

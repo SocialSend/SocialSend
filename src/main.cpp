@@ -1279,7 +1279,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         // There is a similar check in CreateNewBlock() to prevent creating
         // invalid blocks, however allowing such transactions into the mempool
         // can be exploited as a DoS attack.
-        flags = STANDARD_SCRIPT_VERIFY_FLAGS;
+        flags = MANDATORY_SCRIPT_VERIFY_FLAGS;
 
         if (fCLTVHasMajority) {
             flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;

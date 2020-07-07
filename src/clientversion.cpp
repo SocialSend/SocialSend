@@ -20,7 +20,7 @@ const std::string CLIENT_NAME("SEND Core");
 /**
  * Client version number
  */
-#define CLIENT_VERSION_SUFFIX "Core"
+#define CLIENT_VERSION_SUFFIX "-Core"
 
 
 /**

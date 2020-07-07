@@ -25,7 +25,7 @@ using namespace boost;
     - This would result in old clients getting confused about which spork is for what
 */
 #define SPORK_START 10001
-#define SPORK_END 10016
+#define SPORK_END 10017
 
 #define SPORK_2_SWIFTTX 10001
 #define SPORK_3_SWIFTTX_BLOCK_FILTERING 10002
@@ -41,6 +41,7 @@ using namespace boost;
 #define SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2 10014
 #define SPORK_16_MN_WINNER_MINIMUM_AGE 10015
 #define SPORK_17_MN_NETCHECK 10016
+#define SPORK_18_MIN_AGE_STAKE_ENFORCEMENT 10017
 
 
 #define SPORK_2_SWIFTTX_DEFAULT 978307200                         //2001-1-1
@@ -57,8 +58,9 @@ using namespace boost;
 #define SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2_DEFAULT 4070908800    //OFF
 #define SPORK_17_MN_NETCHECK_DEFAULT 4070908800 		          //off
 #define SPORK_16_MN_WINNER_MINIMUM_AGE_DEFAULT 8000               // Age in seconds. This should be > MASTERNODE_REMOVAL_SECONDS to avoid
-                                                                  // misconfigured new nodes in the list. 
+                                                                  // misconfigured new nodes in the list.
                                                                   // Set this to zero to emulate classic behaviour
+#define SPORK_18_MIN_AGE_STAKE_ENFORCEMENT_DEFAULT 4070908800     //OFF
 
 class CSporkMessage;
 class CSporkManager;

@@ -11,6 +11,7 @@
 #include "script/interpreter.h"
 #include "timedata.h"
 #include "util.h"
+#include "spork.h"
 
 using namespace std;
 
@@ -299,8 +300,17 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock blockFrom, const CTra
     if (nTimeTx < nTimeBlockFrom) // Transaction timestamp violation
         return error("CheckStakeKernelHash() : nTime violation");
 
-    if (nTimeBlockFrom + nStakeMinAge > nTimeTx) // Min age requirement
-        return error("CheckStakeKernelHash() : min age violation - nTimeBlockFrom=%d nStakeMinAge=%d nTimeTx=%d", nTimeBlockFrom, nStakeMinAge, nTimeTx);
+    if (chainActive.Tip()->nHeight > 1375100 && IsSporkActive(SPORK_18_MIN_AGE_STAKE_ENFORCEMENT)) {
+        if (nTimeBlockFrom > GetSporkValue(SPORK_18_MIN_AGE_STAKE_ENFORCEMENT)) {
+            // NOTE: This is a consensus rule!
+            // This check finds INVALID blocks starting at height 13938 due prior non-use of this method,
+            //  AND causes a chain fork when a peer mints a block that fails this consensus rule on chain tip.
+            // Activate at a later date via Block Height and SPORK check.
+            if (nTimeBlockFrom + nStakeMinAge > nTimeTx) { // Min age requirement
+                return error("CheckStakeKernelHash() : min age violation - nTimeBlockFrom=%d nStakeMinAge=%d nTimeTx=%d", nTimeBlockFrom, nStakeMinAge, nTimeTx);
+            }
+        }
+    }
 
     //grab difficulty
     uint256 bnTargetPerCoinDay;

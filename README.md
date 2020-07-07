@@ -10,7 +10,10 @@ with collateral of 12,500 SEND
 More information at: http://socialsend.io <br />
 Social Send Platform at: https://socialsend.net
 
-### Coin Specs
+## SEND Core - Running
+- [SEND Core Documentation](https://github.com/SocialSend/SocialSend/tree/master/doc)
+
+## Coin Specifications
 <table>
 	<tr>
 		<td>Ticker Symbol</td><td>SEND</td>
@@ -19,10 +22,10 @@ Social Send Platform at: https://socialsend.net
 		<td>Algorithm</td><td>Quark</td>
 	</tr>
 	<tr>
-		<td>Type</td><td>PoW - PoS Hybrid*</td>
+		<td>Type</td><td>PoW - PoS Hybrid<sup id="a1" name="a1"><a href="#f1"><b>1</b></a></sup></td>
 	</tr>
 	<tr>
-		<td>Block Time</td><td>~60 Seconds</td>
+		<td>Block Time</td><td>~30 Seconds</td>
 	</tr>
 	<tr>
 		<td>Difficulty Retargeting</td><td>Every Block</td>
@@ -31,13 +34,22 @@ Social Send Platform at: https://socialsend.net
 		<td>Max Coin Supply (PoS)</td><td>65 Mil SEND</td>
 	</tr>
 	<tr>
-		<td>Premine/Initial Supply</td><td>30 Mil SEND*</td>
+		<td>Premine/Initial Supply</td><td>30 Mil SEND<sup id="a2" name="a2"><a href="#f2"><b>2</b></a></sup></td>
 	</tr>
+    <tr>
+        <td>Peer Port (public)</td><td>50050</td>
+    </tr>
+    <tr>
+        <td>Masternode Port</td><td>50050<sup id="a3" name="a3"><a href="#f3"><b>3</b></a></sup></td>
+    </tr>
+    <tr>
+        <td>RPC Port (private)</td><td>50051</td>
+    </tr>
 </table>
 
-*First 1000 Blocks PoW. 1001 - Infinite Blocks PoS only.
-
-**30Mil SEND Premined for Swap of existing PIE/PIEX Chain 28 Million + Pre-Sale for Cryptopia Listing.
+<b id="f1" name="f1">1</b> <sub>First 1000 Blocks PoW. 1001 - Infinite Blocks PoS only. [↩](#a1)</sub>  <br/>
+<b id="f2" name="f2">2</b> <sub>30Mil SEND Premined for Swap of existing PIE/PIEX Chain 28 Million + Pre-Sale for Cryptopia Listing. [↩](#a2)</sub>  <br/>
+<b id="f3" name="f3">3</b> <sub>ONLY port 50050 may be used for masternodes and MUST be open. [↩](#a3)</sub>  <br/>
 
 ### PoS/PoW Block Details
 <table>

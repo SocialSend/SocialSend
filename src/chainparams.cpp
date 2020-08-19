@@ -341,7 +341,8 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
                               (1340850, uint256("0xad02ed0f42a5d76eeabb69f437fc945b43d0f999fdfd0aa251b07a4605cd3e03"))
                               (1340965, uint256("0x52b7ea1c19d1ba12cabe461f7b3026dd5236f27dafb70636a1ce1e82732770f4"))
                               (1366146, uint256("0x524fb0b11fc44f4896a9e510bc10c1ff4963bf686f10cb1ed8abb0786852b4d5"))
-                              (1366147, uint256("0xfff907bf42e74dfab737241341472fc9d783e1c0ca1c7c8a6d80ae176f75c8f0"));
+                              (1366147, uint256("0xfff907bf42e74dfab737241341472fc9d783e1c0ca1c7c8a6d80ae176f75c8f0"))
+                              (1427337, uint256("0xf576acfccc53c0af8810975c7e94b430d1a8b5925ba9263d2b2abe81083ce010"));
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
     1594097604, // * UNIX timestamp of last checkpoint block
@@ -391,8 +392,8 @@ public:
         nRejectBlockOutdatedMajority = 20520;  // 95%
         nToCheckBlockUpgradeMajority = 21600;  // Approximate expected amount of blocks in 7 days (2880*7.5)
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // SEND: 1 day
-        nTargetSpacing = 1 * 30;  // SEND: 30 seconds
+        nTargetTimespan = 1 * 60 * 40;  // SEND: 40 minutes
+        nTargetSpacing = 1 * 60;        // SEND: 1 minute
         nLastPOWBlock = 1001;
         nMaturity = 10;
         nMasternodeCountDrift = 20;
@@ -536,8 +537,8 @@ public:
         nRejectBlockOutdatedMajority = 12312;
         nToCheckBlockUpgradeMajority = 12960; // ((60*60*24)/30)*4.5 = 12960 or about 4 days
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // SEND: 1 day
-        nTargetSpacing = 1 * 60;  // SEND: 1 minute
+        nTargetTimespan = 1 * 60 * 40;  // SEND: 40 minutes
+        nTargetSpacing = 1 * 60;        // SEND: 1 minute
         nLastPOWBlock = 200;
         nMaturity = 15;
         nMasternodeCountDrift = 4;

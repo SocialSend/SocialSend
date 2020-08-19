@@ -25,7 +25,7 @@ Social Send Platform at: https://socialsend.net
 		<td>Type</td><td>PoW - PoS Hybrid<sup id="a1" name="a1"><a href="#f1"><b>1</b></a></sup></td>
 	</tr>
 	<tr>
-		<td>Block Time</td><td>~30 Seconds</td>
+		<td>Block Time</td><td>~60 Seconds</td>
 	</tr>
 	<tr>
 		<td>Difficulty Retargeting</td><td>Every Block</td>

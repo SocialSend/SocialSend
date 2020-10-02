@@ -10,6 +10,9 @@
 #include "rpcserver.h"
 #include "sync.h"
 #include "util.h"
+#include "kernel.h"
+
+#include "masternodeman.h"
 
 #include <stdint.h>
 
@@ -53,6 +56,10 @@ double GetDifficulty(const CBlockIndex* blockindex)
 Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool txDetails = false)
 {
     Object result;
+    int64_t MNPayment = GetMasternodePayment(blockindex->nHeight, GetBlockValue(blockindex->nHeight));
+    int64_t StakerPayment = blockindex->nMint - MNPayment;
+    double MNRewardPercent = floor(((double)MNPayment / (double)blockindex->nMint) * 100);
+
     result.push_back(Pair("hash", block.GetHash().GetHex()));
     int confirmations = -1;
     // Only report confirmations if the block is on the main chain
@@ -79,13 +86,24 @@ Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool txDe
     result.push_back(Pair("difficulty", GetDifficulty(blockindex)));
     result.push_back(Pair("chainwork", blockindex->nChainWork.GetHex()));
 
-    if (blockindex->pprev)
+    if (blockindex->pprev) {
         result.push_back(Pair("previousblockhash", blockindex->pprev->GetBlockHash().GetHex()));
+    }
     CBlockIndex* pnext = chainActive.Next(blockindex);
-    if (pnext)
+    if (pnext) {
         result.push_back(Pair("nextblockhash", pnext->GetBlockHash().GetHex()));
-		result.push_back(Pair("flags", strprintf("%s", blockindex->IsProofOfStake() ? "proof-of-stake" : "proof-of-work")));
-		result.push_back(Pair("nflags:", strprintf("%i", blockindex->nFlags)));
+    }
+
+    result.push_back(Pair("flags", strprintf("%s", blockindex->IsProofOfStake() ? "proof-of-stake" : "proof-of-work")));
+    result.push_back(Pair("nflags:", strprintf("%i", blockindex->nFlags)));
+    result.push_back(Pair("mint", ValueFromAmount(GetBlockValue(blockindex->nHeight))));
+
+    result.push_back(Pair("mnReward", ValueFromAmount(MNPayment)));
+    result.push_back(Pair("mnRewardPercent", MNRewardPercent));
+    result.push_back(Pair("stakerPayment", ValueFromAmount(StakerPayment)));
+    result.push_back(Pair("modifier", strprintf("%16x", blockindex->nStakeModifier)));
+    result.push_back(Pair("modifierchecksum", strprintf("%08x", GetStakeModifierChecksum(blockindex))));
+
     return result;
 }
 
@@ -483,8 +501,39 @@ Value verifychain(const Array& params, bool fHelp)
     return CVerifyDB().VerifyDB(pcoinsTip, nCheckLevel, nCheckDepth);
 }
 
+/** Implementation of IsSuperMajority with better feedback */
+static Value SoftForkMajorityDesc(int minVersion, CBlockIndex* pindex, int nRequired)
+{
+    int nFound = 0;
+    CBlockIndex* pstart = pindex;
+    for (int i = 0; i < Params().ToCheckBlockUpgradeMajority() && pstart != NULL; i++)
+    {
+        if (pstart->nVersion >= minVersion)
+            ++nFound;
+        pstart = pstart->pprev;
+    }
+    Object rv;
+    rv.push_back(Pair("status", nFound >= nRequired));
+    rv.push_back(Pair("found", nFound));
+    rv.push_back(Pair("required", nRequired));
+    rv.push_back(Pair("window", Params().ToCheckBlockUpgradeMajority()));
+    return rv;
+}
+
+static Value SoftForkDesc(const std::string &name, int version, CBlockIndex* pindex)
+{
+    Object rv;
+    rv.push_back(Pair("id", name));
+    rv.push_back(Pair("version", version));
+    rv.push_back(Pair("enforce", SoftForkMajorityDesc(version, pindex, Params().EnforceBlockUpgradeMajority())));
+    rv.push_back(Pair("reject", SoftForkMajorityDesc(version, pindex, Params().RejectBlockOutdatedMajority())));
+    return rv;
+}
+
 Value getblockchaininfo(const Array& params, bool fHelp)
 {
+    int newBlockVersion = 5; // SoftFork Ver for BIP65
+
     if (fHelp || params.size() != 0)
         throw runtime_error(
             "getblockchaininfo\n"
@@ -498,9 +547,24 @@ Value getblockchaininfo(const Array& params, bool fHelp)
             "  \"difficulty\": xxxxxx,     (numeric) the current difficulty\n"
             "  \"verificationprogress\": xxxx, (numeric) estimate of verification progress [0..1]\n"
             "  \"chainwork\": \"xxxx\"     (string) total amount of work in active chain, in hexadecimal\n"
+            "  \"softforks\": [            (array) status of softforks in progress\n"
+            "     {\n"
+            "        \"id\": \"xxxx\",        (string) name of softfork\n"
+            "        \"version\": xx,         (numeric) block version\n"
+            "        \"enforce\": {           (object) progress toward enforcing the softfork rules for new-version blocks\n"
+            "           \"status\": xx,       (boolean) true if threshold reached\n"
+            "           \"found\": xx,        (numeric) number of blocks with the new version found\n"
+            "           \"required\": xx,     (numeric) number of blocks required to trigger\n"
+            "           \"window\": xx,       (numeric) maximum size of examined window of recent blocks\n"
+            "        },\n"
+            "        \"reject\": { ... }      (object) progress toward rejecting pre-softfork blocks (same fields as \"enforce\")\n"
+            "     }, ...\n"
+            "  ]\n"
             "}\n"
             "\nExamples:\n" +
             HelpExampleCli("getblockchaininfo", "") + HelpExampleRpc("getblockchaininfo", ""));
+
+    LOCK(cs_main);
 
     Object obj;
     obj.push_back(Pair("chain", Params().NetworkIDString()));
@@ -510,6 +574,10 @@ Value getblockchaininfo(const Array& params, bool fHelp)
     obj.push_back(Pair("difficulty", (double)GetDifficulty()));
     obj.push_back(Pair("verificationprogress", Checkpoints::GuessVerificationProgress(chainActive.Tip())));
     obj.push_back(Pair("chainwork", chainActive.Tip()->nChainWork.GetHex()));
+    CBlockIndex* tip = chainActive.Tip();
+    Array softforks;
+    softforks.push_back(SoftForkDesc("bip65", newBlockVersion, tip));
+    obj.push_back(Pair("softforks", softforks));
     return obj;
 }
 

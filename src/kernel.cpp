@@ -11,6 +11,7 @@
 #include "script/interpreter.h"
 #include "timedata.h"
 #include "util.h"
+#include "spork.h"
 
 using namespace std;
 
@@ -31,6 +32,7 @@ unsigned int getIntervalVersion(bool fTestNet)
 // Hard checkpoints of stake modifiers to ensure they are deterministic
 static std::map<int, unsigned int> mapStakeModifierCheckpoints =
     boost::assign::map_list_of(0, 0xfd11f4e7u);
+    // TODO: Add to mapStakeModifierCheckpoints
 
 // Get time weight
 int64_t GetWeight(int64_t nIntervalBeginning, int64_t nIntervalEnd)
@@ -298,8 +300,19 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock blockFrom, const CTra
     if (nTimeTx < nTimeBlockFrom) // Transaction timestamp violation
         return error("CheckStakeKernelHash() : nTime violation");
 
-    //if (nTimeBlockFrom + nStakeMinAge > nTimeTx) // Min age requirement
-	//	return error("CheckStakeKernelHash() : min age violation - nTimeBlockFrom=%d nStakeMinAge=%d nTimeTx=%d", nTimeBlockFrom, nStakeMinAge, nTimeTx);
+    if (chainActive.Tip()->nHeight > 1375100 && IsSporkActive(SPORK_18_MIN_AGE_STAKE_ENFORCEMENT)) {
+        CBlockIndex* pindexPrev = chainActive.Tip();
+        // Check if majority (>95%) of the network is producing version 5 blocks..
+        if (CBlockIndex::IsSuperMajority(5, pindexPrev, Params().RejectBlockOutdatedMajority())) {
+            // NOTE: This is a consensus rule!
+            // This check finds INVALID blocks starting at height 13938 due prior non-use of this method,
+            //  AND causes a chain fork when a peer mints a block that fails this consensus rule on chain tip.
+            // Activate at a later date via Block Height and SPORK check.
+            if (nTimeBlockFrom + nStakeMinAge > nTimeTx) { // Min age requirement
+                return error("CheckStakeKernelHash() : min age violation - nTimeBlockFrom=%d nStakeMinAge=%d nTimeTx=%d", nTimeBlockFrom, nStakeMinAge, nTimeTx);
+            }
+        }
+    }
 
     //grab difficulty
     uint256 bnTargetPerCoinDay;

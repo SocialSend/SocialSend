@@ -333,19 +333,22 @@ static void convertSeed6(std::vector<CAddress>& vSeedsOut, const SeedSpec6* data
 // + Contains no strange transactions
 static Checkpoints::MapCheckpoints mapCheckpoints =
     boost::assign::map_list_of(0, uint256("0xb06b542aa656ba613882269e38a7f487a9a04cc129a85d3f7c6463aa6a5dabc9"))
-							  (640953, uint256("0x7de563f8c1b04a1007512aa86ca6ad7867b6edf74295634b6a37d9acfba52d84"))
-							  (640954, uint256("0xc6e05be69577f8c3c6742f3a5af16b84d2184f222cc73d40a3895517b0d213ee"))
-							  (640955, uint256("0x2d7d3bb64be5c5312534fa131d0fbb5eceb717fd3c7068623b8b106865559893"))
-							  (644895, uint256("0xba58649fe95ce60e5a90e592bb09ea81453875e4aefdb359b87769c09c9d89d1"))
-							  (1340790, uint256("0x365be7115a301111a379766d3fbc655016083b89e710d3b82654b6700b1907cc"))
-							  (1340850, uint256("0xad02ed0f42a5d76eeabb69f437fc945b43d0f999fdfd0aa251b07a4605cd3e03"))
-							  (1340965, uint256("0x52b7ea1c19d1ba12cabe461f7b3026dd5236f27dafb70636a1ce1e82732770f4"));
+                              (640953, uint256("0x7de563f8c1b04a1007512aa86ca6ad7867b6edf74295634b6a37d9acfba52d84"))
+                              (640954, uint256("0xc6e05be69577f8c3c6742f3a5af16b84d2184f222cc73d40a3895517b0d213ee"))
+                              (640955, uint256("0x2d7d3bb64be5c5312534fa131d0fbb5eceb717fd3c7068623b8b106865559893"))
+                              (644895, uint256("0xba58649fe95ce60e5a90e592bb09ea81453875e4aefdb359b87769c09c9d89d1"))
+                              (1340790, uint256("0x365be7115a301111a379766d3fbc655016083b89e710d3b82654b6700b1907cc"))
+                              (1340850, uint256("0xad02ed0f42a5d76eeabb69f437fc945b43d0f999fdfd0aa251b07a4605cd3e03"))
+                              (1340965, uint256("0x52b7ea1c19d1ba12cabe461f7b3026dd5236f27dafb70636a1ce1e82732770f4"))
+                              (1366146, uint256("0x524fb0b11fc44f4896a9e510bc10c1ff4963bf686f10cb1ed8abb0786852b4d5"))
+                              (1366147, uint256("0xfff907bf42e74dfab737241341472fc9d783e1c0ca1c7c8a6d80ae176f75c8f0"))
+                              (1427337, uint256("0xf576acfccc53c0af8810975c7e94b430d1a8b5925ba9263d2b2abe81083ce010"));
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1592575048, // * UNIX timestamp of last checkpoint block
-    2884627,    // * total number of transactions between genesis and last checkpoint
+    1594097604, // * UNIX timestamp of last checkpoint block
+    2936005,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
-    2500        // * estimated number of transactions per day after checkpoint
+    3000        // * estimated number of transactions per day after checkpoint
 };
 
 static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
@@ -385,12 +388,12 @@ public:
         bnProofOfWorkLimit = ~uint256(0) >> 20; // SEND starting difficulty is 1 / 2^12
         nSubsidyHalvingInterval = 210000;
         nMaxReorganizationDepth = 100;
-        nEnforceBlockUpgradeMajority = 750;
-        nRejectBlockOutdatedMajority = 950;
-        nToCheckBlockUpgradeMajority = 1000;
+        nEnforceBlockUpgradeMajority = 16200;  // 75% ... ((60*60*24)/30)*7.5 = 21600 or about 7 days
+        nRejectBlockOutdatedMajority = 20520;  // 95%
+        nToCheckBlockUpgradeMajority = 21600;  // Approximate expected amount of blocks in 7 days (2880*7.5)
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // SEND: 1 day
-        nTargetSpacing = 1 * 30;  // SEND: 30 seconds
+        nTargetTimespan = 1 * 60 * 40;  // SEND: 40 minutes
+        nTargetSpacing = 1 * 60;        // SEND: 1 minute
         nLastPOWBlock = 1001;
         nMaturity = 10;
         nMasternodeCountDrift = 20;
@@ -458,13 +461,11 @@ public:
             printf("block.nTime = %u \n", genesis.nTime);
             printf("block.nNonce = %u \n", genesis.nNonce);
             printf("block.GetHash = %s\n", genesis.GetHash().ToString().c_str());
-
-            }
-
+        }
 
 
         assert(hashGenesisBlock == uint256("0xb06b542aa656ba613882269e38a7f487a9a04cc129a85d3f7c6463aa6a5dabc9"));
-        //assert(genesis.hashMerkleRoot == uint256("0x1b2ef6e2f28be914103a277377ae7729dcd125dfeb8bf97bd5964ba72b6dc39b"));
+        assert(genesis.hashMerkleRoot == uint256("0x91b58b73311ec15f5f0a2aa31626808b81d463bca5e1ccfd39617352301f9c76"));
 
         vSeeds.push_back(CDNSSeedData("dns.socialsend.io", "seed.dns.socialsend.io"));     // Primary DNS Seeder
         vSeeds.push_back(CDNSSeedData("dns.socialsend.info", "seed.dns.socialsend.info"));
@@ -486,7 +487,7 @@ public:
         base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 212);
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x02)(0x2D)(0x25)(0x33).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x02)(0x21)(0x31)(0x2B).convert_to_container<std::vector<unsigned char> >();
-        // 	BIP44 coin type is from https://github.com/satoshilabs/slips/blob/master/slip-0044.md
+        // BIP44 coin type is from https://github.com/satoshilabs/slips/blob/master/slip-0044.md
         base58Prefixes[EXT_COIN_TYPE] = boost::assign::list_of(0x80)(0x00)(0x00)(0x77).convert_to_container<std::vector<unsigned char> >();
 
         convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
@@ -532,12 +533,12 @@ public:
         pchMessageStart[3] = 0xba;
         vAlertPubKey = ParseHex("000010e83b2703ccf322f7dbd62dd5855ac7c10bd055814ce121ba32607d573b8810c02c0582aed05b4deb9c4b77b26d92428c61256cd42774babea0a073b2ed0c9");
         nDefaultPort = 51474;
-        nEnforceBlockUpgradeMajority = 51;
-        nRejectBlockOutdatedMajority = 75;
-        nToCheckBlockUpgradeMajority = 100;
+        nEnforceBlockUpgradeMajority = 6480;
+        nRejectBlockOutdatedMajority = 12312;
+        nToCheckBlockUpgradeMajority = 12960; // ((60*60*24)/30)*4.5 = 12960 or about 4 days
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // SEND: 1 day
-        nTargetSpacing = 1 * 60;  // SEND: 1 minute
+        nTargetTimespan = 1 * 60 * 40;  // SEND: 40 minutes
+        nTargetSpacing = 1 * 60;        // SEND: 1 minute
         nLastPOWBlock = 200;
         nMaturity = 15;
         nMasternodeCountDrift = 4;
@@ -553,7 +554,7 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-		//TESTNET NODES
+        //TESTNET NODES
         vSeeds.push_back(CDNSSeedData("35.224.177.163", "35.224.177.163"));
         vSeeds.push_back(CDNSSeedData("35.193.118.249", "35.193.118.249"));
         vSeeds.push_back(CDNSSeedData("35.193.60.209", "35.193.60.209"));
@@ -587,7 +588,7 @@ public:
         strObfuscationPoolDummyAddress = "y57cqfGRkekRyDRNeJiLtYVEbvhXrNbmox";
         nStartMasternodePayments = 1420837558; //Fri, 09 Jan 2015 21:05:58 GMT
 
-		nNewMasternodeReward_StartBlock = 65000;
+        nNewMasternodeReward_StartBlock = 201;
         nNewMasternodeReward_Collateral = 12500;
         nNewMasternodeReward_MNPercent = 75.0 / 100.0;
     }

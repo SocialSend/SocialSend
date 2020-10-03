@@ -45,10 +45,10 @@ const std::string CLIENT_NAME("SEND Core");
 #endif
 
 //! git will put "#define GIT_ARCHIVE 1" on the next line inside archives.
-#define GIT_ARCHIVE 1
+
 #ifdef GIT_ARCHIVE
-#define GIT_COMMIT_ID "$Format:%H$"
-#define GIT_COMMIT_DATE "$Format:%cD$"
+    #define GIT_COMMIT_ID "$Format:%h$"
+    #define GIT_COMMIT_DATE "$Format:%cD$"
 #endif
 
 #define BUILD_DESC_WITH_SUFFIX(maj, min, rev, build, suffix) \
@@ -71,11 +71,11 @@ const std::string CLIENT_NAME("SEND Core");
 #endif
 
 #ifndef BUILD_DATE
-#ifdef GIT_COMMIT_DATE
-#define BUILD_DATE GIT_COMMIT_DATE
-#else
-#define BUILD_DATE __DATE__ ", " __TIME__
-#endif
+    #ifdef GIT_COMMIT_DATE
+        #define BUILD_DATE GIT_COMMIT_DATE
+    #else
+        #define BUILD_DATE __DATE__ ", " __TIME__
+    #endif
 #endif
 
 const std::string CLIENT_BUILD(BUILD_DESC CLIENT_VERSION_SUFFIX);

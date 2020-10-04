@@ -9,8 +9,16 @@
 
 #if defined(HAVE_CONFIG_H)
 #include "config/send-config.h"
-#endif //HAVE_CONFIG_H
+#else
+// TODO: Fix build system to use vars define in configure..
+#define CLIENT_VERSION_MAJOR 1
+#define CLIENT_VERSION_MINOR 2
+#define CLIENT_VERSION_REVISION 1
+#define CLIENT_VERSION_BUILD 5
+#define CLIENT_VERSION_IS_RELEASE true
+#define COPYRIGHT_YEAR 2020
 
+#endif //HAVE_CONFIG_H
 
 // Check that required client information is defined
 #if !defined(CLIENT_VERSION_MAJOR) || !defined(CLIENT_VERSION_MINOR) || !defined(CLIENT_VERSION_REVISION) || !defined(CLIENT_VERSION_BUILD) || !defined(CLIENT_VERSION_IS_RELEASE) || !defined(COPYRIGHT_YEAR)

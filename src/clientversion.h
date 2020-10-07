@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2009-2017 The Bitcoin developers
 // Copyright (c) 2017-2020 The PIVX developers
 // Copyright (c) 2019-2020 The SEND developers
 // Distributed under the MIT software license, see the accompanying
@@ -9,14 +9,6 @@
 
 #if defined(HAVE_CONFIG_H)
 #include "config/send-config.h"
-#else
-// TODO: Fix build system to use vars define in configure..
-#define CLIENT_VERSION_MAJOR 1
-#define CLIENT_VERSION_MINOR 2
-#define CLIENT_VERSION_REVISION 1
-#define CLIENT_VERSION_BUILD 5
-#define CLIENT_VERSION_IS_RELEASE true
-#define COPYRIGHT_YEAR 2020
 #endif //HAVE_CONFIG_H
 
 // Check that required client information is defined

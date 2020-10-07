@@ -31,6 +31,12 @@
   <key>CFBundleExecutable</key>
   <string>SEND-Qt</string>
 
+  <key>CFBundleName</key>
+  <string>SEND-Qt</string>
+
+  <key>LSHasLocalizedDisplayName</key>
+  <true/>
+
   <key>CFBundleIdentifier</key>
   <string>io.send.Send-Qt</string>
 

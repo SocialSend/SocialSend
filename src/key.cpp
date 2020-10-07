@@ -4,6 +4,7 @@
 
 #include "key.h"
 
+#include "crypto/common.h"
 #include "crypto/hmac_sha512.h"
 #include "crypto/rfc6979_hmac_sha256.h"
 #include "eccryptoverify.h"
@@ -12,6 +13,11 @@
 
 #include "ecwrapper.h"
 #include <secp256k1.h>
+#include <secp256k1_recovery.h>
+
+#include "uint256.h"
+
+static secp256k1_context* secp256k1_context_sign = nullptr;
 
 //! anonymous namespace
 namespace
@@ -156,24 +162,22 @@ bool CKey::Load(CPrivKey& privkey, CPubKey& vchPubKey, bool fSkipCheck = false)
     return VerifyPubKey(vchPubKey);
 }
 
-bool CKey::Derive(CKey& keyChild, unsigned char ccChild[32], unsigned int nChild, const unsigned char cc[32]) const
+bool CKey::Derive(CKey& keyChild, vchChainCode &ccChild, unsigned int nChild, const ChainCode& cc) const
 {
     assert(IsValid());
     assert(IsCompressed());
-    unsigned char out[64];
-    LockObject(out);
+    std::vector<unsigned char, secure_allocator<unsigned char>> vout(64);
     if ((nChild >> 31) == 0) {
         CPubKey pubkey = GetPubKey();
-        assert(pubkey.begin() + 33 == pubkey.end());
-        BIP32Hash(cc, nChild, *pubkey.begin(), pubkey.begin() + 1, out);
+        assert(pubkey.size() == CPubKey::COMPRESSED_PUBLIC_KEY_SIZE);
+        BIP32Hash(cc, nChild, *pubkey.begin(), pubkey.begin()+1, vout.data());
     } else {
-        assert(begin() + 32 == end());
-        BIP32Hash(cc, nChild, 0, begin(), out);
+        assert(size() == 32);
+        BIP32Hash(cc, nChild, 0, begin(), vout.data());
     }
-    memcpy(ccChild, out + 32, 32);
+    memcpy(ccChild.begin(), vout.data()+32, 32);
     memcpy((unsigned char*)keyChild.begin(), begin(), 32);
-    bool ret = secp256k1_ec_privkey_tweak_add((unsigned char*)keyChild.begin(), out);
-    UnlockObject(out);
+    bool ret = secp256k1_ec_privkey_tweak_add(secp256k1_context_sign, (unsigned char*)keyChild.begin(), vout.data());
     keyChild.fCompressed = true;
     keyChild.fValid = ret;
     return ret;
@@ -238,13 +242,34 @@ void CExtKey::Decode(const unsigned char code[74])
 
 bool ECC_InitSanityCheck()
 {
-#if !defined(USE_SECP256K1)
-    if (!CECKey::SanityCheck()) {
-        return false;
-    }
-#endif
     CKey key;
     key.MakeNewKey(true);
     CPubKey pubkey = key.GetPubKey();
     return key.VerifyPubKey(pubkey);
+}
+
+void ECC_Start() {
+    assert(secp256k1_context_sign == nullptr);
+
+    secp256k1_context *ctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN);
+    assert(ctx != nullptr);
+
+    {
+        // Pass in a random blinding seed to the secp256k1 context.
+        std::vector<unsigned char, secure_allocator<unsigned char>> vseed(32);
+        GetRandBytes(vseed.data(), 32);
+        bool ret = secp256k1_context_randomize(ctx, vseed.data());
+        assert(ret);
+    }
+
+    secp256k1_context_sign = ctx;
+}
+
+void ECC_Stop() {
+    secp256k1_context *ctx = secp256k1_context_sign;
+    secp256k1_context_sign = nullptr;
+
+    if (ctx) {
+        secp256k1_context_destroy(ctx);
+    }
 }

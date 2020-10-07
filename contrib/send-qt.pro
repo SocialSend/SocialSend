@@ -5,7 +5,7 @@
 DEFINES += ENABLE_WALLET
 
 TEMPLATE = app
-TARGET = 
+TARGET =
 DEPENDPATH += . \
               src \
               src/compat \
@@ -223,7 +223,7 @@ HEADERS += src/activemasternode.h \
            src/script/sign.h \
            src/script/standard.h \
            src/test/bignum.h \
-           src/univalue/univalue.h \
+           src/univalue/include/univalue.h \
            src/univalue/univalue_escapes.h \
            src/leveldb/db/builder.h \
            src/leveldb/db/db_impl.h \

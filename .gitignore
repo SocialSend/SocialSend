@@ -187,3 +187,5 @@ doc/Doxyfile
 /deps
 /libs
 /logs
+warrnings-error.txt
+deploy-warrnings-error.txt

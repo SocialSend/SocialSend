@@ -17,6 +17,7 @@
 #define CLIENT_VERSION_BUILD 5
 #define CLIENT_VERSION_IS_RELEASE true
 #define COPYRIGHT_YEAR 2020
+
 #endif //HAVE_CONFIG_H
 
 // Check that required client information is defined

@@ -8,6 +8,7 @@
 #include <QColor>
 #include <QPainter>
 #include <QTimer>
+#include <QPainterPath>
 
 #include <cmath>
 

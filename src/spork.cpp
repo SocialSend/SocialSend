@@ -26,21 +26,6 @@ CSporkManager sporkManager;
 std::map<uint256, CSporkMessage> mapSporks;
 std::map<int, CSporkMessage> mapSporksActive;
 
-// PIVX: on startup load spork values from previous session if they exist in the sporkDB
-void LoadSporksFromDB()
-{
-    CSporkMessage spork;
-    if (!sporkDB->ReadSpork(SPORK_17_ENABLE_ZEROCOIN, spork)) {
-        LogPrintf("%s : no previous value for SPORK_17_ENABLE_ZEROCOIN found in database\n", __func__);
-        return;
-    }
-
-    //add spork to memory
-    mapSporks[spork.GetHash()] = spork;
-    mapSporksActive[spork.nSporkID] = spork;
-    LogPrintf("%s : loaded spork %d with value %d\n", __func__, spork.nSporkID, spork.nValue);
-}
-
 void ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
 {
     if (fLiteMode) return; //disable all obfuscation/masternode related functionality
@@ -74,10 +59,6 @@ void ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
         mapSporks[hash] = spork;
         mapSporksActive[spork.nSporkID] = spork;
         sporkManager.Relay(spork);
-
-        // PIVX: add spork database. For now only database zerocoin activation spork
-        if (spork.nSporkID == SPORK_17_ENABLE_ZEROCOIN)
-            sporkDB->WriteSpork(spork.nSporkID, spork);
 
         //does a task if needed
         ExecuteSpork(spork.nSporkID, spork.nValue);

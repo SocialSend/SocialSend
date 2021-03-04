@@ -26,6 +26,11 @@ CSporkManager sporkManager;
 std::map<uint256, CSporkMessage> mapSporks;
 std::map<int, CSporkMessage> mapSporksActive;
 
+// PIVX: on startup load spork values from previous session if they exist in the sporkDB
+void LoadSporksFromDB()
+{
+}
+
 void ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
 {
     if (fLiteMode) return; //disable all obfuscation/masternode related functionality

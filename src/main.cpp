@@ -4988,8 +4988,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         // PIVX: We use certain sporks during IBD, so check to see if they are
         // available. If not, ask the first peer connected for them.
         if (!sporkDB->SporkExists(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) &&
-            !sporkDB->SporkExists(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2) &&
-            !sporkDB->SporkExists(SPORK_17_ENABLE_ZEROCOIN)) {
+            !sporkDB->SporkExists(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2)) {
             LogPrintf("Required sporks not found, asking peer to send them\n");
             pfrom->PushMessage("getsporks");
         }

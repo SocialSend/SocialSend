@@ -1262,7 +1262,8 @@ bool AppInit2(boost::thread_group& threadGroup)
                     break;
                 }
 
-                // PIVX: load previous sessions sporks if we have them. note: only zerocoin spork being loaded right now)
+                // PIVX: load previous sessions sporks if we have them.
+                uiInterface.InitMessage(_("Loading sporks..."));
                 LoadSporksFromDB();
 
                 uiInterface.InitMessage(_("Verifying blocks..."));

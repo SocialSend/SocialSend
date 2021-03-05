@@ -3873,23 +3873,6 @@ bool ProcessNewBlock(CValidationState& state, CNode* pfrom, CBlock* pblock, CDis
     bool checked = CheckBlock(*pblock, state);
     LogPrintf("%s : size=%d\n", __func__, pblock->GetSerializeSize(SER_DISK, CLIENT_VERSION));
 
-    int nMints = 0;
-    int nSpends = 0;
-    for (const CTransaction tx : pblock->vtx) {
-        if (tx.ContainsZerocoins()) {
-            for (const CTxIn in : tx.vin) {
-                if (in.scriptSig.IsZerocoinSpend())
-                    nSpends++;
-            }
-            for (const CTxOut out : tx.vout) {
-                if (out.IsZerocoinMint())
-                    nMints++;
-            }
-        }
-    }
-    if (nMints || nSpends)
-        LogPrintf("%s : block contains %d zPiv mints and %d zPiv spends\n", __func__, nMints, nSpends);
-
     // ppcoin: check proof-of-stake
     // Limited duplicity on stake: prevents block flood attack
     // Duplicate stake allowed only when there is orphan child block

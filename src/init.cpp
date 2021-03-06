@@ -1271,9 +1271,6 @@ bool AppInit2(boost::thread_group& threadGroup)
 
                 uiInterface.InitMessage(_("Verifying blocks..."));
 
-                // Flag sent to validation code to let it know it can skip certain checks
-                fVerifyingBlocks = true;
-
                 // Zerocoin must check at level 4
                 if (!CVerifyDB().VerifyDB(pcoinsdbview, 4, GetArg("-checkblocks", 100))) {
                     strLoadError = _("Corrupted block database detected");

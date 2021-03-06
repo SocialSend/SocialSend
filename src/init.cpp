@@ -1266,10 +1266,6 @@ bool AppInit2(boost::thread_group& threadGroup)
                     break;
                 }
 
-                // PIVX: load previous sessions sporks if we have them.
-                uiInterface.InitMessage(_("Loading sporks..."));
-                LoadSporksFromDB();
-
                 uiInterface.InitMessage(_("Verifying blocks..."));
                 if (!CVerifyDB().VerifyDB(pcoinsdbview, GetArg("-checklevel", 4),
                         GetArg("-checkblocks", 500))) {

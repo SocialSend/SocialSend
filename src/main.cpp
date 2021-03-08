@@ -3650,20 +3650,6 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
         }
     }
 
-    for (CTransaction tx : block.vtx) {
-        if (tx.IsZerocoinSpend()) {
-            if (fVerifyingBlocks)
-                continue;
-
-            //Check that this transaction is not already in the blockchain
-            uint256 hashFromChain;
-            CTransaction txTest;
-            GetTransaction(tx.GetHash(), txTest, hashFromChain, true);
-            if (hashFromChain != 0 && mapBlockIndex.count(hashFromChain) && chainActive.Contains(mapBlockIndex[hashFromChain]) && pindexPrev->nHeight + 1 > mapBlockIndex[hashFromChain]->nHeight)
-                return state.DoS(100, error("CheckTransaction(): transaction already exists in blockchain!"));
-        }
-    }
-
     return true;
 }
 

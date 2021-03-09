@@ -1335,13 +1335,10 @@ bool AppInit2(boost::thread_group& threadGroup)
                     break;
                 }
 
-                if (fAddrIndex != GetBoolArg("-addrindex", true)) {
-                    strLoadError = _("You need to rebuild the database using -reindex to change -addrindex");
-                    break;
-                }
-
-                // Populate list of invalid/fraudulent outpoints that are banned from the chain
-                PopulateInvalidOutPointMap();
+                //if (fAddrIndex != GetBoolArg("-addrindex", true)) {
+                //    strLoadError = _("You need to rebuild the database using -reindex to change -addrindex");
+                //    break;
+                //}
 
                 // Recalculate money supply for blocks that are impacted by accounting issue after zerocoin activation
                 if (GetBoolArg("-reindexmoneysupply", false)) {

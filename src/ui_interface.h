@@ -102,6 +102,10 @@ public:
 
     /** New block has been accepted */
     boost::signals2::signal<void(const uint256& hash)> NotifyBlockTip;
+
+    /** New transaction has been added to the mempool */
+    boost::signals2::signal<void(const uint256& hash)> NotifyTransaction;
+    
 };
 
 extern CClientUIInterface uiInterface;

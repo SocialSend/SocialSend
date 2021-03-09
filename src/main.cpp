@@ -66,6 +66,7 @@ bool fReindex = false;
 bool fTxIndex = true;
 bool fIsBareMultisigStd = true;
 bool fCheckBlockIndex = false;
+bool fVerifyingBlocks = false;
 unsigned int nCoinCacheSize = 5000;
 bool fAlerts = DEFAULT_ALERTS;
 
@@ -5063,11 +5064,10 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             return false;
         }
 
-        // PIVX: We use certain sporks during IBD, so check to see if they are
+        // Phore: We use certain sporks during IBD, so check to see if they are
         // available. If not, ask the first peer connected for them.
-        if (!pSporkDB->SporkExists(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) &&
-            !pSporkDB->SporkExists(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2)) {
-            LogPrintf("Required sporks not found, asking peer to send them\n");
+        bool fMissingSporks = !pSporkDB->SporkExists(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) &&
+            !pSporkDB->SporkExists(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2);
 
         if (fMissingSporks || !fRequestedSporksIDB){
             LogPrintf("asking peer for sporks\n");
@@ -5478,7 +5478,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                      tx.GetHash().ToString(),
                      mempool.mapTx.size());
 
-            uiInterface.NotifyTransaction(tx.GetHash());
+            //uiInterface.NotifyTransaction(tx.GetHash());
 
             // Recursively process any orphan transactions that depended on this one
             set<NodeId> setMisbehaving;

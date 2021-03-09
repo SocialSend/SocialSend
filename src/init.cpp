@@ -1349,17 +1349,23 @@ bool AppInit2(boost::thread_group& threadGroup)
 
                 uiInterface.InitMessage(_("Verifying blocks..."));
 
+                // Flag sent to validation code to let it know it can skip certain checks
+                fVerifyingBlocks = true;
+
                 // Zerocoin must check at level 4
                 if (!CVerifyDB().VerifyDB(pcoinsdbview, 4, GetArg("-checkblocks", 100))) {
                     strLoadError = _("Corrupted block database detected");
+                    fVerifyingBlocks = false;
                     break;
                 }
             } catch (std::exception& e) {
                 if (fDebug) LogPrintf("%s\n", e.what());
                 strLoadError = _("Error opening block database");
+                fVerifyingBlocks = false;
                 break;
             }
 
+            fVerifyingBlocks = false;
             fLoaded = true;
         } while (false);
 
@@ -1422,6 +1428,7 @@ bool AppInit2(boost::thread_group& threadGroup)
         }
 
         uiInterface.InitMessage(_("Loading wallet..."));
+        fVerifyingBlocks = true;
 
         nStart = GetTimeMillis();
         bool fFirstRun = true;
@@ -1517,6 +1524,8 @@ bool AppInit2(boost::thread_group& threadGroup)
                 }
             }
         }
+        fVerifyingBlocks = false;
+
     }  // (!fDisableWallet)
 #else  // ENABLE_WALLET
     LogPrintf("No wallet compiled in!\n");

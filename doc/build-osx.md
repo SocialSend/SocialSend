@@ -190,7 +190,7 @@ Next, switch into your Downloads folder:
 
 The next step is to download the current version of the wallet from Github and go into that directory:
 
-```git clone https://github.com/phoreproject/phore.git```
+```git clone https://github.com/SocialSend/SocialSend.git```
 ```cd Phore```
 
 Now set some configuration flags:
@@ -221,7 +221,7 @@ Once the build is complete, switch into the src/qt subdirectory:
 
 And there you have your wallet – you can start it by running:
 
-```./phore-qt```
+```./send-qt```
 
 You can move the wallet app to another more permanent location. If you have not moved it and want to start your wallet in the future, open Terminal and run this command:
 

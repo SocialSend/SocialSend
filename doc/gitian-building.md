@@ -53,10 +53,10 @@ Please refer to the following documents to set up the operating systems and Giti
 Getting and building the inputs
 --------------------------------
 
-At this point you have two options, you can either use the automated script (found in [https://github.com/phoreproject/phore/blob/master/contrib/gitian-build.sh](https://github.com/phoreproject/phore/blob/master/contrib/gitian-build.sh), only works in Debian/Ubuntu) or you could manually do everything by following this guide.
+At this point you have two options, you can either use the automated script (found in [https://github.com/SocialSend/SocialSend/blob/master/contrib/gitian-build.sh](https://github.com/SocialSend/SocialSend/blob/master/contrib/gitian-build.sh), only works in Debian/Ubuntu) or you could manually do everything by following this guide.
 If you are using the automated script, then run it with the `--setup` command. Afterwards, run it with the `--build` command (example: `contrib/gitian-build.sh -b signer 0.15.0`). Otherwise ignore this.
 
-Follow the instructions in [https://github.com/phoreproject/phore/blob/master/doc/release-process.md](https://github.com/phoreproject/phore/blob/master/doc/release-process.md#fetch-and-create-inputs-first-time-or-when-dependency-versions-change)
+Follow the instructions in [https://github.com/SocialSend/SocialSend/blob/master/doc/release-process.md](https://github.com/SocialSend/SocialSend/blob/master/doc/release-process.md#fetch-and-create-inputs-first-time-or-when-dependency-versions-change)
 in the send repository under 'Fetch and create inputs' to install sources which require
 manual intervention. Also optionally follow the next step: 'Seed the Gitian sources cache
 and offline git repositories' which will fetch the remaining files required for building
@@ -66,7 +66,7 @@ Building Send Core
 ----------------
 
 To build Phore Core (for Linux, OS X and Windows) just follow the steps under 'perform
-Gitian builds' in [https://github.com/phoreproject/phore/blob/master/doc/release-process.md](https://github.com/phoreproject/phore/blob/master/doc/release-process.md#setup-and-perform-gitian-builds) in the phore repository.
+Gitian builds' in [https://github.com/SocialSend/SocialSend/blob/master/doc/release-process.md](https://github.com/SocialSend/SocialSend/blob/master/doc/release-process.md#setup-and-perform-gitian-builds) in the send repository.
 
 This may take some time as it will build all the dependencies needed for each descriptor.
 These dependencies will be cached after a successful build to avoid rebuilding them when possible.
@@ -113,16 +113,16 @@ For example:
 ```bash
 URL=https://github.com/laanwj/bitcoin.git
 COMMIT=2014_03_windows_unicode_path
-./bin/gbuild --commit phore=${COMMIT} --url phore=${URL} ../phore/contrib/gitian-descriptors/gitian-linux.yml
-./bin/gbuild --commit phore=${COMMIT} --url phore=${URL} ../phore/contrib/gitian-descriptors/gitian-win.yml
-./bin/gbuild --commit phore=${COMMIT} --url phore=${URL} ../phore/contrib/gitian-descriptors/gitian-osx.yml
+./bin/gbuild --commit send=${COMMIT} --url send=${URL} ../send/contrib/gitian-descriptors/gitian-linux.yml
+./bin/gbuild --commit send=${COMMIT} --url send=${URL} ../send/contrib/gitian-descriptors/gitian-win.yml
+./bin/gbuild --commit send=${COMMIT} --url send=${URL} ../send/contrib/gitian-descriptors/gitian-osx.yml
 ```
 
 Building fully offline
 -----------------------
 
 For building fully offline including attaching signatures to unsigned builds, the detached-sigs repository
-and the phore git repository with the desired tag must both be available locally, and then gbuild must be
+and the send git repository with the desired tag must both be available locally, and then gbuild must be
 told where to find them. It also requires an apt-cacher-ng which is fully-populated but set to offline mode, or
 manually disabling gitian-builder's use of apt-get to update the VM build environment.
 
@@ -141,7 +141,7 @@ cd /path/to/gitian-builder
 LXC_ARCH=amd64 LXC_SUITE=trusty on-target -u root apt-get update
 LXC_ARCH=amd64 LXC_SUITE=trusty on-target -u root \
   -e DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends -y install \
-  $( sed -ne '/^packages:/,/[^-] .*/ {/^- .*/{s/"//g;s/- //;p}}' ../phore/contrib/gitian-descriptors/*|sort|uniq )
+  $( sed -ne '/^packages:/,/[^-] .*/ {/^- .*/{s/"//g;s/- //;p}}' ../send/contrib/gitian-descriptors/*|sort|uniq )
 LXC_ARCH=amd64 LXC_SUITE=trusty on-target -u root apt-get -q -y purge grub
 LXC_ARCH=amd64 LXC_SUITE=trusty on-target -u root -e DEBIAN_FRONTEND=noninteractive apt-get -y dist-upgrade
 ```
@@ -161,12 +161,12 @@ Then when building, override the remote URLs that gbuild would otherwise pull fr
 ```bash
 
 cd /some/root/path/
-git clone https://github.com/phoreproject/phore-detached-sigs.git
+git clone https://github.com/SocialSend/SocialSend-detached-sigs.git
 
-BTCPATH=/some/root/path/phore
-SIGPATH=/some/root/path/phore-detached-sigs
+BTCPATH=/some/root/path/send
+SIGPATH=/some/root/path/send-detached-sigs
 
-./bin/gbuild --url phore=${BTCPATH},signature=${SIGPATH} ../phore/contrib/gitian-descriptors/gitian-win-signer.yml
+./bin/gbuild --url send=${BTCPATH},signature=${SIGPATH} ../send/contrib/gitian-descriptors/gitian-win-signer.yml
 ```
 
 Signing externally

@@ -1,13 +1,13 @@
 PIVX Core version 3.0.0 is now available from:
 
-  <https://github.com/pivx-project/pivx/releases>
+  <https://github.com/SocialSend/SocialSend/releases>
 
 This is a new major version release, including various bug fixes and
 performance improvements, as well as updated translations.
 
 Please report bugs using the issue tracker at github:
 
-  <https://github.com/pivx-project/pivx/issues>
+  <https://github.com/SocialSend/SocialSend/issues>
 
 Mandatory Update
 ==============
@@ -19,7 +19,7 @@ Users updating from a previous version after the 13th of October will require a 
 How to Upgrade
 ==============
 
-If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/PIVX-Qt (on Mac) or pivxd/pivx-qt (on Linux).
+If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/SEND-Qt (on Mac) or sendd/send-qt (on Linux).
 
 Compatibility
 ==============
@@ -132,4 +132,4 @@ Thanks to everyone who directly contributed to this release:
 - amirabrams
 - presstab
 
-As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/pivx-project-translations/).
+As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/send-project-translations/).

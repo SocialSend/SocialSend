@@ -13,10 +13,10 @@ AC_CONFIG_HEADERS([src/config/send-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-aux/m4])
 
-BITCOIN_DAEMON_NAME=pivxd
-BITCOIN_GUI_NAME=pivx-qt
-BITCOIN_CLI_NAME=pivx-cli
-BITCOIN_TX_NAME=pivx-tx
+BITCOIN_DAEMON_NAME=sendd
+BITCOIN_GUI_NAME=send-qt
+BITCOIN_CLI_NAME=send-cli
+BITCOIN_TX_NAME=send-tx
 
 AC_CANONICAL_HOST
 

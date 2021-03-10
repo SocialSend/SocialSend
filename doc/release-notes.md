@@ -13,7 +13,7 @@ Please report bugs using the issue tracker at github:
 Mandatory Update
 ==============
 
-PIVX Core v3.0.4 is a mandatory update for all users. This release contains various updates/fixes pertaining to the zPIV protocol, supply tracking, block transmission and relaying, as well as usability and quality-of-life updates to the GUI.
+SEND Core v3.0.4 is a mandatory update for all users. This release contains various updates/fixes pertaining to the zPIV protocol, supply tracking, block transmission and relaying, as well as usability and quality-of-life updates to the GUI.
 
 Users will have a grace period to update their clients before versions prior to this release are no longer allowed to connect to this (and future) version(s).
 
@@ -21,7 +21,7 @@ Users will have a grace period to update their clients before versions prior to 
 How to Upgrade
 ==============
 
-If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/PIVX-Qt (on Mac) or pivxd/pivx-qt (on Linux).
+If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/SEND-Qt (on Mac) or sendd/send-qt (on Linux).
 
 
 Compatibility
@@ -117,4 +117,4 @@ Thanks to everyone who directly contributed to this release:
 - rejectedpromise
 - aaronlangford31
 
-As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/pivx-project-translations/).
+As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/send-project-translations/).

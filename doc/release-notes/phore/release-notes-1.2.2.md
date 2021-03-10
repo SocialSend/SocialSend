@@ -3,7 +3,7 @@
 
 **THIS IS A MANDATORY UPDATE. UPGRADE YOUR CLIENTS BEFORE BLOCK 250,000.**
 
-Phore Core version 1.2.2 is now available from:
+Send Core version 1.2.2 is now available from:
 
   https://socialsend.io/
 
@@ -17,7 +17,7 @@ How to Upgrade
 
 If you are running an older version, shut it down. Wait until it has completely
 shut down (which might take a few minutes for older versions), then run the
-installer (on Windows) or just copy over /Applications/Phore-Qt (on Mac) or
+installer (on Windows) or just copy over /Applications/Send-Qt (on Mac) or
 phored/send-qt (on Linux).
 
 

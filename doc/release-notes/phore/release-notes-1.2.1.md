@@ -2,7 +2,7 @@
 ====================
 
 
-Phore Core version 1.2.1 is now available from:
+Send Core version 1.2.1 is now available from:
 
   https://socialsend.io/
 
@@ -16,7 +16,7 @@ How to Upgrade
 
 If you are running an older version, shut it down. Wait until it has completely
 shut down (which might take a few minutes for older versions), then run the
-installer (on Windows) or just copy over /Applications/Phore-Qt (on Mac) or
+installer (on Windows) or just copy over /Applications/Send-Qt (on Mac) or
 phored/send-qt (on Linux).
 
 
@@ -41,7 +41,7 @@ Also:
 Versioning Note
 ---------------
 
-Phore will now be switching to a more standard semantic versioning
+Send will now be switching to a more standard semantic versioning
 system (https://semver.org/). This means that in the future, the version numbers
 will take the form:
 

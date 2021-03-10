@@ -65,7 +65,7 @@ offline.
 Building Send Core
 ----------------
 
-To build Phore Core (for Linux, OS X and Windows) just follow the steps under 'perform
+To build Send Core (for Linux, OS X and Windows) just follow the steps under 'perform
 Gitian builds' in [https://github.com/SocialSend/SocialSend/blob/master/doc/release-process.md](https://github.com/SocialSend/SocialSend/blob/master/doc/release-process.md#setup-and-perform-gitian-builds) in the send repository.
 
 This may take some time as it will build all the dependencies needed for each descriptor.

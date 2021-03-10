@@ -11,7 +11,7 @@ ENV RANDOM_PASS `pwgen -Bs1 12`
 ENV RPC_PASSWORD ${RPC_PASSWORD:-$RANDOM_PASS}
 
 # Build the project
-RUN wget https://github.com/phoreproject/Phore/releases/download/v1.2.0.0/send-1.1.0-x86_64-linux-gnu.tar.gz -O send-1.1.0.tar.gz
+RUN wget https://github.com/phoreproject/Send/releases/download/v1.2.0.0/send-1.1.0-x86_64-linux-gnu.tar.gz -O send-1.1.0.tar.gz
 RUN tar -xvf send-1.1.0.tar.gz
 RUN mkdir -p /root/.send/
 RUN echo "rpcuser=$RPC_USER\nrpcpassword=$RPC_PASSWORD" > /root/.send/send.conf

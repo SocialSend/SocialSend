@@ -155,7 +155,7 @@ Troubleshooting:<a name="trouble"></a>
         make
         sudo make install
 
-        Then configure Phore with this build of BerkeleyDB,
+        Then configure Send with this build of BerkeleyDB,
         ./configure --with-gui=qt5  LDFLAGS="-L/usr/local/BerkeleyDB.4.8/lib/" CPPFLAGS="-I/usr/local/BerkeleyDB.4.8/include/"
                 
         
@@ -176,7 +176,7 @@ Otherwise, open Terminal and type in the command to install homebrew:
 
 ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```
 
-The use homebrew to install a number of unix programs and libraries needed to build the Phore wallet:
+The use homebrew to install a number of unix programs and libraries needed to build the Send wallet:
 
 ```brew install autoconf automake berkeley-db@4 boost@1.57 git libevent libtool miniupnpc openssl pkg-config protobuf qt zeromq```
 
@@ -191,7 +191,7 @@ Next, switch into your Downloads folder:
 The next step is to download the current version of the wallet from Github and go into that directory:
 
 ```git clone https://github.com/SocialSend/SocialSend.git```
-```cd Phore```
+```cd Send```
 
 Now set some configuration flags:
 
@@ -203,15 +203,15 @@ Then we begin the build process:
 ```./configure```
 ```make```
 
-You have the choice to build the GUI Phore wallet as a Mac OSX app, described in “How to build the Phore-Qt App”. If, for whatever reason, you prefer to use the command line tools, continue with “Command line tools”.
+You have the choice to build the GUI Send wallet as a Mac OSX app, described in “How to build the Send-Qt App”. If, for whatever reason, you prefer to use the command line tools, continue with “Command line tools”.
 
-### How to build the Phore-Qt App:
+### How to build the Send-Qt App:
 
 After make is finished, you can create an App bundle inside a disk image with:
 
 ```make deploy```
 
-Once this is done, you’ll find Phore-Qt.dmg inside your Phore folder. Open and install the wallet like any typical Mac app.
+Once this is done, you’ll find Send-Qt.dmg inside your Send folder. Open and install the wallet like any typical Mac app.
 
 ### Command line tools
 

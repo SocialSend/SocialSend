@@ -99,7 +99,7 @@ map<uint256, int64_t> mapRejectedBlocks;
 // attacks because then we can check that either the staking input is available in the current
 // active chain, or the staking input was spent in the past 100 blocks after the height
 // of the incoming block.
-// Sourced from Phore.io pull req #133 & #134  (added by LOMA OOPALOOPA)
+// Sourced from Send.io pull req #133 & #134  (added by LOMA OOPALOOPA)
 map<COutPoint, int> mapStakeSpent;
 
 void EraseOrphansFor(NodeId peer);
@@ -5064,7 +5064,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             return false;
         }
 
-        // Phore: We use certain sporks during IBD, so check to see if they are
+        // Send: We use certain sporks during IBD, so check to see if they are
         // available. If not, ask the first peer connected for them.
         bool fMissingSporks = !pSporkDB->SporkExists(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) &&
             !pSporkDB->SporkExists(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2);

@@ -117,9 +117,9 @@ public:
     json_spirit::Value execute(const std::string& method, const json_spirit::Array& params) const;
 
     /**
-    * Returns a list of registered commands
-    * @returns List of registered commands.
-    */
+     * Returns a list of registered commands
+     * @returns List of registered commands.
+     */
     std::vector<std::string> listCommands() const;
 };
 
@@ -256,6 +256,7 @@ extern json_spirit::Value getmasternodescores(const json_spirit::Array& params, 
 extern json_spirit::Value initmasternode(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value masternodeisinit(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value killmasternode(const json_spirit::Array& params, bool fHelp);
+extern json_spirit::Value masternodestate(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value mnbudget(const json_spirit::Array& params, bool fHelp); // in rpcmasternode-budget.cpp
 extern json_spirit::Value preparebudget(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value submitbudget(const json_spirit::Array& params, bool fHelp);

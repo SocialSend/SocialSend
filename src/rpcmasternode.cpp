@@ -138,7 +138,7 @@ Value initmasternode(const Array& params, bool fHelp)
             "1. MasterNodePrivKey      (numeric, optional) Show the last n blocks (default 10)\n"
             "2. MasterNodeAddr      (numeric, optional) Show the last n blocks (default 10)\n"
             "\nExamples:\n" +
-			HelpExampleCli("initmasternode", "MasterNodePrivKey MasterNodeAddr") +
+            HelpExampleCli("initmasternode", "MasterNodePrivKey MasterNodeAddr") +
             HelpExampleRpc("initmasternode", "MasterNodePrivKey MasterNodeAddr"));
     if (params.size() == 2) {
         strMasterNodePrivKey = params[0].get_str();
@@ -163,12 +163,12 @@ Value initmasternode(const Array& params, bool fHelp)
 
 Value masternodeisinit(const Array& params, bool fHelp)
 {
-    if (fHelp) 
-		throw runtime_error(
-			"masternodeisinit\n"
-			"Check if masternode is initialised\n"
-			"Examples:\n" +
-			HelpExampleCli("masternodeisinit", "") + HelpExampleRpc("masternodeisinit", ""));
+    if (fHelp)
+        throw runtime_error(
+            "masternodeisinit\n"
+            "Check if masternode is initialised\n"
+            "Examples:\n" +
+            HelpExampleCli("masternodeisinit", "") + HelpExampleRpc("masternodeisinit", ""));
     // check flag and variables are set
     if (!fMasterNode || strMasterNodeAddr == "" || strMasterNodePrivKey == "")
         return false;
@@ -234,7 +234,7 @@ Value masternode(const Array& params, bool fHelp)
     }
 
     if (strCommand == "connect") {
-        Array newParams(params.size() -1);
+        Array newParams(params.size() - 1);
         std::copy(params.begin() + 1, params.end(), newParams.begin());
         return masternodeconnect(newParams, fHelp);
     }
@@ -302,14 +302,12 @@ Value masternode(const Array& params, bool fHelp)
         std::copy(params.begin() + 1, params.end(), newParams.begin());
         return initmasternode(newParams, fHelp);
     }
-    
-	if (strCommand == "isInit")
-    {
+
+    if (strCommand == "isInit") {
         return masternodeisinit(params, fHelp);
     }
-    
-	if (strCommand == "kill")
-    {
+
+    if (strCommand == "kill") {
         return killmasternode(params, fHelp);
     }
     return Value::null;
@@ -352,7 +350,7 @@ Value listmasternodes(const Array& params, bool fHelp)
     {
         LOCK(cs_main);
         CBlockIndex* pindex = chainActive.Tip();
-        if(!pindex) return 0;
+        if (!pindex) return 0;
         nHeight = pindex->nHeight;
     }
     std::vector<pair<int, CMasternode> > vMasternodeRanks = mnodeman.GetMasternodeRanks(nHeight);
@@ -410,26 +408,26 @@ Value masternodeconnect(const Array& params, bool fHelp)
     if (pnode) {
         Object obj;
         pnode->PushVersion();
-        int timeout = 3000000;	//3000000 uS timeout (3 secs)
+        int timeout = 3000000; // 3000000 uS timeout (3 secs)
         while (pnode->nPingUsecTime == 0) {
             usleep(100000);
             timeout -= 100000;
             if (timeout < 0) {
-                if (pnode->nVersion != 0){
-					//Node connected but ping timeout
-					obj.push_back(Pair("version", pnode->strSubVer));
-					obj.push_back(Pair("ping", -1));
-					obj.push_back(Pair("blocks", pnode->nStartingHeight));
-					obj.push_back(Pair("protocol", pnode->nVersion));
+                if (pnode->nVersion != 0) {
+                    // Node connected but ping timeout
+                    obj.push_back(Pair("version", pnode->strSubVer));
+                    obj.push_back(Pair("ping", -1));
+                    obj.push_back(Pair("blocks", pnode->nStartingHeight));
+                    obj.push_back(Pair("protocol", pnode->nVersion));
                     pnode->Release();
                     return obj;
-				}else{
-					pnode->Release();
-					throw runtime_error("Connection timeout\n");
-				}
-			}
-		}
-        //node connected and valid ping
+                } else {
+                    pnode->Release();
+                    throw runtime_error("Connection timeout\n");
+                }
+            }
+        }
+        // node connected and valid ping
         obj.push_back(Pair("version", pnode->strSubVer));
         obj.push_back(Pair("ping", pnode->nPingUsecTime));
         obj.push_back(Pair("blocks", pnode->nStartingHeight));
@@ -441,7 +439,7 @@ Value masternodeconnect(const Array& params, bool fHelp)
     }
 }
 
-Value getmasternodecount (const Array& params, bool fHelp)
+Value getmasternodecount(const Array& params, bool fHelp)
 {
     if (fHelp || (params.size() > 0))
         throw runtime_error(
@@ -474,7 +472,7 @@ Value getmasternodecount (const Array& params, bool fHelp)
     return obj;
 }
 
-Value masternodecurrent (const Array& params, bool fHelp)
+Value masternodecurrent(const Array& params, bool fHelp)
 {
     if (fHelp || (params.size() != 0))
         throw runtime_error(
@@ -507,7 +505,7 @@ Value masternodecurrent (const Array& params, bool fHelp)
     throw runtime_error("unknown");
 }
 
-Value masternodedebug (const Array& params, bool fHelp)
+Value masternodedebug(const Array& params, bool fHelp)
 {
     if (fHelp || (params.size() != 0))
         throw runtime_error(
@@ -531,7 +529,7 @@ Value masternodedebug (const Array& params, bool fHelp)
         return activeMasternode.GetStatus();
 }
 
-Value startmasternode (const Array& params, bool fHelp)
+Value startmasternode(const Array& params, bool fHelp)
 {
     std::string strCommand;
     if (params.size() >= 1) {
@@ -615,7 +613,7 @@ Value startmasternode (const Array& params, bool fHelp)
         BOOST_FOREACH (CMasternodeConfig::CMasternodeEntry mne, masternodeConfig.getEntries()) {
             std::string errorMessage;
             int nIndex;
-            if(!mne.castOutputIndex(nIndex))
+            if (!mne.castOutputIndex(nIndex))
                 continue;
             CTxIn vin = CTxIn(uint256(mne.getTxHash()), uint32_t(nIndex));
             CMasternode* pmn = mnodeman.Find(vin);
@@ -705,7 +703,7 @@ Value startmasternode (const Array& params, bool fHelp)
     return Value::null;
 }
 
-Value createmasternodekey (const Array& params, bool fHelp)
+Value createmasternodekey(const Array& params, bool fHelp)
 {
     if (fHelp || (params.size() != 0))
         throw runtime_error(
@@ -723,7 +721,7 @@ Value createmasternodekey (const Array& params, bool fHelp)
     return CBitcoinSecret(secret).ToString();
 }
 
-Value getmasternodeoutputs (const Array& params, bool fHelp)
+Value getmasternodeoutputs(const Array& params, bool fHelp)
 {
     if (fHelp || (params.size() != 0))
         throw runtime_error(
@@ -756,7 +754,7 @@ Value getmasternodeoutputs (const Array& params, bool fHelp)
     return ret;
 }
 
-Value listmasternodeconf (const Array& params, bool fHelp)
+Value listmasternodeconf(const Array& params, bool fHelp)
 {
     std::string strFilter = "";
 
@@ -793,7 +791,7 @@ Value listmasternodeconf (const Array& params, bool fHelp)
 
     BOOST_FOREACH (CMasternodeConfig::CMasternodeEntry mne, masternodeConfig.getEntries()) {
         int nIndex;
-        if(!mne.castOutputIndex(nIndex))
+        if (!mne.castOutputIndex(nIndex))
             continue;
         CTxIn vin = CTxIn(uint256(mne.getTxHash()), uint32_t(nIndex));
         CMasternode* pmn = mnodeman.Find(vin);
@@ -818,7 +816,7 @@ Value listmasternodeconf (const Array& params, bool fHelp)
     return ret;
 }
 
-Value getmasternodestatus (const Array& params, bool fHelp)
+Value getmasternodestatus(const Array& params, bool fHelp)
 {
     if (fHelp || (params.size() != 0))
         throw runtime_error(
@@ -851,14 +849,81 @@ Value getmasternodestatus (const Array& params, bool fHelp)
         mnObj.push_back(Pair("status", activeMasternode.status));
         mnObj.push_back(Pair("message", activeMasternode.GetStatus()));
         mnObj.push_back(Pair("signatureTime", pmn->sigTime));
-        mnObj.push_back(Pair("lastPingTime", pmn->lastPing.sigTime));    
+        mnObj.push_back(Pair("lastPingTime", pmn->lastPing.sigTime));
         return mnObj;
     }
-    throw runtime_error("Masternode not found in the list of available masternodes. Current status: "
-                        + activeMasternode.GetStatus());
+    throw runtime_error("Masternode not found in the list of available masternodes. Current status: " + activeMasternode.GetStatus());
 }
 
-Value getmasternodewinners (const Array& params, bool fHelp)
+Value masternodestate(const Array& params, bool fHelp)
+{
+    if (fHelp || (params.size() != 0)) {
+        throw runtime_error(
+            "masternodestate\n"
+            "\nPrint masternode state from given key\n"
+
+            "\nResult:\n"
+            "{\n"
+            "  \"txhash\": \"xxxx\",      (string) Collateral transaction hash\n"
+            "  \"outputidx\": n,        (numeric) Collateral transaction output index number\n"
+            "  \"netaddr\": \"xxxx\",     (string) Masternode network address\n"
+            "  \"addr\": \"xxxx\",        (string) send address for masternode payments\n"
+            "  \"status\": \"xxxx\",      (string) Masternode status\n"
+            "  \"message\": \"xxxx\"      (string) Masternode status message\n"
+            "}\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("getmasternodestatus", "") + HelpExampleRpc("getmasternodestatus", ""));
+    }
+
+    std::string masternodeKey = "";
+    if (params.size() >= 1) {
+        masternodeKey = params[0].get_str();
+    }
+
+    int nHeight;
+    {
+        LOCK(cs_main);
+        CBlockIndex* pindex = chainActive.Tip();
+        if (!pindex) return 0;
+        nHeight = pindex->nHeight;
+    }
+    std::vector<pair<int, CMasternode> > vMasternodeRanks = mnodeman.GetMasternodeRanks(nHeight);
+    BOOST_FOREACH (PAIRTYPE(int, CMasternode) & s, vMasternodeRanks) {
+        Object obj;
+        std::string strVin = s.second.vin.prevout.ToStringShort();
+        std::string strTxHash = s.second.vin.prevout.hash.ToString();
+        uint32_t oIdx = s.second.vin.prevout.n;
+
+        CMasternode* mn = mnodeman.Find(s.second.vin);
+
+        if (mn != NULL && strTxHash == masternodeKey) {
+            if (strFilter != "" && strTxHash.find(strFilter) == string::npos &&
+                mn->Status().find(strFilter) == string::npos &&
+                CBitcoinAddress(mn->pubKeyCollateralAddress.GetID()).ToString().find(strFilter) == string::npos) continue;
+
+            std::string strStatus = mn->Status();
+
+            obj.push_back(Pair("rank", (strStatus == "ENABLED" ? s.first : 0)));
+            obj.push_back(Pair("txhash", strTxHash));
+            obj.push_back(Pair("outidx", (uint64_t)oIdx));
+            obj.push_back(Pair("status", strStatus));
+            obj.push_back(Pair("addr", CBitcoinAddress(mn->pubKeyCollateralAddress.GetID()).ToString()));
+            obj.push_back(Pair("ip:port", mn->addr.ToString()));
+            obj.push_back(Pair("version", mn->protocolVersion));
+            obj.push_back(Pair("lastseen", (int64_t)mn->lastPing.sigTime));
+            obj.push_back(Pair("activetime", (int64_t)(mn->lastPing.sigTime - mn->sigTime)));
+            obj.push_back(Pair("lastpaid", (int64_t)mn->GetLastPaid()));
+
+            ret.push_back(obj);
+        }
+    }
+
+
+    throw runtime_error("Masternode vin not found in the list of available masternodes.");
+}
+
+Value getmasternodewinners(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 3)
         throw runtime_error(
@@ -902,7 +967,7 @@ Value getmasternodewinners (const Array& params, bool fHelp)
     {
         LOCK(cs_main);
         CBlockIndex* pindex = chainActive.Tip();
-        if(!pindex) return 0;
+        if (!pindex) return 0;
         nHeight = pindex->nHeight;
     }
 
@@ -927,12 +992,12 @@ Value getmasternodewinners (const Array& params, bool fHelp)
         if (strPayment.find(',') != std::string::npos) {
             Array winner;
             boost::char_separator<char> sep(",");
-            boost::tokenizer< boost::char_separator<char> > tokens(strPayment, sep);
+            boost::tokenizer<boost::char_separator<char> > tokens(strPayment, sep);
             BOOST_FOREACH (const string& t, tokens) {
                 Object addr;
                 std::size_t pos = t.find(":");
-                std::string strAddress = t.substr(0,pos);
-                uint64_t nVotes = atoi(t.substr(pos+1));
+                std::string strAddress = t.substr(0, pos);
+                uint64_t nVotes = atoi(t.substr(pos + 1));
                 addr.push_back(Pair("address", strAddress));
                 addr.push_back(Pair("nVotes", nVotes));
                 winner.push_back(addr);
@@ -941,8 +1006,8 @@ Value getmasternodewinners (const Array& params, bool fHelp)
         } else if (strPayment.find("Unknown") == std::string::npos) {
             Object winner;
             std::size_t pos = strPayment.find(":");
-            std::string strAddress = strPayment.substr(0,pos);
-            uint64_t nVotes = atoi(strPayment.substr(pos+1));
+            std::string strAddress = strPayment.substr(0, pos);
+            uint64_t nVotes = atoi(strPayment.substr(pos + 1));
             winner.push_back(Pair("address", strAddress));
             winner.push_back(Pair("nVotes", nVotes));
             obj.push_back(Pair("winner", winner));
@@ -953,13 +1018,13 @@ Value getmasternodewinners (const Array& params, bool fHelp)
             obj.push_back(Pair("winner", winner));
         }
 
-            ret.push_back(obj);
+        ret.push_back(obj);
     }
 
     return ret;
 }
 
-Value getmasternodescores (const Array& params, bool fHelp)
+Value getmasternodescores(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 1)
         throw runtime_error(
@@ -982,7 +1047,7 @@ Value getmasternodescores (const Array& params, bool fHelp)
     if (params.size() == 1) {
         try {
             nLast = std::stoi(params[0].get_str());
-        } catch (const boost::bad_lexical_cast &) {
+        } catch (const boost::bad_lexical_cast&) {
             throw runtime_error("Exception on param 2");
         }
     }

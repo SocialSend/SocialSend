@@ -285,6 +285,12 @@ Value masternode(const Array& params, bool fHelp)
         return getmasternodestatus(newParams, fHelp);
     }
 
+    if (strCommand == "state") {
+        Array newParams(params.size() - 1);
+        std::copy(params.begin() + 1, params.end(), newParams.begin());
+        return masternodestate(newParams, fHelp);
+    }
+
     if (strCommand == "winners") {
         Array newParams(params.size() - 1);
         std::copy(params.begin() + 1, params.end(), newParams.begin());
@@ -876,9 +882,11 @@ Value masternodestate(const Array& params, bool fHelp)
             HelpExampleCli("getmasternodestatus", "") + HelpExampleRpc("getmasternodestatus", ""));
     }
 
+    std::string strFilter = "";
     std::string masternodeKey = "";
     if (params.size() >= 1) {
         masternodeKey = params[0].get_str();
+        strFilter = masternodeKey;
     }
 
     int nHeight;
@@ -895,9 +903,13 @@ Value masternodestate(const Array& params, bool fHelp)
         std::string strTxHash = s.second.vin.prevout.hash.ToString();
         uint32_t oIdx = s.second.vin.prevout.n;
 
+        if (strTxHash != masternodeKey) {
+            continue;
+        }
+
         CMasternode* mn = mnodeman.Find(s.second.vin);
 
-        if (mn != NULL && strTxHash == masternodeKey) {
+        if (mn != NULL) {
             if (strFilter != "" && strTxHash.find(strFilter) == string::npos &&
                 mn->Status().find(strFilter) == string::npos &&
                 CBitcoinAddress(mn->pubKeyCollateralAddress.GetID()).ToString().find(strFilter) == string::npos) continue;
@@ -915,10 +927,9 @@ Value masternodestate(const Array& params, bool fHelp)
             obj.push_back(Pair("activetime", (int64_t)(mn->lastPing.sigTime - mn->sigTime)));
             obj.push_back(Pair("lastpaid", (int64_t)mn->GetLastPaid()));
 
-            ret.push_back(obj);
+            return obj;
         }
     }
-
 
     throw runtime_error("Masternode vin not found in the list of available masternodes.");
 }
